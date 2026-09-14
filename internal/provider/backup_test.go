@@ -2,7 +2,15 @@ package provider
 
 import (
 	"encoding/json"
+	"fmt"
 	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
+
+	"github.com/TwilightCoders/terraform-provider-truenas/api"
+	"github.com/TwilightCoders/terraform-provider-truenas/internal/apischema"
+	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware/middlewaretest"
 
 	"github.com/hashicorp/terraform-plugin-testing/knownvalue"
 	"github.com/hashicorp/terraform-plugin-testing/statecheck"
@@ -84,19 +92,72 @@ resource "truenas_cloudsync_credentials" "b2" {
 }`,
 		update: `
 resource "truenas_cloudsync_credentials" "b2" {
-  name = "Backblaze B2"
+  name = "Backblaze"
   storage = {
     b2 = {
       account = "0012345"
       key     = "K001rotated"
     }
   }
+  storage_wo_version = 1
 }`,
 		checks: []statecheck.StateCheck{
 			statecheck.ExpectKnownValue(addr, tfjsonpath.New("storage").AtMapKey("b2").AtMapKey("account"), knownvalue.StringExact("0012345")),
+			statecheck.ExpectKnownValue(addr, tfjsonpath.New("storage").AtMapKey("b2").AtMapKey("key"), knownvalue.Null()),
 			statecheck.ExpectKnownValue(addr, tfjsonpath.New("storage").AtMapKey("s3"), knownvalue.Null()),
 		},
 	}.run(t)
+}
+
+func TestWriteOnlySecretsAreSentOnlyOnVersionBump(t *testing.T) {
+	srv := middlewaretest.NewServer(t)
+	store := srv.ServeCRUD(apischema.MustLoad(api.Latest), "cloudsync.credentials")
+	config := func(key, version string) string {
+		return providerConfig(srv, "") + `
+resource "truenas_cloudsync_credentials" "b2" {
+  name = "Backblaze"
+  storage = {
+    b2 = {
+      account = "0012345"
+      key     = "` + key + `"
+    }
+  }
+  ` + version + `
+}`
+	}
+	storedKey := func() any {
+		return store.Rows()[0]["provider"].(map[string]any)["key"]
+	}
+
+	resource.UnitTest(t, resource.TestCase{
+		ProtoV6ProviderFactories: factories,
+		Steps: []resource.TestStep{
+			{
+				Config: config("first", ""),
+				Check: func(*terraform.State) error {
+					if got := storedKey(); got != "first" {
+						return fmt.Errorf("created key = %v", got)
+					}
+					return nil
+				},
+			},
+			{
+				// Changing only a write-only value is invisible to Terraform: nothing to apply.
+				Config:             config("second", ""),
+				PlanOnly:           true,
+				ExpectNonEmptyPlan: false,
+			},
+			{
+				Config: config("second", "storage_wo_version = 1"),
+				Check: func(*terraform.State) error {
+					if got := storedKey(); got != "second" {
+						return fmt.Errorf("key after version bump = %v", got)
+					}
+					return nil
+				},
+			},
+		},
+	})
 }
 
 func TestCloudSyncTaskLifecycle(t *testing.T) {

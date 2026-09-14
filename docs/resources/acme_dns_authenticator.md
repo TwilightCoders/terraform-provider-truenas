@@ -3,12 +3,12 @@
 page_title: "truenas_acme_dns_authenticator Resource - truenas"
 subcategory: ""
 description: |-
-  Manages a DNS provider for ACME DNS-01 challenges. Set exactly one provider under authenticator. Its credentials are sensitive but stored in Terraform state, because TrueNAS reports them back.
+  Manages a DNS provider for ACME DNS-01 challenges. Set exactly one provider under authenticator. Credentials are write-only: they never enter Terraform state. Bump authenticator_wo_version to resend them.
 ---
 
 # truenas_acme_dns_authenticator (Resource)
 
-Manages a DNS provider for ACME DNS-01 challenges. Set exactly one provider under `authenticator`. Its credentials are sensitive but stored in Terraform state, because TrueNAS reports them back.
+Manages a DNS provider for ACME DNS-01 challenges. Set exactly one provider under `authenticator`. Credentials are write-only: they never enter Terraform state. Bump `authenticator_wo_version` to resend them.
 
 
 
@@ -19,6 +19,10 @@ Manages a DNS provider for ACME DNS-01 challenges. Set exactly one provider unde
 
 - `authenticator` (Attributes) Authentication credentials and configuration for the DNS provider. Set exactly one of the nested attributes. (see [below for nested schema](#nestedatt--authenticator))
 - `name` (String) Human-readable name for the DNS authenticator.
+
+### Optional
+
+- `authenticator_wo_version` (Number) Change this value to send `authenticator` again. Terraform never stores `authenticator`.
 
 ### Read-Only
 
@@ -40,8 +44,8 @@ Optional:
 
 Optional:
 
-- `api_key` (String, Sensitive) API Key.
-- `api_token` (String, Sensitive) API Token.
+- `api_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) API Key.
+- `api_token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) API Token.
 - `cloudflare_email` (String) Cloudflare Email.
 
 
@@ -50,7 +54,7 @@ Optional:
 
 Required:
 
-- `digitalocean_token` (String, Sensitive) DigitalOcean Token.
+- `digitalocean_token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) DigitalOcean Token.
 
 
 <a id="nestedatt--authenticator--ovh"></a>
@@ -58,9 +62,9 @@ Required:
 
 Required:
 
-- `application_key` (String, Sensitive) OVH Application Key.
-- `application_secret` (String, Sensitive) OVH Application Secret.
-- `consumer_key` (String, Sensitive) OVH Consumer Key.
+- `application_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) OVH Application Key.
+- `application_secret` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) OVH Application Secret.
+- `consumer_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) OVH Consumer Key.
 - `endpoint` (String) OVH Endpoint.
 
 
@@ -70,7 +74,7 @@ Required:
 Required:
 
 - `access_key_id` (String) AWS Access Key ID.
-- `secret_access_key` (String, Sensitive) AWS Secret Access Key.
+- `secret_access_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) AWS Secret Access Key.
 
 
 <a id="nestedatt--authenticator--shell"></a>

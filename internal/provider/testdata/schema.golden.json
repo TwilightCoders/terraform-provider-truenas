@@ -8,12 +8,14 @@
               "api_key": {
                 "mode": "optional",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "api_token": {
                 "mode": "optional",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "cloudflare_email": {
                 "mode": "optional",
@@ -28,7 +30,8 @@
               "digitalocean_token": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               }
             },
             "mode": "optional",
@@ -39,17 +42,20 @@
               "application_key": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "application_secret": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "consumer_key": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "endpoint": {
                 "mode": "required",
@@ -68,7 +74,8 @@
               "secret_access_key": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               }
             },
             "mode": "optional",
@@ -99,6 +106,10 @@
         },
         "mode": "required",
         "nesting": "SINGLE"
+      },
+      "authenticator_wo_version": {
+        "mode": "optional",
+        "type": "tftypes.Number"
       },
       "id": {
         "mode": "computed",
@@ -449,7 +460,8 @@
               "key": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               }
             },
             "mode": "optional",
@@ -464,7 +476,8 @@
               "key": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               }
             },
             "mode": "optional",
@@ -477,14 +490,16 @@
                 "type": "tftypes.String"
               },
               "client_secret": {
-                "mode": "optional+computed",
+                "mode": "optional",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "token": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               }
             },
             "mode": "optional",
@@ -497,14 +512,16 @@
                 "type": "tftypes.String"
               },
               "client_secret": {
-                "mode": "optional+computed",
+                "mode": "optional",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "token": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               }
             },
             "mode": "optional",
@@ -519,7 +536,8 @@
               "pass": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "port": {
                 "mode": "optional+computed",
@@ -550,9 +568,10 @@
                 "type": "tftypes.String"
               },
               "client_secret": {
-                "mode": "optional+computed",
+                "mode": "optional",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "team_drive": {
                 "mode": "optional+computed",
@@ -561,7 +580,8 @@
               "token": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               }
             },
             "mode": "optional",
@@ -574,14 +594,16 @@
                 "type": "tftypes.String"
               },
               "client_secret": {
-                "mode": "optional+computed",
+                "mode": "optional",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "token": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               }
             },
             "mode": "optional",
@@ -602,7 +624,8 @@
               "token": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               }
             },
             "mode": "optional",
@@ -613,7 +636,8 @@
               "pass": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "user": {
                 "mode": "required",
@@ -630,9 +654,10 @@
                 "type": "tftypes.String"
               },
               "client_secret": {
-                "mode": "optional+computed",
+                "mode": "optional",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "drive_id": {
                 "mode": "required",
@@ -645,7 +670,8 @@
               "token": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               }
             },
             "mode": "optional",
@@ -662,18 +688,20 @@
                 "type": "tftypes.String"
               },
               "application_credential_secret": {
-                "mode": "optional+computed",
+                "mode": "optional",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "auth": {
                 "mode": "required",
                 "type": "tftypes.String"
               },
               "auth_token": {
-                "mode": "optional+computed",
+                "mode": "optional",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "auth_version": {
                 "mode": "required",
@@ -690,7 +718,8 @@
               "key": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "region": {
                 "mode": "optional+computed",
@@ -731,9 +760,10 @@
                 "type": "tftypes.String"
               },
               "client_secret": {
-                "mode": "optional+computed",
+                "mode": "optional",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "hostname": {
                 "mode": "optional+computed",
@@ -742,7 +772,8 @@
               "token": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               }
             },
             "mode": "optional",
@@ -769,7 +800,8 @@
               "secret_access_key": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "signatures_v2": {
                 "mode": "optional+computed",
@@ -792,7 +824,8 @@
               "pass": {
                 "mode": "optional",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "port": {
                 "mode": "optional+computed",
@@ -823,7 +856,8 @@
               "secret_access_key": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               }
             },
             "mode": "optional",
@@ -834,7 +868,8 @@
               "pass": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "url": {
                 "mode": "required",
@@ -859,14 +894,16 @@
                 "type": "tftypes.String"
               },
               "client_secret": {
-                "mode": "optional+computed",
+                "mode": "optional",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               },
               "token": {
                 "mode": "required",
                 "sensitive": true,
-                "type": "tftypes.String"
+                "type": "tftypes.String",
+                "write_only": true
               }
             },
             "mode": "optional",
@@ -875,6 +912,10 @@
         },
         "mode": "required",
         "nesting": "SINGLE"
+      },
+      "storage_wo_version": {
+        "mode": "optional",
+        "type": "tftypes.Number"
       }
     },
     "identity": {
@@ -1206,12 +1247,14 @@
           "key": {
             "mode": "optional",
             "sensitive": true,
-            "type": "tftypes.String"
+            "type": "tftypes.String",
+            "write_only": true
           },
           "passphrase": {
             "mode": "optional",
             "sensitive": true,
-            "type": "tftypes.String"
+            "type": "tftypes.String",
+            "write_only": true
           },
           "pbkdf2iters": {
             "mode": "optional",
@@ -1220,6 +1263,10 @@
         },
         "mode": "optional",
         "nesting": "SINGLE"
+      },
+      "encryption_options_wo_version": {
+        "mode": "optional",
+        "type": "tftypes.Number"
       },
       "encryption_root": {
         "mode": "computed",
@@ -2802,12 +2849,14 @@
           "key": {
             "mode": "optional",
             "sensitive": true,
-            "type": "tftypes.String"
+            "type": "tftypes.String",
+            "write_only": true
           },
           "passphrase": {
             "mode": "optional",
             "sensitive": true,
-            "type": "tftypes.String"
+            "type": "tftypes.String",
+            "write_only": true
           },
           "pbkdf2iters": {
             "mode": "optional",
@@ -2816,6 +2865,10 @@
         },
         "mode": "optional",
         "nesting": "SINGLE"
+      },
+      "encryption_options_wo_version": {
+        "mode": "optional",
+        "type": "tftypes.Number"
       },
       "encryption_root": {
         "mode": "computed",

@@ -3,12 +3,12 @@
 page_title: "truenas_cloudsync_credentials Resource - truenas"
 subcategory: ""
 description: |-
-  Manages credentials for cloud sync tasks. Set exactly one storage type under storage. Secret fields are sensitive but are stored in Terraform state, because TrueNAS reports them back.
+  Manages credentials for cloud sync tasks. Set exactly one storage type under storage. Secret fields are write-only: they never enter Terraform state. Bump storage_wo_version to resend them.
 ---
 
 # truenas_cloudsync_credentials (Resource)
 
-Manages credentials for cloud sync tasks. Set exactly one storage type under `storage`. Secret fields are sensitive but are stored in Terraform state, because TrueNAS reports them back.
+Manages credentials for cloud sync tasks. Set exactly one storage type under `storage`. Secret fields are write-only: they never enter Terraform state. Bump `storage_wo_version` to resend them.
 
 
 
@@ -19,6 +19,10 @@ Manages credentials for cloud sync tasks. Set exactly one storage type under `st
 
 - `name` (String) Human-readable name for the cloud credential.
 - `storage` (Attributes) Cloud provider configuration including type and authentication details. Set exactly one of the nested attributes. (see [below for nested schema](#nestedatt--storage))
+
+### Optional
+
+- `storage_wo_version` (Number) Change this value to send `storage` again. Terraform never stores `storage`.
 
 ### Read-Only
 
@@ -55,7 +59,7 @@ Optional:
 Required:
 
 - `account` (String) Azure Blob Storage account name for authentication.
-- `key` (String, Sensitive) Azure Blob Storage access key for authentication.
+- `key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Azure Blob Storage access key for authentication.
 
 Optional:
 
@@ -68,7 +72,7 @@ Optional:
 Required:
 
 - `account` (String) Backblaze B2 account ID for authentication.
-- `key` (String, Sensitive) Backblaze B2 application key for authentication.
+- `key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Backblaze B2 application key for authentication.
 
 
 <a id="nestedatt--storage--box"></a>
@@ -76,12 +80,12 @@ Required:
 
 Required:
 
-- `token` (String, Sensitive) Box OAuth access token for API authentication.
+- `token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Box OAuth access token for API authentication.
 
 Optional:
 
 - `client_id` (String) Box OAuth application client ID. Defaults to `""`.
-- `client_secret` (String, Sensitive) Box OAuth application client secret. Defaults to `""`.
+- `client_secret` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Box OAuth application client secret.
 
 
 <a id="nestedatt--storage--dropbox"></a>
@@ -89,12 +93,12 @@ Optional:
 
 Required:
 
-- `token` (String, Sensitive) Dropbox OAuth access token for API authentication.
+- `token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Dropbox OAuth access token for API authentication.
 
 Optional:
 
 - `client_id` (String) Dropbox OAuth application client ID. Defaults to `""`.
-- `client_secret` (String, Sensitive) Dropbox OAuth application client secret. Defaults to `""`.
+- `client_secret` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Dropbox OAuth application client secret.
 
 
 <a id="nestedatt--storage--ftp"></a>
@@ -103,7 +107,7 @@ Optional:
 Required:
 
 - `host` (String) FTP server hostname or IP address.
-- `pass` (String, Sensitive) FTP password for authentication.
+- `pass` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) FTP password for authentication.
 - `user` (String) FTP username for authentication.
 
 Optional:
@@ -124,12 +128,12 @@ Required:
 
 Required:
 
-- `token` (String, Sensitive) OAuth access token for Google Drive authentication.
+- `token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) OAuth access token for Google Drive authentication.
 
 Optional:
 
 - `client_id` (String) OAuth client ID for Google Drive API access. Defaults to `""`.
-- `client_secret` (String, Sensitive) OAuth client secret for Google Drive API access. Defaults to `""`.
+- `client_secret` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) OAuth client secret for Google Drive API access.
 - `team_drive` (String) Google Drive team drive ID or empty string for personal drive. Defaults to `""`.
 
 
@@ -138,12 +142,12 @@ Optional:
 
 Required:
 
-- `token` (String, Sensitive) OAuth access token for Google Photos authentication.
+- `token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) OAuth access token for Google Photos authentication.
 
 Optional:
 
 - `client_id` (String) OAuth client ID for Google Photos API access. Defaults to `""`.
-- `client_secret` (String, Sensitive) OAuth client secret for Google Photos API access. Defaults to `""`.
+- `client_secret` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) OAuth client secret for Google Photos API access.
 
 
 <a id="nestedatt--storage--http"></a>
@@ -159,7 +163,7 @@ Required:
 
 Required:
 
-- `token` (String, Sensitive) OAuth access token for Hubic authentication.
+- `token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) OAuth access token for Hubic authentication.
 
 
 <a id="nestedatt--storage--mega"></a>
@@ -167,7 +171,7 @@ Required:
 
 Required:
 
-- `pass` (String, Sensitive) MEGA password for authentication.
+- `pass` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) MEGA password for authentication.
 - `user` (String) MEGA username for authentication.
 
 
@@ -178,12 +182,12 @@ Required:
 
 - `drive_id` (String) OneDrive drive identifier.
 - `drive_type` (String) Type of OneDrive to access.
-- `token` (String, Sensitive) OAuth access token for OneDrive authentication.
+- `token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) OAuth access token for OneDrive authentication.
 
 Optional:
 
 - `client_id` (String) OAuth client ID for OneDrive API access. Defaults to `""`.
-- `client_secret` (String, Sensitive) OAuth client secret for OneDrive API access. Defaults to `""`.
+- `client_secret` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) OAuth client secret for OneDrive API access.
 
 
 <a id="nestedatt--storage--openstack_swift"></a>
@@ -205,15 +209,15 @@ Required:
 * `internal`: Internal network endpoint
 * `admin`: Administrative endpoint
 * `null`: Use default
-- `key` (String, Sensitive) Swift password or API key for authentication.
+- `key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Swift password or API key for authentication.
 - `user` (String) Swift username for authentication.
 
 Optional:
 
 - `application_credential_id` (String) Swift application credential ID for authentication. Defaults to `""`.
 - `application_credential_name` (String) Swift application credential name for authentication. Defaults to `""`.
-- `application_credential_secret` (String, Sensitive) Swift application credential secret for authentication. Defaults to `""`.
-- `auth_token` (String, Sensitive) Swift authentication token for pre-authenticated access. Defaults to `""`.
+- `application_credential_secret` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Swift application credential secret for authentication.
+- `auth_token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Swift authentication token for pre-authenticated access.
 - `domain` (String) Swift domain name for authentication. Defaults to `""`.
 - `region` (String) Swift region name for geographic distribution. Defaults to `""`.
 - `storage_url` (String) Swift storage URL endpoint. Defaults to `""`.
@@ -228,12 +232,12 @@ Optional:
 
 Required:
 
-- `token` (String, Sensitive) OAuth access token for pCloud authentication.
+- `token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) OAuth access token for pCloud authentication.
 
 Optional:
 
 - `client_id` (String) OAuth client ID for pCloud API access. Defaults to `""`.
-- `client_secret` (String, Sensitive) OAuth client secret for pCloud API access. Defaults to `""`.
+- `client_secret` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) OAuth client secret for pCloud API access.
 - `hostname` (String) pCloud hostname or empty string for default. Defaults to `""`.
 
 
@@ -243,7 +247,7 @@ Optional:
 Required:
 
 - `access_key_id` (String) S3 access key ID for authentication.
-- `secret_access_key` (String, Sensitive) S3 secret access key for authentication.
+- `secret_access_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) S3 secret access key for authentication.
 
 Optional:
 
@@ -264,7 +268,7 @@ Required:
 
 Optional:
 
-- `pass` (String, Sensitive) SFTP password for authentication or `null` for key-based auth.
+- `pass` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) SFTP password for authentication or `null` for key-based auth.
 - `port` (Number) SFTP server port number. Defaults to `22`.
 - `private_key` (Number) SSH private key ID for authentication or `null` for password auth.
 
@@ -275,7 +279,7 @@ Optional:
 Required:
 
 - `access_key_id` (String) Storj S3-compatible access key ID for authentication.
-- `secret_access_key` (String, Sensitive) Storj S3-compatible secret access key for authentication.
+- `secret_access_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Storj S3-compatible secret access key for authentication.
 
 Optional:
 
@@ -287,7 +291,7 @@ Optional:
 
 Required:
 
-- `pass` (String, Sensitive) WebDAV password for authentication.
+- `pass` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) WebDAV password for authentication.
 - `url` (String) WebDAV server URL endpoint.
 - `user` (String) WebDAV username for authentication.
 - `vendor` (String) WebDAV server vendor type for compatibility optimizations.
@@ -303,12 +307,12 @@ Required:
 
 Required:
 
-- `token` (String, Sensitive) Yandex OAuth access token for API authentication.
+- `token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Yandex OAuth access token for API authentication.
 
 Optional:
 
 - `client_id` (String) Yandex OAuth application client ID. Defaults to `""`.
-- `client_secret` (String, Sensitive) Yandex OAuth application client secret. Defaults to `""`.
+- `client_secret` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Yandex OAuth application client secret.
 
 ## Import
 

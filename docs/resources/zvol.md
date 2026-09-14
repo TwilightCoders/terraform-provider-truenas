@@ -32,6 +32,7 @@ Manages a ZFS volume (zvol). Destroying the resource fails while the volume has 
 There is 1 case where ZFS encryption is not allowed for a dataset:
 1) If the parent dataset is encrypted with a passphrase and `name` is being created with a key for encrypting the        dataset. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS.
 - `encryption_options` (Attributes) Configuration for encryption of dataset for `name` pool. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS. (see [below for nested schema](#nestedatt--encryption_options))
+- `encryption_options_wo_version` (Number) Change this value to send `encryption_options` again. Terraform never stores `encryption_options`.
 - `exec` (String) Whether files in this dataset can be executed. Defaults to `"INHERIT"`.
 - `force_size` (Boolean) Force creation even if the size is not optimal. TrueNAS does not report this value, so changes made outside Terraform are not detected.
 - `inherit_encryption` (Boolean) Whether to inherit encryption settings from the parent dataset. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS.
@@ -87,8 +88,8 @@ Optional:
 
 - `algorithm` (String) Encryption algorithm to use for dataset encryption. TrueNAS does not report this value, so changes made outside Terraform are not detected.
 - `generate_key` (Boolean) Automatically generate the key to be used for dataset encryption. TrueNAS does not report this value, so changes made outside Terraform are not detected.
-- `key` (String, Sensitive) A hex-encoded key specified as an alternative to using `passphrase`. TrueNAS does not report this value, so changes made outside Terraform are not detected.
-- `passphrase` (String, Sensitive) Must be specified if encryption for root dataset is desired with a passphrase as a key. TrueNAS does not report this value, so changes made outside Terraform are not detected.
+- `key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) A hex-encoded key specified as an alternative to using `passphrase`.
+- `passphrase` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Must be specified if encryption for root dataset is desired with a passphrase as a key.
 - `pbkdf2iters` (Number) Number of PBKDF2 iterations for key derivation from passphrase. Higher iterations improve security     against brute force attacks but increase unlock time. Default 350,000 balances security and performance. TrueNAS does not report this value, so changes made outside Terraform are not detected.
 
 ## Import

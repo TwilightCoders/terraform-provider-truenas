@@ -101,6 +101,8 @@ var Dataset = engine.Resource{
 	Fields: map[string]engine.Field{
 		// Child datasets are resources of their own.
 		"children": engine.Omit,
+		// The encryption passphrase or key must never reach state.
+		"encryption_options": {WriteOnlySecrets: true},
 		// Read as a map of property wrappers but written as a list; not modeled yet.
 		"user_properties": engine.Omit,
 		// Volume-only properties that the shared read shape reports for filesystems too.
@@ -118,9 +120,10 @@ var Zvol = engine.Resource{
 	ListOptions: map[string]any{"extra": map[string]any{"flat": true}},
 	Description: "Manages a ZFS volume (zvol). Destroying the resource fails while the volume has snapshots or dependents.",
 	Fields: map[string]engine.Field{
-		"children":        engine.Omit,
-		"user_properties": engine.Omit,
-		"mountpoint":      engine.Omit,
+		"children":           engine.Omit,
+		"user_properties":    engine.Omit,
+		"mountpoint":         engine.Omit,
+		"encryption_options": {WriteOnlySecrets: true},
 	},
 }
 
@@ -166,10 +169,10 @@ var CloudSyncCredentials = engine.Resource{
 	Type:      "cloudsync_credentials",
 	Namespace: "cloudsync.credentials",
 	Description: "Manages credentials for cloud sync tasks. Set exactly one storage type under `storage`. " +
-		"Secret fields are sensitive but are stored in Terraform state, because TrueNAS reports them back.",
+		"Secret fields are write-only: they never enter Terraform state. Bump `storage_wo_version` to resend them.",
 	Fields: map[string]engine.Field{
 		// "provider" is reserved by Terraform.
-		"provider": {Name: "storage"},
+		"provider": {Name: "storage", WriteOnlySecrets: true},
 	},
 }
 
@@ -206,9 +209,9 @@ var ACMEDNSAuthenticator = engine.Resource{
 	Type:      "acme_dns_authenticator",
 	Namespace: "acme.dns.authenticator",
 	Description: "Manages a DNS provider for ACME DNS-01 challenges. Set exactly one provider under `authenticator`. " +
-		"Its credentials are sensitive but stored in Terraform state, because TrueNAS reports them back.",
+		"Credentials are write-only: they never enter Terraform state. Bump `authenticator_wo_version` to resend them.",
 	Fields: map[string]engine.Field{
-		"attributes": {Name: "authenticator"},
+		"attributes": {Name: "authenticator", WriteOnlySecrets: true},
 	},
 }
 

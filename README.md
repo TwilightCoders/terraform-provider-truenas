@@ -115,6 +115,26 @@ list "truenas_dataset" "tank" {
 `terraform query -generate-config-out=datasets.tf` writes import blocks and configuration for every
 match. Users and groups list only non-built-in accounts.
 
+## Secrets and Terraform state
+
+Terraform state is a plain file. The provider keeps credentials out of it with write-only attributes:
+Terraform sends them to TrueNAS and never records them. Changing a write-only value alone plans
+nothing; bump the matching `*_wo_version` attribute to send it again.
+
+| Resource | Write-only | Resend with |
+|---|---|---|
+| `truenas_user` | `password` | `password_wo_version` |
+| `truenas_certificate` | `privatekey`, `passphrase` | `privatekey_wo_version`, `passphrase_wo_version` |
+| `truenas_cloudsync_credentials` | every secret under `storage` | `storage_wo_version` |
+| `truenas_cloudsync_task` | `encryption_password`, `encryption_salt` | their `*_wo_version` |
+| `truenas_acme_dns_authenticator` | every secret under `authenticator` | `authenticator_wo_version` |
+| `truenas_replication` | `encryption_key` | `encryption_key_wo_version` |
+| `truenas_dataset`, `truenas_zvol` | `encryption_options.passphrase`, `encryption_options.key` | `encryption_options_wo_version` |
+
+Values the provider cannot recognize as secrets are stored normally: commands in `truenas_cron_job`
+and `truenas_init_script`, and compose files, are recorded as written. Keep secrets in `.env` files
+or TrueNAS itself rather than inline.
+
 ## Requirements
 
 | Component | Version |
