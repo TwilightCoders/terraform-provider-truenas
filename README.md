@@ -45,9 +45,8 @@ provider "truenas" {
   host     = "nas.lan"
   username = "truenas_admin"
   # api_key from TRUENAS_API_KEY
-  tls = {
-    fingerprint = "AA:BB:CC:..." # TrueNAS ships a self-signed certificate
-  }
+  # A publicly trusted certificate needs no tls block. For a private CA:
+  # tls = { ca_pem = file("ca.pem") }
 }
 
 resource "truenas_snapshot_task" "home" {

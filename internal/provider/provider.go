@@ -109,16 +109,18 @@ func (p *Provider) Schema(_ context.Context, _ provider.SchemaRequest, resp *pro
 					"Use it to import and plan against a production box with a guarantee of no writes.",
 			},
 			"tls": schema.SingleNestedAttribute{
-				Optional:            true,
-				MarkdownDescription: "Server certificate verification. TrueNAS ships a self-signed certificate; pin it with `fingerprint` or trust it with `ca_pem`.",
+				Optional: true,
+				MarkdownDescription: "Server certificate verification. With a publicly trusted certificate (for example an ACME certificate managed by `truenas_certificate`), leave this unset. " +
+					"For a private CA, prefer `ca_pem`: it survives certificate renewal. `fingerprint` pins one certificate and breaks when it is renewed.",
 				Attributes: map[string]schema.Attribute{
 					"ca_pem": schema.StringAttribute{
 						Optional:            true,
 						MarkdownDescription: "PEM-encoded CA certificates to trust.",
 					},
 					"fingerprint": schema.StringAttribute{
-						Optional:            true,
-						MarkdownDescription: "SHA-256 fingerprint of the server certificate, hex with optional colons. Replaces chain and hostname verification.",
+						Optional: true,
+						MarkdownDescription: "SHA-256 fingerprint of the server certificate, hex with optional colons. Replaces chain and hostname verification. " +
+							"Breaks whenever the certificate is renewed; use it for short-lived bootstrap only.",
 					},
 					"insecure_skip_verify": schema.BoolAttribute{
 						Optional:            true,
