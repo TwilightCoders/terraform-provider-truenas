@@ -340,3 +340,70 @@ resource "truenas_app" "plex" {
 		},
 	})
 }
+
+// Recording provider-side settings changes nothing on TrueNAS, so read-only mode must allow it;
+// anything that would call TrueNAS must still be refused at plan time.
+func TestReadOnlyAllowsStateOnlyChanges(t *testing.T) {
+	srv := middlewaretest.NewServer(t)
+	apps := serveApps(srv)
+	apps.apps["postgres"] = map[string]any{
+		"name": "postgres", "state": "RUNNING", "custom_app": true, "portals": map[string]any{}, "notes": nil,
+		"config": map[string]any{"include": []any{"/mnt/tank/apps/docker/postgres.yml"}},
+	}
+	app := func(extra string) string {
+		return providerConfig(srv, "read_only = true") + `
+resource "truenas_app" "postgres" {
+  name    = "postgres"
+  include = ["/mnt/tank/apps/docker/postgres.yml"]
+  ` + extra + `
+}`
+	}
+
+	resource.UnitTest(t, resource.TestCase{
+		ProtoV6ProviderFactories: factories,
+		Steps: []resource.TestStep{
+			{
+				Config: app(`hold = true
+  delete_images = false`) + `
+import {
+  to = truenas_app.postgres
+  id = "postgres"
+}`,
+				Check: expectCalls(apps),
+				ConfigStateChecks: []statecheck.StateCheck{
+					statecheck.ExpectKnownValue("truenas_app.postgres", tfjsonpath.New("hold"), knownvalue.Bool(true)),
+				},
+			},
+			{
+				Config: app(`hold = false
+  delete_ix_volumes = true`),
+				Check: expectCalls(apps),
+			},
+			{
+				Config:      app(`redeploy_trigger = "new"`),
+				ExpectError: regexp.MustCompile(`would\s+call\s+app.redeploy\s+on\s+postgres,\s+but\s+the\s+provider\s+has\s+read_only`),
+			},
+			{
+				Config:      app(`desired_state = "STOPPED"`),
+				ExpectError: regexp.MustCompile(`would\s+call\s+app.stop`),
+			},
+			{
+				Config: app(`portals = { "UI" = "http://pg.lan/" }
+  hold = false`),
+				ExpectError: regexp.MustCompile(`would\s+replace\s+postgres`),
+			},
+			{
+				Config:      providerConfig(srv, "read_only = true") + `# destroy`,
+				ExpectError: regexp.MustCompile(`would\s+destroy\s+postgres`),
+			},
+			{
+				// Leave the fixture removable.
+				Config: providerConfig(srv, "") + `
+resource "truenas_app" "postgres" {
+  name    = "postgres"
+  include = ["/mnt/tank/apps/docker/postgres.yml"]
+}`,
+			},
+		},
+	})
+}

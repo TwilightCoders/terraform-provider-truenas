@@ -2,12 +2,16 @@ package provider
 
 import (
 	"encoding/json"
+	"fmt"
+	"regexp"
+	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/knownvalue"
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 	"github.com/hashicorp/terraform-plugin-testing/statecheck"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
 
 	"github.com/TwilightCoders/terraform-provider-truenas/api"
@@ -122,6 +126,45 @@ resource "truenas_certificate" "lan" {
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{plancheck.ExpectResourceAction(addr, plancheck.ResourceActionDestroyBeforeCreate)},
 				},
+			},
+		},
+	})
+}
+
+func TestReadOnlyRecordsCreateOnlyValuesAfterImport(t *testing.T) {
+	srv := middlewaretest.NewServer(t)
+	store := srv.ServeCRUD(apischema.MustLoad(api.Latest), "certificate")
+	store.Seed(map[string]any{"id": json.Number("7"), "name": "truenas-lan", "common": "nas.example.com", "renew_days": json.Number("10")})
+	config := providerConfig(srv, "read_only = true") + `
+import {
+  to = truenas_certificate.lan
+  id = "7"
+}
+resource "truenas_certificate" "lan" {
+  name        = "truenas-lan"
+  create_type = "CERTIFICATE_CREATE_CSR"
+  common      = "nas.example.com"
+}`
+	resource.UnitTest(t, resource.TestCase{
+		ProtoV6ProviderFactories: factories,
+		Steps: []resource.TestStep{
+			{
+				Config: config,
+				Check: func(*terraform.State) error {
+					for _, c := range srv.Calls() {
+						if c.Method == "certificate.update" || c.Method == "certificate.create" {
+							return fmt.Errorf("read-only apply called %s", c.Method)
+						}
+					}
+					return nil
+				},
+			},
+			{
+				Config:      strings.Replace(config, `name        = "truenas-lan"`, `name        = "renamed"`, 1),
+				ExpectError: regexp.MustCompile(`would\s+update`),
+			},
+			{
+				Config: strings.Replace(config, `read_only = true`, ``, 1),
 			},
 		},
 	})

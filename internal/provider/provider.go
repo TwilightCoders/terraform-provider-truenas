@@ -110,7 +110,7 @@ func (p *Provider) Schema(_ context.Context, _ provider.SchemaRequest, resp *pro
 			},
 			"read_only": schema.BoolAttribute{
 				Optional: true,
-				MarkdownDescription: "Refuse any plan that would create, update or destroy a resource. " +
+				MarkdownDescription: "Refuse any plan that would call TrueNAS to create, update, replace or destroy a resource; changes that only update Terraform state still apply. " +
 					"Use it to import and plan against a production box with a guarantee of no writes.",
 			},
 			"tls": schema.SingleNestedAttribute{

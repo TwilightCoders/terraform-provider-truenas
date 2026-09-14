@@ -89,7 +89,9 @@ Settings resources (`*_config`) manage values that always exist: creating one ap
 attributes you set, and destroying it removes it from state without changing TrueNAS.
 
 Set `read_only = true` to import and plan against a production box with a guarantee that nothing
-is changed: any plan that would create, update or destroy a resource fails.
+is changed: any plan that would call TrueNAS to create, update, replace or destroy a resource fails.
+Changes that only update Terraform state are still applied, such as recording `hold`,
+`delete_images` or an imported resource's creation-only values.
 
 > **Connect to TrueNAS directly.** TrueNAS permanently revokes an API key the first time it arrives
 > over plaintext. A reverse proxy that terminates TLS and forwards to TrueNAS over HTTP does exactly

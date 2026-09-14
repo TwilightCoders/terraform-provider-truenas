@@ -89,12 +89,19 @@ func (st *Store) Rows() []map[string]any {
 	return out
 }
 
-// Seed stores a row as if it already existed, keyed by its primary key.
+// Seed stores a row as if it already existed, keyed by its primary key. Like a real read, the
+// row gets schema defaults and zero values for fields it leaves out.
 func (st *Store) Seed(row map[string]any) {
 	st.mu.Lock()
 	defer st.mu.Unlock()
-	key := fmt.Sprint(row[st.pk])
-	st.rows[key] = deepCopy(row).(map[string]any)
+	stored := deepCopy(row).(map[string]any)
+	if st.create != nil && st.create.Kind == apischema.KindObject {
+		var ignored []middleware.FieldError
+		checkObject("seed", st.create, stored, true, &ignored)
+	}
+	fillReadOnly(st.read, stored)
+	key := fmt.Sprint(stored[st.pk])
+	st.rows[key] = stored
 	st.order = append(st.order, key)
 }
 

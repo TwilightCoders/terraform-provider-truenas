@@ -27,6 +27,7 @@ import (
 var (
 	_ resource.ResourceWithConfigure   = (*filesystemACL)(nil)
 	_ resource.ResourceWithImportState = (*filesystemACL)(nil)
+	_ resource.ResourceWithModifyPlan  = (*filesystemACL)(nil)
 )
 
 // NFS4 permission and flag names, as filesystem.getacl reports them.
@@ -180,9 +181,22 @@ func (r *filesystemACL) Create(ctx context.Context, req resource.CreateRequest, 
 }
 
 func (r *filesystemACL) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan aclModel
+	var plan, state aclModel
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
-	if resp.Diagnostics.HasError() || !r.writable(&resp.Diagnostics) {
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	// recursive and traverse only shape the next write; changing them alone touches nothing.
+	if aclUnchanged(plan, state) {
+		if r.data == nil {
+			resp.Diagnostics.AddError("Provider not configured", "The TrueNAS provider has not been configured with a connection.")
+			return
+		}
+		resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
+		return
+	}
+	if !r.writable(&resp.Diagnostics) {
 		return
 	}
 	resp.Diagnostics.Append(r.apply(ctx, &plan)...)
@@ -190,6 +204,30 @@ func (r *filesystemACL) Update(ctx context.Context, req resource.UpdateRequest, 
 		return
 	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
+}
+
+// aclUnchanged reports whether plan would leave the ACL itself as state has it.
+func aclUnchanged(plan, state aclModel) bool {
+	return plan.Entries.Equal(state.Entries) && plan.ACLType.Equal(state.ACLType) &&
+		plan.UID.Equal(state.UID) && plan.GID.Equal(state.GID)
+}
+
+func (r *filesystemACL) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if r.data == nil || !r.data.ReadOnly || req.Plan.Raw.IsNull() {
+		return // destroying only forgets the ACL
+	}
+	var plan aclModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if req.State.Raw.IsNull() {
+		resp.Diagnostics.AddError("Provider is read-only", "This plan would set an ACL, but the provider has read_only = true.")
+		return
+	}
+	var state aclModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if !resp.Diagnostics.HasError() && !aclUnchanged(plan, state) {
+		resp.Diagnostics.AddError("Provider is read-only",
+			fmt.Sprintf("This plan would change the ACL of %s, but the provider has read_only = true.", state.Path.ValueString()))
+	}
 }
 
 func (r *filesystemACL) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {

@@ -153,7 +153,11 @@ func (r *app) Configure(_ context.Context, req resource.ConfigureRequest, resp *
 }
 
 func (r *app) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	readOnly := r.data != nil && r.data.ReadOnly
 	if req.State.Raw.IsNull() {
+		if readOnly && !req.Plan.Raw.IsNull() {
+			resp.Diagnostics.AddError("Provider is read-only", "This plan would create an app, but the provider has read_only = true.")
+		}
 		return
 	}
 	var state appModel
@@ -165,6 +169,9 @@ func (r *app) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, re
 	if req.Plan.Raw.IsNull() {
 		if state.Hold.ValueBool() {
 			resp.Diagnostics.AddError("App is held", fmt.Sprintf("%s has hold = true; set hold = false before destroying it.", state.Name.ValueString()))
+		}
+		if readOnly {
+			resp.Diagnostics.AddError("Provider is read-only", fmt.Sprintf("This plan would destroy %s, but the provider has read_only = true.", state.Name.ValueString()))
 		}
 		return
 	}
@@ -181,6 +188,16 @@ func (r *app) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, re
 	}
 	if known(plan.Notes) && !state.Notes.IsNull() && strings.TrimSpace(plan.Notes.ValueString()) != strings.TrimSpace(state.Notes.ValueString()) {
 		resp.RequiresReplace.Append(path.Root("notes"))
+	}
+
+	if readOnly {
+		switch calls := plannedCalls(plan, state); {
+		case len(resp.RequiresReplace) > 0:
+			resp.Diagnostics.AddError("Provider is read-only", fmt.Sprintf("This plan would replace %s, but the provider has read_only = true.", state.Name.ValueString()))
+		case len(calls) > 0:
+			resp.Diagnostics.AddError("Provider is read-only",
+				fmt.Sprintf("This plan would call %s on %s, but the provider has read_only = true.", strings.Join(calls, ", "), state.Name.ValueString()))
+		}
 	}
 
 	if state.Hold.ValueBool() && plan.Hold.ValueBool() && appChanges(plan, state) {
@@ -252,45 +269,56 @@ func (r *app) Read(ctx context.Context, req resource.ReadRequest, resp *resource
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
+// plannedCalls lists the app.* methods an update from state to plan would call, in order. Attributes
+// that only configure the provider (hold, delete_images, delete_ix_volumes) call nothing.
+func plannedCalls(plan, state appModel) []string {
+	var calls []string
+	switch {
+	case !plan.Include.Equal(state.Include) || !plan.Compose.Equal(state.Compose):
+		calls = append(calls, "app.update")
+	case !plan.RedeployTrigger.Equal(state.RedeployTrigger) && plan.DesiredState.ValueString() == "RUNNING":
+		calls = append(calls, "app.redeploy")
+	}
+	switch {
+	case plan.DesiredState.ValueString() == "STOPPED" && state.State.ValueString() != "STOPPED":
+		calls = append(calls, "app.stop")
+	case plan.DesiredState.ValueString() == "RUNNING" && state.State.ValueString() == "STOPPED":
+		calls = append(calls, "app.start")
+	}
+	return calls
+}
+
 func (r *app) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state appModel
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
-	if resp.Diagnostics.HasError() || !r.writable(&resp.Diagnostics) {
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	if r.data == nil {
+		resp.Diagnostics.AddError("Provider not configured", "The TrueNAS provider has not been configured with a connection.")
+		return
+	}
+	calls := plannedCalls(plan, state)
+	if len(calls) > 0 && !r.writable(&resp.Diagnostics) {
 		return
 	}
 	name := plan.Name.ValueString()
-
-	composeChanged := !plan.Include.Equal(state.Include) || !plan.Compose.Equal(state.Compose)
-	switch {
-	case composeChanged:
-		config, diags := composeConfig(ctx, plan)
-		resp.Diagnostics.Append(diags...)
-		if resp.Diagnostics.HasError() {
-			return
+	for _, method := range calls {
+		var err error
+		switch method {
+		case "app.update":
+			config, diags := composeConfig(ctx, plan)
+			resp.Diagnostics.Append(diags...)
+			if resp.Diagnostics.HasError() {
+				return
+			}
+			_, err = r.data.Client.Call(ctx, method, name, map[string]any{"custom_compose_config": config})
+		default:
+			_, err = r.data.Client.Call(ctx, method, name)
 		}
-		if _, err := r.data.Client.Call(ctx, "app.update", name, map[string]any{"custom_compose_config": config}); err != nil {
-			resp.Diagnostics.AddError("Unable to update app", err.Error())
-			return
-		}
-	case !plan.RedeployTrigger.Equal(state.RedeployTrigger) && plan.DesiredState.ValueString() == "RUNNING":
-		if _, err := r.data.Client.Call(ctx, "app.redeploy", name); err != nil {
-			resp.Diagnostics.AddError("Unable to redeploy app", err.Error())
-			return
-		}
-	}
-
-	switch {
-	case plan.DesiredState.ValueString() == "STOPPED" && state.State.ValueString() != "STOPPED":
-		_, err := r.data.Client.Call(ctx, "app.stop", name)
 		if err != nil {
-			resp.Diagnostics.AddError("Unable to stop app", err.Error())
-			return
-		}
-	case plan.DesiredState.ValueString() == "RUNNING" && state.State.ValueString() == "STOPPED":
-		_, err := r.data.Client.Call(ctx, "app.start", name)
-		if err != nil {
-			resp.Diagnostics.AddError("Unable to start app", err.Error())
+			resp.Diagnostics.AddError(fmt.Sprintf("%s failed", method), err.Error())
 			return
 		}
 	}
