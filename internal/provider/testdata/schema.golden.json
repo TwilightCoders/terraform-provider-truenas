@@ -3545,6 +3545,84 @@
       "id": "tftypes.String"
     }
   },
+  "truenas_filesystem_acl": {
+    "attributes": {
+      "acltype": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "entries": {
+        "attributes": {
+          "advanced_flags": {
+            "mode": "optional",
+            "type": "tftypes.Set[tftypes.String]"
+          },
+          "advanced_perms": {
+            "mode": "optional",
+            "type": "tftypes.Set[tftypes.String]"
+          },
+          "default": {
+            "mode": "optional",
+            "type": "tftypes.Bool"
+          },
+          "execute": {
+            "mode": "optional",
+            "type": "tftypes.Bool"
+          },
+          "flags": {
+            "mode": "optional",
+            "type": "tftypes.String"
+          },
+          "id": {
+            "mode": "optional",
+            "type": "tftypes.Number"
+          },
+          "perms": {
+            "mode": "optional",
+            "type": "tftypes.String"
+          },
+          "read": {
+            "mode": "optional",
+            "type": "tftypes.Bool"
+          },
+          "tag": {
+            "mode": "required",
+            "type": "tftypes.String"
+          },
+          "type": {
+            "mode": "optional",
+            "type": "tftypes.String"
+          },
+          "write": {
+            "mode": "optional",
+            "type": "tftypes.Bool"
+          }
+        },
+        "mode": "required",
+        "nesting": "SET"
+      },
+      "gid": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "path": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "recursive": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "traverse": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "uid": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      }
+    }
+  },
   "truenas_general_config": {
     "attributes": {
       "ds_auth": {

@@ -17,6 +17,7 @@ import and resource identity.
 | `truenas_cloudsync_task` | `cloudsync` |
 | `truenas_cron_job` | `cronjob` |
 | `truenas_dataset` | `pool.dataset` (filesystems) |
+| `truenas_filesystem_acl` | `filesystem.getacl` / `setacl` (hand-written) |
 | `truenas_general_config` | `system.general` (settings) |
 | `truenas_group` | `group` |
 | `truenas_init_script` | `initshutdownscript` |

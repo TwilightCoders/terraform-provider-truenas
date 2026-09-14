@@ -1,7 +1,16 @@
 // Package resources declares the provider's resources as engine specs.
 package resources
 
-import "github.com/TwilightCoders/terraform-provider-truenas/internal/engine"
+import (
+	"github.com/hashicorp/terraform-plugin-framework/resource"
+
+	"github.com/TwilightCoders/terraform-provider-truenas/internal/engine"
+)
+
+// Custom lists hand-written resources that the engine cannot derive.
+var Custom = []func() resource.Resource{
+	NewFilesystemACL,
+}
 
 // All lists every resource the provider serves.
 var All = []engine.Resource{

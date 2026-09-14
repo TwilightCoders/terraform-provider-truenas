@@ -199,11 +199,11 @@ func (p *Provider) Configure(ctx context.Context, req provider.ConfigureRequest,
 }
 
 func (p *Provider) Resources(_ context.Context) []func() resource.Resource {
-	out := make([]func() resource.Resource, 0, len(resources.All))
+	out := make([]func() resource.Resource, 0, len(resources.All)+len(resources.Custom))
 	for _, spec := range resources.All {
 		out = append(out, engine.NewResource(p.snapshot, spec))
 	}
-	return out
+	return append(out, resources.Custom...)
 }
 
 func (p *Provider) ListResources(_ context.Context) []func() list.ListResource {

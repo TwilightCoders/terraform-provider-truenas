@@ -1,0 +1,77 @@
+{
+    "path": "/mnt/tank/data/media",
+    "user": null,
+    "group": null,
+    "uid": 3000,
+    "gid": 3000,
+    "acltype": "NFS4",
+    "acl": [
+        {
+            "tag": "owner@",
+            "type": "ALLOW",
+            "perms": {
+                "BASIC": "FULL_CONTROL"
+            },
+            "flags": {
+                "BASIC": "INHERIT"
+            },
+            "id": -1,
+            "who": null
+        },
+        {
+            "tag": "group@",
+            "type": "ALLOW",
+            "perms": {
+                "BASIC": "FULL_CONTROL"
+            },
+            "flags": {
+                "BASIC": "INHERIT"
+            },
+            "id": -1,
+            "who": null
+        },
+        {
+            "tag": "USER",
+            "type": "ALLOW",
+            "perms": {
+                "BASIC": "READ"
+            },
+            "flags": {
+                "BASIC": "INHERIT"
+            },
+            "id": 3001,
+            "who": null
+        },
+        {
+            "tag": "everyone@",
+            "type": "ALLOW",
+            "perms": {
+                "READ_DATA": false,
+                "WRITE_DATA": false,
+                "APPEND_DATA": false,
+                "READ_NAMED_ATTRS": false,
+                "WRITE_NAMED_ATTRS": false,
+                "EXECUTE": false,
+                "DELETE": false,
+                "DELETE_CHILD": false,
+                "READ_ATTRIBUTES": false,
+                "WRITE_ATTRIBUTES": false,
+                "READ_ACL": false,
+                "WRITE_ACL": false,
+                "WRITE_OWNER": false,
+                "SYNCHRONIZE": false
+            },
+            "flags": {
+                "BASIC": "INHERIT"
+            },
+            "id": -1,
+            "who": null
+        }
+    ],
+    "aclflags": {
+        "autoinherit": false,
+        "protected": false,
+        "defaulted": false
+    },
+    "trivial": false
+}
