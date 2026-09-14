@@ -6,11 +6,13 @@ import "github.com/TwilightCoders/terraform-provider-truenas/internal/engine"
 // All lists every resource the provider serves.
 var All = []engine.Resource{
 	CronJob,
+	Dataset,
 	Group,
 	InitScript,
 	SMBShare,
 	SnapshotTask,
 	User,
+	Zvol,
 }
 
 // CronJob manages scheduled commands (cronjob).
@@ -74,5 +76,36 @@ var User = engine.Resource{
 		"random_password": engine.Omit,
 		// Accepts a group id, returns the group object.
 		"group": {Ref: "id"},
+	},
+}
+
+// Dataset manages ZFS filesystems (pool.dataset with type FILESYSTEM).
+var Dataset = engine.Resource{
+	Type:        "dataset",
+	Namespace:   "pool.dataset",
+	Variant:     "FILESYSTEM",
+	Description: "Manages a ZFS filesystem dataset. Properties set to `INHERIT` (the default for most) follow the parent dataset. Destroying the resource fails while the dataset has children.",
+	Fields: map[string]engine.Field{
+		// Child datasets are resources of their own.
+		"children": engine.Omit,
+		// Read as a map of property wrappers but written as a list; not modeled yet.
+		"user_properties": engine.Omit,
+		// Volume-only properties that the shared read shape reports for filesystems too.
+		"volsize":      engine.Omit,
+		"volblocksize": engine.Omit,
+		"sparse":       engine.Omit,
+	},
+}
+
+// Zvol manages ZFS volumes (pool.dataset with type VOLUME).
+var Zvol = engine.Resource{
+	Type:        "zvol",
+	Namespace:   "pool.dataset",
+	Variant:     "VOLUME",
+	Description: "Manages a ZFS volume (zvol). Destroying the resource fails while the volume has snapshots or dependents.",
+	Fields: map[string]engine.Field{
+		"children":        engine.Omit,
+		"user_properties": engine.Omit,
+		"mountpoint":      engine.Omit,
 	},
 }

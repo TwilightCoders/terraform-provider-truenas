@@ -12,11 +12,13 @@ import and resource identity.
 | Resource | TrueNAS service |
 |---|---|
 | `truenas_cron_job` | `cronjob` |
+| `truenas_dataset` | `pool.dataset` (filesystems) |
 | `truenas_group` | `group` |
 | `truenas_init_script` | `initshutdownscript` |
 | `truenas_smb_share` | `sharing.smb` |
 | `truenas_snapshot_task` | `pool.snapshottask` |
 | `truenas_user` | `user` |
+| `truenas_zvol` | `pool.dataset` (volumes) |
 
 ## Usage
 
@@ -52,6 +54,27 @@ resource "truenas_snapshot_task" "home" {
 
 Set `read_only = true` to import and plan against a production box with a guarantee that nothing
 is changed: any plan that would create, update or destroy a resource fails.
+
+> **Connect to TrueNAS directly.** TrueNAS permanently revokes an API key the first time it arrives
+> over plaintext. A reverse proxy that terminates TLS and forwards to TrueNAS over HTTP does exactly
+> that, even though your side of the connection is encrypted. The provider refuses to send the key
+> when `host` is answered by a web server other than TrueNAS's own; `allow_reverse_proxy = true`
+> overrides this for proxies that re-encrypt.
+
+### Importing existing objects
+
+Import blocks for this provider need `provider = truenas`; without it, Terraform's config generation
+looks for `hashicorp/truenas`.
+
+```hcl
+import {
+  to       = truenas_snapshot_task.home
+  provider = truenas
+  identity = { id = 5 }
+}
+```
+
+`terraform plan -generate-config-out=generated.tf` then writes the configuration for everything imported.
 
 ## Requirements
 

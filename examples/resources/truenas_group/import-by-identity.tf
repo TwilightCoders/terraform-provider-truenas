@@ -1,5 +1,6 @@
 import {
-  to = truenas_group.example
+  to       = truenas_group.example
+  provider = truenas
   identity = {
     id = 1
   }

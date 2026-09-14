@@ -111,7 +111,11 @@ func (st *Store) handleCreate(_ context.Context, params []json.RawMessage) (any,
 		return nil, err
 	}
 	var fields []middleware.FieldError
-	checkObject(st.argName+"_create", st.create, data, true, &fields)
+	if st.create.Kind == apischema.KindUnion {
+		checkValue(st.argName+"_create", st.create, data, &fields)
+	} else {
+		checkObject(st.argName+"_create", st.create, data, true, &fields)
+	}
 	if len(fields) > 0 {
 		return nil, validation(fields)
 	}
@@ -286,6 +290,9 @@ func checkValue(path string, t *apischema.Type, v any, errs *[]middleware.FieldE
 	switch t.Kind {
 	case apischema.KindString:
 		s, ok := v.(string)
+		if _, isNumber := v.(json.Number); isNumber && t.IntOrString {
+			return
+		}
 		if !ok {
 			bad("string")
 			return

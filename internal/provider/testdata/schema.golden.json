@@ -60,6 +60,241 @@
       "id": "tftypes.Number"
     }
   },
+  "truenas_dataset": {
+    "attributes": {
+      "aclmode": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "acltype": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "atime": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "available": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "casesensitivity": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "checksum": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "comments": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "compression": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "compressratio": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "copies": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "create_ancestors": {
+        "mode": "optional",
+        "type": "tftypes.Bool"
+      },
+      "creation": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "deduplication": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "encrypted": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "encryption": {
+        "mode": "optional",
+        "type": "tftypes.Bool"
+      },
+      "encryption_algorithm": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "encryption_options": {
+        "attributes": {
+          "algorithm": {
+            "mode": "optional",
+            "type": "tftypes.String"
+          },
+          "generate_key": {
+            "mode": "optional",
+            "type": "tftypes.Bool"
+          },
+          "key": {
+            "mode": "optional",
+            "sensitive": true,
+            "type": "tftypes.String"
+          },
+          "passphrase": {
+            "mode": "optional",
+            "sensitive": true,
+            "type": "tftypes.String"
+          },
+          "pbkdf2iters": {
+            "mode": "optional",
+            "type": "tftypes.Number"
+          }
+        },
+        "mode": "optional",
+        "nesting": "SINGLE"
+      },
+      "encryption_root": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "exec": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "inherit_encryption": {
+        "mode": "optional",
+        "type": "tftypes.Bool"
+      },
+      "key_format": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "key_loaded": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "locked": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "managedby": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "mountpoint": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "name": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "origin": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "pbkdf2iters": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "pool": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "quota": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "quota_critical": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "quota_warning": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "readonly": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "recordsize": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "refquota": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "refquota_critical": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "refquota_warning": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "refreservation": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "reservation": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "share_type": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "snapdev": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "snapdir": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "special_small_block_size": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "sync": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "used": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "usedbychildren": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "usedbydataset": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "usedbyrefreservation": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "usedbysnapshots": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "xattr": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      }
+    },
+    "identity": {
+      "id": "tftypes.String"
+    }
+  },
   "truenas_group": {
     "attributes": {
       "builtin": {
@@ -683,6 +918,253 @@
     },
     "identity": {
       "id": "tftypes.Number"
+    }
+  },
+  "truenas_zvol": {
+    "attributes": {
+      "aclmode": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "acltype": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "atime": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "available": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "casesensitivity": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "checksum": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "comments": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "compression": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "compressratio": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "copies": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "create_ancestors": {
+        "mode": "optional",
+        "type": "tftypes.Bool"
+      },
+      "creation": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "deduplication": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "encrypted": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "encryption": {
+        "mode": "optional",
+        "type": "tftypes.Bool"
+      },
+      "encryption_algorithm": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "encryption_options": {
+        "attributes": {
+          "algorithm": {
+            "mode": "optional",
+            "type": "tftypes.String"
+          },
+          "generate_key": {
+            "mode": "optional",
+            "type": "tftypes.Bool"
+          },
+          "key": {
+            "mode": "optional",
+            "sensitive": true,
+            "type": "tftypes.String"
+          },
+          "passphrase": {
+            "mode": "optional",
+            "sensitive": true,
+            "type": "tftypes.String"
+          },
+          "pbkdf2iters": {
+            "mode": "optional",
+            "type": "tftypes.Number"
+          }
+        },
+        "mode": "optional",
+        "nesting": "SINGLE"
+      },
+      "encryption_root": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "exec": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "force_size": {
+        "mode": "optional",
+        "type": "tftypes.Bool"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "inherit_encryption": {
+        "mode": "optional",
+        "type": "tftypes.Bool"
+      },
+      "key_format": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "key_loaded": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "locked": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "managedby": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "name": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "origin": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "pbkdf2iters": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "pool": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "quota": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "quota_critical": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "quota_warning": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "readonly": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "recordsize": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "refquota": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "refquota_critical": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "refquota_warning": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "refreservation": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "reservation": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "share_type": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "snapdev": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "snapdir": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "sparse": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "special_small_block_size": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "sync": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "used": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "usedbychildren": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "usedbydataset": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "usedbyrefreservation": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "usedbysnapshots": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "volblocksize": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "volsize": {
+        "mode": "required",
+        "type": "tftypes.Number"
+      },
+      "xattr": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      }
+    },
+    "identity": {
+      "id": "tftypes.String"
     }
   }
 }

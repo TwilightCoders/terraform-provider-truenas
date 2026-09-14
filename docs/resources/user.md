@@ -52,7 +52,7 @@ WARNING: The established best practice is to use only key-based authentication f
 - `uid` (Number) UNIX UID. If not provided, it is automatically filled with the next one available. Changing this forces a new resource.
 - `userns_idmap` (String) Specifies the subuid mapping for this user. If DIRECT then the UID will be     directly mapped to all containers. Alternatively, the target UID may be     explicitly specified. If `null`, then the UID will not be mapped.
 
-NOTE: This field will be ignored for users that have been assigned TrueNAS roles. JSON-encoded; use `jsonencode()`.
+NOTE: This field will be ignored for users that have been assigned TrueNAS roles.
 
 ### Read-Only
 
@@ -77,7 +77,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = truenas_user.example
+  to       = truenas_user.example
+  provider = truenas
   identity = {
     id = 1
   }

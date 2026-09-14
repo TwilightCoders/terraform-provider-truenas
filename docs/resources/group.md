@@ -27,7 +27,7 @@ Create a new group.
 - `sudo_commands_nopasswd` (List of String) A list of commands that group members may execute with elevated privileges. User is not prompted for password     when executing any command from the list.  Defaults to `[]`.
 - `userns_idmap` (String) Specifies the subgid mapping for this group. If DIRECT then the GID will be     directly mapped to all containers. Alternatively, the target GID may be     explicitly specified. If null, then the GID will not be mapped.
 
-**NOTE: This field will be ignored for groups that have been assigned TrueNAS roles.** JSON-encoded; use `jsonencode()`.
+**NOTE: This field will be ignored for groups that have been assigned TrueNAS roles.**
 - `users` (List of Number) A list a API user identifiers for local users who are members of this group. These IDs match the `id` field     from `user.query`.
 
 NOTE: This field is empty for groups that come from directory services (`local` is `False`).  Defaults to `[]`.
@@ -49,7 +49,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = truenas_group.example
+  to       = truenas_group.example
+  provider = truenas
   identity = {
     id = 1
   }

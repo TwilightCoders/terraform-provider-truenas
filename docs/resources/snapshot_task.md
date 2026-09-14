@@ -75,7 +75,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = truenas_snapshot_task.example
+  to       = truenas_snapshot_task.example
+  provider = truenas
   identity = {
     id = 1
   }

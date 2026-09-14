@@ -290,7 +290,8 @@ In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp
 
 ```terraform
 import {
-  to = truenas_smb_share.example
+  to       = truenas_smb_share.example
+  provider = truenas
   identity = {
     id = 1
   }
