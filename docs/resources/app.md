@@ -19,7 +19,7 @@ resource "truenas_app" "plex" {
 
   portals = {
     "Web UI" = "http://plex.lan/"
-    "Direct" = "http://192.168.1.10:32400/web"
+    "Direct" = "http://192.0.2.10:32400/web"
   }
   notes = "Library at /mnt/tank/media."
 
