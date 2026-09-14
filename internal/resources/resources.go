@@ -9,8 +9,12 @@ var All = []engine.Resource{
 	Dataset,
 	Group,
 	InitScript,
+	NetworkConfig,
+	NFSConfig,
+	SMBConfig,
 	SMBShare,
 	SnapshotTask,
+	SSHConfig,
 	User,
 	Zvol,
 }
@@ -107,5 +111,42 @@ var Zvol = engine.Resource{
 		"children":        engine.Omit,
 		"user_properties": engine.Omit,
 		"mountpoint":      engine.Omit,
+	},
+}
+
+// NetworkConfig manages global network settings: hostname, domain, gateways, DNS (network.configuration).
+var NetworkConfig = engine.Resource{
+	Type:      "network_config",
+	Namespace: "network.configuration",
+	Fields: map[string]engine.Field{
+		// Live interface and DHCP state, not configuration.
+		"state": engine.Omit,
+	},
+}
+
+// NFSConfig manages the NFS service settings (nfs).
+var NFSConfig = engine.Resource{
+	Type:      "nfs_config",
+	Namespace: "nfs",
+}
+
+// SMBConfig manages the SMB service settings (smb).
+var SMBConfig = engine.Resource{
+	Type:      "smb_config",
+	Namespace: "smb",
+}
+
+// SSHConfig manages the SSH service settings (ssh).
+var SSHConfig = engine.Resource{
+	Type:      "ssh_config",
+	Namespace: "ssh",
+	Fields: map[string]engine.Field{
+		// Host private keys: never in Terraform state.
+		"privatekey":       engine.Omit,
+		"host_dsa_key":     engine.Omit,
+		"host_ecdsa_key":   engine.Omit,
+		"host_ed25519_key": engine.Omit,
+		"host_key":         engine.Omit,
+		"host_rsa_key":     engine.Omit,
 	},
 }

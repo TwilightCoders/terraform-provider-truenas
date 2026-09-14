@@ -19,6 +19,7 @@ Manage TrueNAS SCALE through its versioned JSON-RPC API. Requires TrueNAS 25.10 
 - `allow_reverse_proxy` (Boolean) Connect even when `host` is answered by a web server other than TrueNAS's own. The provider refuses by default because a TLS-terminating proxy that forwards over HTTP gets the API key revoked. Only set this for a proxy that re-encrypts to TrueNAS.
 - `api_key` (String, Sensitive) API key. Defaults to `$TRUENAS_API_KEY`.
 - `host` (String) TrueNAS HTTPS address with optional port, e.g. `nas.lan` or `nas.lan:8443`. Defaults to `$TRUENAS_HOST`. Point it at TrueNAS itself: TrueNAS permanently revokes an API key that reaches it over plaintext, which happens behind a reverse proxy that terminates TLS and forwards over HTTP.
+- `insecure_loopback` (Boolean) Speak plaintext HTTP and WebSocket to a loopback address, typically the local end of an SSH tunnel to TrueNAS's HTTP port (`ssh -L 18080:127.0.0.1:80 nas`, then `host = "127.0.0.1:18080"`). TrueNAS accepts API keys over plaintext only from loopback, so the provider refuses any host that resolves elsewhere. Cannot be combined with `tls`.
 - `read_only` (Boolean) Refuse any plan that would create, update or destroy a resource. Use it to import and plan against a production box with a guarantee of no writes.
 - `tls` (Attributes) Server certificate verification. TrueNAS ships a self-signed certificate; pin it with `fingerprint` or trust it with `ca_pem`. (see [below for nested schema](#nestedatt--tls))
 - `username` (String) User that owns the API key. Defaults to `$TRUENAS_USERNAME`.

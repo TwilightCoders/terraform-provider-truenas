@@ -393,6 +393,267 @@
       "id": "tftypes.Number"
     }
   },
+  "truenas_network_config": {
+    "attributes": {
+      "activity": {
+        "attributes": {
+          "activities": {
+            "mode": "optional+computed",
+            "type": "tftypes.List[tftypes.String]"
+          },
+          "type": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          }
+        },
+        "mode": "optional+computed",
+        "nesting": "SINGLE"
+      },
+      "domain": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "domains": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "hostname": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "hostname_b": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "hostname_local": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "hostname_virtual": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "hosts": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "httpproxy": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "ipv4gateway": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "ipv6gateway": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "nameserver1": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "nameserver2": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "nameserver3": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "service_announcement": {
+        "attributes": {
+          "mdns": {
+            "mode": "optional+computed",
+            "type": "tftypes.Bool"
+          },
+          "netbios": {
+            "mode": "optional+computed",
+            "type": "tftypes.Bool"
+          },
+          "wsd": {
+            "mode": "optional+computed",
+            "type": "tftypes.Bool"
+          }
+        },
+        "mode": "optional+computed",
+        "nesting": "SINGLE"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_nfs_config": {
+    "attributes": {
+      "allow_nonroot": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "bindip": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "keytab_has_nfs_spn": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "managed_nfsd": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "mountd_log": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "mountd_port": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "protocols": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "rdma": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "rpclockd_port": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "rpcstatd_port": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "servers": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "statd_lockd_log": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "userd_manage_gids": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "v4_domain": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "v4_krb": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "v4_krb_enabled": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_smb_config": {
+    "attributes": {
+      "aapl_extensions": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "admin_group": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "bindip": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "debug": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "description": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "dirmask": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "enable_smb1": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "encryption": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "filemask": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "guest": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "localmaster": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "multichannel": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "netbiosalias": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "netbiosname": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "ntlmv1_auth": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "server_sid": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "smb_options": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "syslog": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "unixcharset": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "workgroup": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
   "truenas_smb_share": {
     "attributes": {
       "access_based_share_enumeration": {
@@ -773,6 +1034,97 @@
       "vmware_sync": {
         "mode": "computed",
         "type": "tftypes.Bool"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_ssh_config": {
+    "attributes": {
+      "bindiface": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "compression": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "host_dsa_key_cert_pub": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "host_dsa_key_pub": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "host_ecdsa_key_cert_pub": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "host_ecdsa_key_pub": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "host_ed25519_key_cert_pub": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "host_ed25519_key_pub": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "host_key_pub": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "host_rsa_key_cert_pub": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "host_rsa_key_pub": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "kerberosauth": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "options": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "password_login_groups": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "passwordauth": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "sftp_log_facility": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "sftp_log_level": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "tcpfwd": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "tcpport": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "weak_ciphers": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
       }
     },
     "identity": {

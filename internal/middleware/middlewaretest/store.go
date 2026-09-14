@@ -399,3 +399,55 @@ func deepCopy(v any) any {
 		return v
 	}
 }
+
+// ConfigStore is an in-memory config service: one settings object read with <ns>.config and
+// changed with <ns>.update.
+type ConfigStore struct {
+	namespace string
+	update    *apischema.Type
+
+	mu   sync.Mutex
+	data map[string]any
+}
+
+// ServeConfig registers <namespace>.config and <namespace>.update, starting from initial.
+func (s *Server) ServeConfig(snap *apischema.Snapshot, namespace string, initial map[string]any) *ConfigStore {
+	cs := &ConfigStore{
+		namespace: namespace,
+		update:    mustMethod(snap, namespace+".update").Accepts[0].Type,
+		data:      deepCopy(initial).(map[string]any),
+	}
+	fillReadOnly(mustMethod(snap, namespace+".config").Returns, cs.data)
+	s.Handle(namespace+".config", func(context.Context, []json.RawMessage) (any, error) {
+		return cs.Data(), nil
+	})
+	s.Handle(namespace+".update", func(_ context.Context, params []json.RawMessage) (any, error) {
+		if len(params) != 1 {
+			return nil, &middleware.Error{Code: middleware.CodeInvalidParams, Errno: 22, Errname: "EINVAL", Reason: "update takes one argument"}
+		}
+		v, err := decode(params[0])
+		patch, ok := v.(map[string]any)
+		if err != nil || !ok {
+			return nil, &middleware.Error{Code: middleware.CodeInvalidParams, Errno: 22, Errname: "EINVAL", Reason: "argument must be an object"}
+		}
+		var fields []middleware.FieldError
+		checkObject(strings.ReplaceAll(namespace, ".", "_")+"_update", cs.update, patch, false, &fields)
+		if len(fields) > 0 {
+			return nil, validation(fields)
+		}
+		cs.mu.Lock()
+		for k, val := range patch {
+			cs.data[k] = val
+		}
+		cs.mu.Unlock()
+		return cs.Data(), nil
+	})
+	return cs
+}
+
+// Data returns a copy of the current settings.
+func (cs *ConfigStore) Data() map[string]any {
+	cs.mu.Lock()
+	defer cs.mu.Unlock()
+	return deepCopy(cs.data).(map[string]any)
+}

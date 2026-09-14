@@ -15,8 +15,12 @@ import and resource identity.
 | `truenas_dataset` | `pool.dataset` (filesystems) |
 | `truenas_group` | `group` |
 | `truenas_init_script` | `initshutdownscript` |
+| `truenas_network_config` | `network.configuration` (settings) |
+| `truenas_nfs_config` | `nfs` (settings) |
+| `truenas_smb_config` | `smb` (settings) |
 | `truenas_smb_share` | `sharing.smb` |
 | `truenas_snapshot_task` | `pool.snapshottask` |
+| `truenas_ssh_config` | `ssh` (settings) |
 | `truenas_user` | `user` |
 | `truenas_zvol` | `pool.dataset` (volumes) |
 
@@ -52,6 +56,9 @@ resource "truenas_snapshot_task" "home" {
 }
 ```
 
+Settings resources (`*_config`) manage values that always exist: creating one applies only the
+attributes you set, and destroying it removes it from state without changing TrueNAS.
+
 Set `read_only = true` to import and plan against a production box with a guarantee that nothing
 is changed: any plan that would create, update or destroy a resource fails.
 
@@ -60,6 +67,18 @@ is changed: any plan that would create, update or destroy a resource fails.
 > that, even though your side of the connection is encrypted. The provider refuses to send the key
 > when `host` is answered by a web server other than TrueNAS's own; `allow_reverse_proxy = true`
 > overrides this for proxies that re-encrypt.
+>
+> Without HTTPS on TrueNAS, tunnel to it over SSH and set `insecure_loopback = true`: TrueNAS accepts
+> keys over plaintext from loopback, and the provider refuses plaintext to anything that is not
+> loopback.
+>
+> ```hcl
+> # ssh -f -N -L 18080:127.0.0.1:80 nas
+> provider "truenas" {
+>   host              = "127.0.0.1:18080"
+>   insecure_loopback = true
+> }
+> ```
 
 ### Importing existing objects
 
