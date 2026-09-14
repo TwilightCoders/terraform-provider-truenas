@@ -50,15 +50,19 @@ func (s *Server) ServeCRUD(snap *apischema.Snapshot, namespace string) *Store {
 		rows:      map[string]map[string]any{},
 		nextID:    1,
 	}
-	st.create = mustMethod(snap, namespace+".create").Accepts[0].Type
+	if snap.HasMethod(namespace + ".create") {
+		st.create = mustMethod(snap, namespace+".create").Accepts[0].Type
+		s.Handle(namespace+".create", st.handleCreate)
+	}
 	st.read = mustMethod(snap, namespace+".get_instance").Returns
 	if snap.HasMethod(namespace + ".update") {
 		st.update = mustMethod(snap, namespace+".update").Accepts[1].Type
 	}
 
-	s.Handle(namespace+".create", st.handleCreate)
 	s.Handle(namespace+".get_instance", st.handleGet)
-	s.Handle(namespace+".delete", st.handleDelete)
+	if snap.HasMethod(namespace + ".delete") {
+		s.Handle(namespace+".delete", st.handleDelete)
+	}
 	s.Handle(namespace+".query", st.handleQuery)
 	if st.update != nil {
 		s.Handle(namespace+".update", st.handleUpdate)
@@ -83,6 +87,15 @@ func (st *Store) Rows() []map[string]any {
 		out = append(out, deepCopy(st.rows[key]).(map[string]any))
 	}
 	return out
+}
+
+// Seed stores a row as if it already existed, keyed by its primary key.
+func (st *Store) Seed(row map[string]any) {
+	st.mu.Lock()
+	defer st.mu.Unlock()
+	key := fmt.Sprint(row[st.pk])
+	st.rows[key] = deepCopy(row).(map[string]any)
+	st.order = append(st.order, key)
 }
 
 // Mutate changes a stored row in place, simulating a change made outside Terraform.

@@ -25,6 +25,7 @@ import and resource identity.
 | `truenas_network_config` | `network.configuration` (settings) |
 | `truenas_nfs_config` | `nfs` (settings) |
 | `truenas_replication` | `replication` |
+| `truenas_service` | `service` (adopts existing services) |
 | `truenas_smb_config` | `smb` (settings) |
 | `truenas_smb_share` | `sharing.smb` |
 | `truenas_snapshot_task` | `pool.snapshottask` |

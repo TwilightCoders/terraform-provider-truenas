@@ -1251,6 +1251,30 @@
       }
     }
   },
+  "data.truenas_service": {
+    "attributes": {
+      "enable": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "id": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "query_filters": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "service": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "state": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      }
+    }
+  },
   "data.truenas_smb_config": {
     "attributes": {
       "aapl_extensions": {
@@ -4482,6 +4506,29 @@
       },
       "transport": {
         "mode": "required",
+        "type": "tftypes.String"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_service": {
+    "attributes": {
+      "enable": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "service": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "state": {
+        "mode": "computed",
         "type": "tftypes.String"
       }
     },

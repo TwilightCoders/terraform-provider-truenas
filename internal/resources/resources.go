@@ -28,6 +28,7 @@ var All = []engine.Resource{
 	NFSConfig,
 	Replication,
 	SMBConfig,
+	Service,
 	SMBShare,
 	SnapshotTask,
 	SSHConfig,
@@ -281,5 +282,19 @@ var VMDevice = engine.Resource{
 		"Display passwords are write-only. Most device changes require the VM to be stopped.",
 	Fields: map[string]engine.Field{
 		"attributes": {WriteOnlySecrets: true},
+	},
+}
+
+// Service manages whether a system service starts at boot (service). Start or stop it now with the
+// truenas_service_control action.
+var Service = engine.Resource{
+	Type:      "service",
+	Namespace: "service",
+	AdoptBy:   "service",
+	Description: "Manages whether a system service (for example `cifs`, `nfs`, `ssh`) starts at boot. " +
+		"The service must already exist. Start or stop it immediately with the `truenas_service_control` action.",
+	Fields: map[string]engine.Field{
+		// Live process ids, not configuration.
+		"pids": engine.Omit,
 	},
 }

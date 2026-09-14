@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -90,6 +91,73 @@ resource "truenas_ssh_config" "this" {
 					}
 					return nil
 				},
+			},
+		},
+	})
+}
+
+func TestServiceAdoption(t *testing.T) {
+	const addr = "truenas_service.smb"
+	srv := middlewaretest.NewServer(t)
+	store := srv.ServeCRUD(apischema.MustLoad(api.Latest), "service")
+	for _, row := range []map[string]any{
+		{"id": json.Number("4"), "service": "cifs", "enable": false, "state": "STOPPED", "pids": []any{}},
+		{"id": json.Number("9"), "service": "nfs", "enable": false, "state": "STOPPED", "pids": []any{}},
+	} {
+		store.Seed(row)
+	}
+	enabled := func(id int) bool { return store.Rows()[id]["enable"] == true }
+
+	resource.UnitTest(t, resource.TestCase{
+		ProtoV6ProviderFactories: factories,
+		CheckDestroy: func(*terraform.State) error {
+			if !enabled(0) {
+				return fmt.Errorf("destroy changed the service")
+			}
+			return nil
+		},
+		Steps: []resource.TestStep{
+			{
+				Config: providerConfig(srv, "") + `
+resource "truenas_service" "smb" {
+  service = "cifs"
+  enable  = true
+}`,
+				ConfigStateChecks: []statecheck.StateCheck{
+					statecheck.ExpectKnownValue(addr, tfjsonpath.New("id"), knownvalue.Int64Exact(4)),
+					statecheck.ExpectKnownValue(addr, tfjsonpath.New("state"), knownvalue.StringExact("STOPPED")),
+				},
+				Check: func(*terraform.State) error {
+					if !enabled(0) || enabled(1) {
+						return fmt.Errorf("wrong service enabled: %v", store.Rows())
+					}
+					return nil
+				},
+			},
+			{
+				Config: providerConfig(srv, "") + `
+resource "truenas_service" "smb" {
+  service = "cifs"
+  enable  = true
+}`,
+				ConfigPlanChecks: resource.ConfigPlanChecks{PreApply: []plancheck.PlanCheck{plancheck.ExpectEmptyPlan()}},
+			},
+			{
+				ResourceName:      addr,
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
+				Config: providerConfig(srv, "") + `
+resource "truenas_service" "missing" {
+  service = "afp"
+  enable  = true
+}
+resource "truenas_service" "smb" {
+  service = "cifs"
+  enable  = true
+}`,
+				ExpectError: regexp.MustCompile(`No single service has service = afp`),
 			},
 		},
 	})
