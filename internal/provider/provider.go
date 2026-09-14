@@ -5,6 +5,7 @@ import (
 	"context"
 	"os"
 
+	"github.com/hashicorp/terraform-plugin-framework/action"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/function"
 	"github.com/hashicorp/terraform-plugin-framework/list"
@@ -37,6 +38,7 @@ var (
 	_ provider.Provider                  = (*Provider)(nil)
 	_ provider.ProviderWithListResources = (*Provider)(nil)
 	_ provider.ProviderWithFunctions     = (*Provider)(nil)
+	_ provider.ProviderWithActions       = (*Provider)(nil)
 )
 
 // Provider is the TrueNAS provider.
@@ -199,6 +201,7 @@ func (p *Provider) Configure(ctx context.Context, req provider.ConfigureRequest,
 	resp.ResourceData = data
 	resp.DataSourceData = data
 	resp.ListResourceData = data
+	resp.ActionData = data
 }
 
 func (p *Provider) Resources(_ context.Context) []func() resource.Resource {
@@ -207,6 +210,14 @@ func (p *Provider) Resources(_ context.Context) []func() resource.Resource {
 		out = append(out, engine.NewResource(p.snapshot, spec))
 	}
 	return append(out, resources.Custom...)
+}
+
+func (p *Provider) Actions(_ context.Context) []func() action.Action {
+	out := make([]func() action.Action, 0, len(resources.Actions))
+	for _, spec := range resources.Actions {
+		out = append(out, engine.NewAction(p.snapshot, spec))
+	}
+	return out
 }
 
 func (p *Provider) Functions(_ context.Context) []func() function.Function {

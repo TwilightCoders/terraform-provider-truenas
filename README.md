@@ -126,6 +126,22 @@ list "truenas_dataset" "tank" {
 `terraform query -generate-config-out=datasets.tf` writes import blocks and configuration for every
 match. Users and groups list only non-built-in accounts.
 
+## Actions
+
+With Terraform 1.14 or later, actions run one-off operations: `truenas_replication_run`,
+`truenas_cloudsync_sync`, `truenas_snapshot_task_run`, `truenas_scrub_run`, `truenas_app_redeploy`,
+`truenas_app_start`, `truenas_app_stop`, `truenas_service_control` and `truenas_ui_restart`. Job-backed
+operations wait for completion.
+
+```hcl
+action "truenas_replication_run" "archive" {
+  config { id = truenas_replication.archive.id }
+}
+```
+
+Run one with `terraform apply -invoke=action.truenas_replication_run.archive`, or attach it to a
+resource with `lifecycle { action_trigger { ... } }`.
+
 ## Functions
 
 `provider::truenas::size_bytes("1.5T")` converts binary sizes to bytes for attributes such as
