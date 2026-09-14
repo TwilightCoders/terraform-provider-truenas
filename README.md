@@ -126,6 +126,11 @@ list "truenas_dataset" "tank" {
 `terraform query -generate-config-out=datasets.tf` writes import blocks and configuration for every
 match. Users and groups list only non-built-in accounts.
 
+## Functions
+
+`provider::truenas::size_bytes("1.5T")` converts binary sizes to bytes for attributes such as
+`quota` and `volsize`.
+
 ## Secrets and Terraform state
 
 Terraform state is a plain file. The provider keeps credentials out of it with write-only attributes:

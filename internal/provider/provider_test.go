@@ -11,6 +11,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/knownvalue"
+	"github.com/hashicorp/terraform-plugin-testing/statecheck"
 
 	"github.com/TwilightCoders/terraform-provider-truenas/api"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/apischema"
@@ -124,6 +126,27 @@ resource "truenas_cron_job" "x" {
 		Steps: []resource.TestStep{
 			{Config: block(`tls = { insecure_skip_verify = true }`), ExpectError: regexp.MustCompile(`tls has no effect with insecure_loopback`)},
 			{Config: block("")},
+		},
+	})
+}
+
+func TestSizeBytesFunction(t *testing.T) {
+	resource.UnitTest(t, resource.TestCase{
+		ProtoV6ProviderFactories: factories,
+		Steps: []resource.TestStep{
+			{
+				Config: `
+output "quota" {
+  value = provider::truenas::size_bytes("1T")
+}`,
+				ConfigStateChecks: []statecheck.StateCheck{
+					statecheck.ExpectKnownOutputValue("quota", knownvalue.Int64Exact(1<<40)),
+				},
+			},
+			{
+				Config:      `output "bad" { value = provider::truenas::size_bytes("lots") }`,
+				ExpectError: regexp.MustCompile(`is not a size`),
+			},
 		},
 	})
 }

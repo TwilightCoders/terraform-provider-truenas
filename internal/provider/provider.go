@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/function"
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
@@ -17,6 +18,7 @@ import (
 	"github.com/TwilightCoders/terraform-provider-truenas/api"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/apischema"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/engine"
+	"github.com/TwilightCoders/terraform-provider-truenas/internal/functions"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/resources"
 )
@@ -34,6 +36,7 @@ const (
 var (
 	_ provider.Provider                  = (*Provider)(nil)
 	_ provider.ProviderWithListResources = (*Provider)(nil)
+	_ provider.ProviderWithFunctions     = (*Provider)(nil)
 )
 
 // Provider is the TrueNAS provider.
@@ -204,6 +207,10 @@ func (p *Provider) Resources(_ context.Context) []func() resource.Resource {
 		out = append(out, engine.NewResource(p.snapshot, spec))
 	}
 	return append(out, resources.Custom...)
+}
+
+func (p *Provider) Functions(_ context.Context) []func() function.Function {
+	return []func() function.Function{functions.NewSizeBytes}
 }
 
 func (p *Provider) ListResources(_ context.Context) []func() list.ListResource {
