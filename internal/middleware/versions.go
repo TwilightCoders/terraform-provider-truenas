@@ -76,8 +76,9 @@ func checkServer(host string, resp *http.Response) error {
 	return &ProxyError{Host: host, Server: server}
 }
 
-func fetchVersions(ctx context.Context, httpc *http.Client, host string, allowProxy bool) ([]string, error) {
-	url := fmt.Sprintf("https://%s/api/versions", host)
+func fetchVersions(ctx context.Context, httpc *http.Client, base string, allowProxy bool) ([]string, error) {
+	url := base + "/api/versions"
+	host := strings.TrimPrefix(strings.TrimPrefix(base, "https://"), "http://")
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody)
 	if err != nil {
 		return nil, err

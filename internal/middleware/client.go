@@ -46,6 +46,9 @@ type Config struct {
 	// AllowReverseProxy skips the check that refuses to send the API key when the host is not
 	// TrueNAS's own web server. Only set it for proxies that re-encrypt to TrueNAS.
 	AllowReverseProxy bool
+	// InsecureLoopback speaks plaintext ws:// and http://, and only to loopback addresses, such as
+	// the local end of an SSH tunnel to TrueNAS's HTTP port. TLS settings are ignored.
+	InsecureLoopback bool
 	// MaxConcurrency bounds in-flight calls. Default 8.
 	MaxConcurrency int
 	// ReadLimit bounds a single response in bytes. Default 64 MiB.
@@ -82,8 +85,15 @@ func Dial(ctx context.Context, cfg Config) (*Client, error) {
 	}
 	cfg.applyDefaults()
 
+	scheme := "https"
 	httpc := cfg.HTTPClient
-	if httpc == nil {
+	switch {
+	case cfg.InsecureLoopback:
+		scheme = "http"
+		if httpc == nil {
+			httpc = loopbackHTTPClient()
+		}
+	case httpc == nil:
 		tlsCfg, err := cfg.TLS.build()
 		if err != nil {
 			return nil, err
@@ -91,7 +101,7 @@ func Dial(ctx context.Context, cfg Config) (*Client, error) {
 		httpc = &http.Client{Transport: &http.Transport{TLSClientConfig: tlsCfg, Proxy: http.ProxyFromEnvironment}}
 	}
 
-	available, err := fetchVersions(ctx, httpc, cfg.Host, cfg.AllowReverseProxy)
+	available, err := fetchVersions(ctx, httpc, scheme+"://"+cfg.Host, cfg.AllowReverseProxy)
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +114,7 @@ func Dial(ctx context.Context, cfg Config) (*Client, error) {
 		cfg:      cfg,
 		httpc:    httpc,
 		version:  version,
-		endpoint: fmt.Sprintf("wss://%s/api/%s", cfg.Host, version),
+		endpoint: fmt.Sprintf("%s://%s/api/%s", map[string]string{"https": "wss", "http": "ws"}[scheme], cfg.Host, version),
 		sem:      make(chan struct{}, cfg.MaxConcurrency),
 	}
 	if _, err := c.session(ctx); err != nil {

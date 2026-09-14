@@ -539,3 +539,47 @@ func TestDialRefusesReverseProxy(t *testing.T) {
 	srv.SetServerHeader("")
 	dial(t, srv)
 }
+
+func TestInsecureLoopback(t *testing.T) {
+	srv := middlewaretest.NewPlaintextServer(t)
+	srv.Handle("system.info", func(context.Context, []json.RawMessage) (any, error) {
+		return map[string]any{"hostname": "truenas"}, nil
+	})
+
+	cfg := srv.Config()
+	cfg.HTTPClient = nil
+	cfg.InsecureLoopback = true
+	c, err := middleware.Dial(context.Background(), cfg)
+	if err != nil {
+		t.Fatalf("Dial over loopback plaintext: %v", err)
+	}
+	defer func() { _ = c.Close() }()
+	if _, err := c.Call(context.Background(), "system.info"); err != nil {
+		t.Fatal(err)
+	}
+
+	_, port, _ := strings.Cut(srv.Listener.Addr().String(), ":")
+	cfg.Host = "localhost:" + port
+	c2, err := middleware.Dial(context.Background(), cfg)
+	if err != nil {
+		t.Fatalf("localhost should resolve to loopback: %v", err)
+	}
+	_ = c2.Close()
+
+	// A plaintext server that is not loopback is refused before anything is sent.
+	for _, host := range []string{"192.0.2.10:8080", "[2001:db8::1]:8080"} {
+		cfg.Host = host
+		_, err = middleware.Dial(context.Background(), cfg)
+		var nl *middleware.NotLoopbackError
+		if !errors.As(err, &nl) || !strings.Contains(err.Error(), "revoke") {
+			t.Errorf("%s: err = %v, want NotLoopbackError", host, err)
+		}
+	}
+
+	// Without the opt-in, a plaintext server is not spoken to at all.
+	plain := srv.Config()
+	plain.HTTPClient = nil
+	if _, err := middleware.Dial(context.Background(), plain); err == nil {
+		t.Error("TLS client accepted a plaintext server")
+	}
+}

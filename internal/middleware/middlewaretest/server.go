@@ -54,6 +54,17 @@ type Server struct {
 // NewServer starts a TLS server offering APIVersion. It is closed when the test ends.
 func NewServer(t testing.TB) *Server {
 	t.Helper()
+	return newServer(t, httptest.NewTLSServer)
+}
+
+// NewPlaintextServer starts a plaintext server on 127.0.0.1, like the local end of an SSH tunnel.
+func NewPlaintextServer(t testing.TB) *Server {
+	t.Helper()
+	return newServer(t, httptest.NewServer)
+}
+
+func newServer(t testing.TB, start func(http.Handler) *httptest.Server) *Server {
+	t.Helper()
 	s := &Server{
 		versions:      []string{APIVersion},
 		handlers:      make(map[string]Handler),
@@ -64,7 +75,7 @@ func NewServer(t testing.TB) *Server {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /api/versions", s.serveVersions)
 	mux.HandleFunc("/api/{version}", s.serveWebsocket)
-	s.Server = httptest.NewTLSServer(mux)
+	s.Server = start(mux)
 	t.Cleanup(s.Close)
 	return s
 }

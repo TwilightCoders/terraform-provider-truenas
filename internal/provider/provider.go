@@ -52,6 +52,7 @@ type config struct {
 	TLS               *tlsConfig   `tfsdk:"tls"`
 	ReadOnly          types.Bool   `tfsdk:"read_only"`
 	AllowReverseProxy types.Bool   `tfsdk:"allow_reverse_proxy"`
+	InsecureLoopback  types.Bool   `tfsdk:"insecure_loopback"`
 }
 
 type tlsConfig struct {
@@ -81,6 +82,13 @@ func (p *Provider) Schema(_ context.Context, _ provider.SchemaRequest, resp *pro
 				MarkdownDescription: "Connect even when `host` is answered by a web server other than TrueNAS's own. " +
 					"The provider refuses by default because a TLS-terminating proxy that forwards over HTTP gets the API key revoked. " +
 					"Only set this for a proxy that re-encrypts to TrueNAS.",
+			},
+			"insecure_loopback": schema.BoolAttribute{
+				Optional: true,
+				MarkdownDescription: "Speak plaintext HTTP and WebSocket to a loopback address, typically the local end of an SSH tunnel " +
+					"to TrueNAS's HTTP port (`ssh -L 18080:127.0.0.1:80 nas`, then `host = \"127.0.0.1:18080\"`). " +
+					"TrueNAS accepts API keys over plaintext only from loopback, so the provider refuses any host that resolves elsewhere. " +
+					"Cannot be combined with `tls`.",
 			},
 			"username": schema.StringAttribute{
 				Optional:            true,
@@ -144,6 +152,10 @@ func (p *Provider) Configure(ctx context.Context, req provider.ConfigureRequest,
 				"Set "+name+" in the provider block or the corresponding TRUENAS_* environment variable.")
 		}
 	}
+	if cfg.InsecureLoopback.ValueBool() && cfg.TLS != nil {
+		resp.Diagnostics.AddAttributeError(path.Root("tls"), "Conflicting provider configuration",
+			"tls has no effect with insecure_loopback, which never uses TLS. Remove one of them.")
+	}
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -156,6 +168,7 @@ func (p *Provider) Configure(ctx context.Context, req provider.ConfigureRequest,
 		Logger:     tflogAdapter{},
 
 		AllowReverseProxy: cfg.AllowReverseProxy.ValueBool(),
+		InsecureLoopback:  cfg.InsecureLoopback.ValueBool(),
 	}
 	if cfg.TLS != nil {
 		mwCfg.TLS = middleware.TLSConfig{

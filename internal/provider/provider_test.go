@@ -12,6 +12,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 
+	"github.com/TwilightCoders/terraform-provider-truenas/api"
+	"github.com/TwilightCoders/terraform-provider-truenas/internal/apischema"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware/middlewaretest"
 )
 
@@ -95,6 +97,33 @@ resource "truenas_cron_job" "x" {
 }`, srv.Listener.Addr().String()),
 				ExpectError: regexp.MustCompile(`invalid username or API key`),
 			},
+		},
+	})
+}
+
+func TestProviderInsecureLoopback(t *testing.T) {
+	srv := middlewaretest.NewPlaintextServer(t)
+	srv.ServeCRUD(apischema.MustLoad(api.Latest), "cronjob")
+	block := func(extra string) string {
+		return fmt.Sprintf(`
+provider "truenas" {
+  host              = %q
+  username          = %q
+  api_key           = %q
+  insecure_loopback = true
+  %s
+}
+resource "truenas_cron_job" "x" {
+  command = "true"
+  user    = "root"
+}`, srv.Listener.Addr().String(), middlewaretest.Username, middlewaretest.APIKey, extra)
+	}
+
+	resource.UnitTest(t, resource.TestCase{
+		ProtoV6ProviderFactories: factories,
+		Steps: []resource.TestStep{
+			{Config: block(`tls = { insecure_skip_verify = true }`), ExpectError: regexp.MustCompile(`tls has no effect with insecure_loopback`)},
+			{Config: block("")},
 		},
 	})
 }
