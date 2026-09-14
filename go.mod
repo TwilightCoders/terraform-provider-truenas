@@ -5,6 +5,7 @@ go 1.27.0
 toolchain go1.27.1
 
 require (
+	github.com/coder/websocket v1.8.15
 	github.com/hashicorp/terraform-plugin-framework v1.19.0
 	github.com/hashicorp/terraform-plugin-go v0.31.0
 )
