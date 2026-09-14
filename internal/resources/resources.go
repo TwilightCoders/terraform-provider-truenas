@@ -5,12 +5,15 @@ import "github.com/TwilightCoders/terraform-provider-truenas/internal/engine"
 
 // All lists every resource the provider serves.
 var All = []engine.Resource{
+	CloudSyncCredentials,
+	CloudSyncTask,
 	CronJob,
 	Dataset,
 	Group,
 	InitScript,
 	NetworkConfig,
 	NFSConfig,
+	Replication,
 	SMBConfig,
 	SMBShare,
 	SnapshotTask,
@@ -152,5 +155,44 @@ var SSHConfig = engine.Resource{
 		"host_ed25519_key": engine.Omit,
 		"host_key":         engine.Omit,
 		"host_rsa_key":     engine.Omit,
+	},
+}
+
+// CloudSyncCredentials manages credentials for cloud sync tasks (cloudsync.credentials).
+var CloudSyncCredentials = engine.Resource{
+	Type:      "cloudsync_credentials",
+	Namespace: "cloudsync.credentials",
+	Description: "Manages credentials for cloud sync tasks. Set exactly one storage type under `storage`. " +
+		"Secret fields are sensitive but are stored in Terraform state, because TrueNAS reports them back.",
+	Fields: map[string]engine.Field{
+		// "provider" is reserved by Terraform.
+		"provider": {Name: "storage"},
+	},
+}
+
+// CloudSyncTask manages cloud sync (rclone) tasks (cloudsync).
+var CloudSyncTask = engine.Resource{
+	Type:      "cloudsync_task",
+	Namespace: "cloudsync",
+	Fields: map[string]engine.Field{
+		"credentials":         {Ref: "id"},
+		"encryption_password": engine.WriteOnly,
+		"encryption_salt":     engine.WriteOnly,
+		// Last run status, not configuration.
+		"job": engine.Omit,
+	},
+}
+
+// Replication manages ZFS replication tasks (replication).
+var Replication = engine.Resource{
+	Type:      "replication",
+	Namespace: "replication",
+	Fields: map[string]engine.Field{
+		"ssh_credentials":         {Ref: "id"},
+		"periodic_snapshot_tasks": {Ref: "id"},
+		"encryption_key":          engine.WriteOnly,
+		// Run status, not configuration.
+		"state": engine.Omit,
+		"job":   engine.Omit,
 	},
 }

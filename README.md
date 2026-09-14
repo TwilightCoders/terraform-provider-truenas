@@ -11,12 +11,15 @@ import and resource identity.
 
 | Resource | TrueNAS service |
 |---|---|
+| `truenas_cloudsync_credentials` | `cloudsync.credentials` |
+| `truenas_cloudsync_task` | `cloudsync` |
 | `truenas_cron_job` | `cronjob` |
 | `truenas_dataset` | `pool.dataset` (filesystems) |
 | `truenas_group` | `group` |
 | `truenas_init_script` | `initshutdownscript` |
 | `truenas_network_config` | `network.configuration` (settings) |
 | `truenas_nfs_config` | `nfs` (settings) |
+| `truenas_replication` | `replication` |
 | `truenas_smb_config` | `smb` (settings) |
 | `truenas_smb_share` | `sharing.smb` |
 | `truenas_snapshot_task` | `pool.snapshottask` |

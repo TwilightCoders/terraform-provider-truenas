@@ -1,4 +1,646 @@
 {
+  "truenas_cloudsync_credentials": {
+    "attributes": {
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "name": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "storage": {
+        "attributes": {
+          "azureblob": {
+            "attributes": {
+              "account": {
+                "mode": "required",
+                "type": "tftypes.String"
+              },
+              "endpoint": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "key": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "b2": {
+            "attributes": {
+              "account": {
+                "mode": "required",
+                "type": "tftypes.String"
+              },
+              "key": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "box": {
+            "attributes": {
+              "client_id": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "client_secret": {
+                "mode": "optional+computed",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "token": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "dropbox": {
+            "attributes": {
+              "client_id": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "client_secret": {
+                "mode": "optional+computed",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "token": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "ftp": {
+            "attributes": {
+              "host": {
+                "mode": "required",
+                "type": "tftypes.String"
+              },
+              "pass": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "port": {
+                "mode": "optional+computed",
+                "type": "tftypes.Number"
+              },
+              "user": {
+                "mode": "required",
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "google_cloud_storage": {
+            "attributes": {
+              "service_account_credentials": {
+                "mode": "required",
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "google_drive": {
+            "attributes": {
+              "client_id": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "client_secret": {
+                "mode": "optional+computed",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "team_drive": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "token": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "google_photos": {
+            "attributes": {
+              "client_id": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "client_secret": {
+                "mode": "optional+computed",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "token": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "http": {
+            "attributes": {
+              "url": {
+                "mode": "required",
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "hubic": {
+            "attributes": {
+              "token": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "mega": {
+            "attributes": {
+              "pass": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "user": {
+                "mode": "required",
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "onedrive": {
+            "attributes": {
+              "client_id": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "client_secret": {
+                "mode": "optional+computed",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "drive_id": {
+                "mode": "required",
+                "type": "tftypes.String"
+              },
+              "drive_type": {
+                "mode": "required",
+                "type": "tftypes.String"
+              },
+              "token": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "openstack_swift": {
+            "attributes": {
+              "application_credential_id": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "application_credential_name": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "application_credential_secret": {
+                "mode": "optional+computed",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "auth": {
+                "mode": "required",
+                "type": "tftypes.String"
+              },
+              "auth_token": {
+                "mode": "optional+computed",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "auth_version": {
+                "mode": "required",
+                "type": "tftypes.Number"
+              },
+              "domain": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "endpoint_type": {
+                "mode": "required",
+                "type": "tftypes.String"
+              },
+              "key": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "region": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "storage_url": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "tenant": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "tenant_domain": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "tenant_id": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "user": {
+                "mode": "required",
+                "type": "tftypes.String"
+              },
+              "user_id": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "pcloud": {
+            "attributes": {
+              "client_id": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "client_secret": {
+                "mode": "optional+computed",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "hostname": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "token": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "s3": {
+            "attributes": {
+              "access_key_id": {
+                "mode": "required",
+                "type": "tftypes.String"
+              },
+              "endpoint": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "max_upload_parts": {
+                "mode": "optional+computed",
+                "type": "tftypes.Number"
+              },
+              "region": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "secret_access_key": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "signatures_v2": {
+                "mode": "optional+computed",
+                "type": "tftypes.Bool"
+              },
+              "skip_region": {
+                "mode": "optional+computed",
+                "type": "tftypes.Bool"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "sftp": {
+            "attributes": {
+              "host": {
+                "mode": "required",
+                "type": "tftypes.String"
+              },
+              "pass": {
+                "mode": "optional",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "port": {
+                "mode": "optional+computed",
+                "type": "tftypes.Number"
+              },
+              "private_key": {
+                "mode": "optional",
+                "type": "tftypes.Number"
+              },
+              "user": {
+                "mode": "required",
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "storj_ix": {
+            "attributes": {
+              "access_key_id": {
+                "mode": "required",
+                "type": "tftypes.String"
+              },
+              "endpoint": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "secret_access_key": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "webdav": {
+            "attributes": {
+              "pass": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "url": {
+                "mode": "required",
+                "type": "tftypes.String"
+              },
+              "user": {
+                "mode": "required",
+                "type": "tftypes.String"
+              },
+              "vendor": {
+                "mode": "required",
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "yandex": {
+            "attributes": {
+              "client_id": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "client_secret": {
+                "mode": "optional+computed",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "token": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          }
+        },
+        "mode": "required",
+        "nesting": "SINGLE"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_cloudsync_task": {
+    "attributes": {
+      "args": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "attributes": {
+        "attributes": {
+          "acknowledge_abuse": {
+            "mode": "optional+computed",
+            "type": "tftypes.Bool"
+          },
+          "bucket": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "bucket_policy_only": {
+            "mode": "optional+computed",
+            "type": "tftypes.Bool"
+          },
+          "chunk_size": {
+            "mode": "optional+computed",
+            "type": "tftypes.Number"
+          },
+          "encryption": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "fast_list": {
+            "mode": "optional+computed",
+            "type": "tftypes.Bool"
+          },
+          "folder": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "region": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "storage_class": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          }
+        },
+        "mode": "required",
+        "nesting": "SINGLE"
+      },
+      "bwlimit": {
+        "attributes": {
+          "bandwidth": {
+            "mode": "required",
+            "type": "tftypes.Number"
+          },
+          "time": {
+            "mode": "required",
+            "type": "tftypes.String"
+          }
+        },
+        "mode": "optional+computed",
+        "nesting": "LIST"
+      },
+      "create_empty_src_dirs": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "credentials": {
+        "mode": "required",
+        "type": "tftypes.Number"
+      },
+      "description": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "direction": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "enabled": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "encryption": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "encryption_password": {
+        "mode": "optional",
+        "sensitive": true,
+        "type": "tftypes.String",
+        "write_only": true
+      },
+      "encryption_password_wo_version": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "encryption_salt": {
+        "mode": "optional",
+        "sensitive": true,
+        "type": "tftypes.String",
+        "write_only": true
+      },
+      "encryption_salt_wo_version": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "exclude": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "filename_encryption": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "follow_symlinks": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "include": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "locked": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "path": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "post_script": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "pre_script": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "schedule": {
+        "attributes": {
+          "dom": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "dow": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "hour": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "minute": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "month": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          }
+        },
+        "mode": "optional+computed",
+        "nesting": "SINGLE"
+      },
+      "snapshot": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "transfer_mode": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "transfers": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
   "truenas_cron_job": {
     "attributes": {
       "command": {
@@ -557,6 +1199,307 @@
       "v4_krb_enabled": {
         "mode": "computed",
         "type": "tftypes.Bool"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_replication": {
+    "attributes": {
+      "allow_from_scratch": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "also_include_naming_schema": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "auto": {
+        "mode": "required",
+        "type": "tftypes.Bool"
+      },
+      "compressed": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "compression": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "direction": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "embed": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "enabled": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "encryption": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "encryption_inherit": {
+        "mode": "optional",
+        "type": "tftypes.Bool"
+      },
+      "encryption_key": {
+        "mode": "optional",
+        "sensitive": true,
+        "type": "tftypes.String",
+        "write_only": true
+      },
+      "encryption_key_format": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "encryption_key_location": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "encryption_key_wo_version": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "exclude": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "has_encrypted_dataset_keys": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "hold_pending_snapshots": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "large_block": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "lifetime_unit": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "lifetime_value": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "lifetimes": {
+        "attributes": {
+          "lifetime_unit": {
+            "mode": "required",
+            "type": "tftypes.String"
+          },
+          "lifetime_value": {
+            "mode": "required",
+            "type": "tftypes.Number"
+          },
+          "schedule": {
+            "attributes": {
+              "dom": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "dow": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "hour": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "minute": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "month": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "required",
+            "nesting": "SINGLE"
+          }
+        },
+        "mode": "optional+computed",
+        "nesting": "LIST"
+      },
+      "logging_level": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "name": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "name_regex": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "naming_schema": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "netcat_active_side": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "netcat_active_side_listen_address": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "netcat_active_side_port_max": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "netcat_active_side_port_min": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "netcat_passive_side_connect_address": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "only_matching_schedule": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "periodic_snapshot_tasks": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.Number]"
+      },
+      "properties": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "properties_exclude": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "properties_override": {
+        "mode": "optional+computed",
+        "type": "tftypes.Map[tftypes.String]"
+      },
+      "readonly": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "recursive": {
+        "mode": "required",
+        "type": "tftypes.Bool"
+      },
+      "replicate": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "restrict_schedule": {
+        "attributes": {
+          "begin": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "dom": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "dow": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "end": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "hour": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "minute": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "month": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          }
+        },
+        "mode": "optional",
+        "nesting": "SINGLE"
+      },
+      "retention_policy": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "retries": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "schedule": {
+        "attributes": {
+          "begin": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "dom": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "dow": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "end": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "hour": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "minute": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "month": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          }
+        },
+        "mode": "optional",
+        "nesting": "SINGLE"
+      },
+      "source_datasets": {
+        "mode": "required",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "speed_limit": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "ssh_credentials": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "sudo": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "target_dataset": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "transport": {
+        "mode": "required",
+        "type": "tftypes.String"
       }
     },
     "identity": {
