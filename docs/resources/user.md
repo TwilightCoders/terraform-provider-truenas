@@ -26,7 +26,7 @@ Create a new user.
 
 - `email` (String) Email address of the user. If the user has the `FULL_ADMIN` role, they will receive email alerts and     notifications.
 - `group` (Number) The group entry `id` for the user's primary group. This is not the same as the Unix group `gid` value.     This is required if `group_create` is `false`.
-- `group_create` (Boolean) If set to `true`, the TrueNAS server automatically creates a new local group as the user's primary group.  TrueNAS does not report this value, so changes made outside Terraform are not detected.
+- `group_create` (Boolean) If set to `true`, the TrueNAS server automatically creates a new local group as the user's primary group.  Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS.
 - `groups` (List of Number) Array of additional groups to which the user belongs. NOTE: Groups are identified by their group entry `id`,     not their Unix group ID (`gid`).
 - `home` (String) The local file system path for the user account's home directory.
 Typically, this is required only if the account has shell access (local or SSH) to TrueNAS.

@@ -27,6 +27,9 @@ type lifecycle struct {
 	onWrite   func(row map[string]any)
 	// importIgnore lists attributes that cannot survive import, such as write-only companions.
 	importIgnore []string
+	// importUpdates is set when an import block plans an update that records create-only values
+	// TrueNAS never reports; such an update sends nothing to TrueNAS.
+	importUpdates bool
 }
 
 func (lc lifecycle) run(t *testing.T) {
@@ -65,6 +68,7 @@ func (lc lifecycle) run(t *testing.T) {
 				ResourceName:    lc.address,
 				ImportState:     true,
 				ImportStateKind: resource.ImportBlockWithResourceIdentity,
+				SkipFunc:        func() (bool, error) { return lc.importUpdates, nil },
 			},
 			{
 				Config: providerConfig(srv, "") + lc.update,

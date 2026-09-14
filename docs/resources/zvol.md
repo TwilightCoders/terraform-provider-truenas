@@ -30,11 +30,11 @@ Manages a ZFS volume (zvol). Destroying the resource fails while the volume has 
 - `deduplication` (String) Deduplication setting. 'ON' enables dedup, 'VERIFY' enables with checksum verification, 'OFF' disables. Defaults to `"INHERIT"`.
 - `encryption` (Boolean) Create a ZFS encrypted root dataset for `name` pool.
 There is 1 case where ZFS encryption is not allowed for a dataset:
-1) If the parent dataset is encrypted with a passphrase and `name` is being created with a key for encrypting the        dataset. TrueNAS does not report this value, so changes made outside Terraform are not detected.
-- `encryption_options` (Attributes) Configuration for encryption of dataset for `name` pool. TrueNAS does not report this value, so changes made outside Terraform are not detected. (see [below for nested schema](#nestedatt--encryption_options))
+1) If the parent dataset is encrypted with a passphrase and `name` is being created with a key for encrypting the        dataset. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS.
+- `encryption_options` (Attributes) Configuration for encryption of dataset for `name` pool. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS. (see [below for nested schema](#nestedatt--encryption_options))
 - `exec` (String) Whether files in this dataset can be executed. Defaults to `"INHERIT"`.
 - `force_size` (Boolean) Force creation even if the size is not optimal. TrueNAS does not report this value, so changes made outside Terraform are not detected.
-- `inherit_encryption` (Boolean) Whether to inherit encryption settings from the parent dataset. TrueNAS does not report this value, so changes made outside Terraform are not detected.
+- `inherit_encryption` (Boolean) Whether to inherit encryption settings from the parent dataset. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS.
 - `managedby` (String) Identifies which service or system manages this dataset. Defaults to `"INHERIT"`.
 - `quota_critical` (String) Percentage of dataset quota at which to issue a critical alert. 0-100 or 'INHERIT'. Defaults to `"INHERIT"`.
 - `quota_warning` (String) Percentage of dataset quota at which to issue a warning. 0-100 or 'INHERIT'. Defaults to `"INHERIT"`.
@@ -43,7 +43,7 @@ There is 1 case where ZFS encryption is not allowed for a dataset:
 - `refquota_warning` (String) Percentage of reference quota at which to issue a warning. 0-100 or 'INHERIT'. Defaults to `"INHERIT"`.
 - `refreservation` (Number) Minimum disk space guaranteed to this dataset itself in bytes.
 - `reservation` (Number) Minimum disk space guaranteed to this dataset and its children in bytes.
-- `share_type` (String) Optimization type for the dataset based on its intended use. TrueNAS does not report this value, so changes made outside Terraform are not detected.
+- `share_type` (String) Optimization type for the dataset based on its intended use. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS.
 - `snapdev` (String) Controls visibility of volume snapshots under /dev/zvol/.
 - `snapdir` (String) Controls visibility of the `.zfs/snapshot` directory. 'DISABLED' hides snapshots, 'VISIBLE' shows them,     'HIDDEN' makes them accessible but not listed. Defaults to `"INHERIT"`.
 - `sparse` (Boolean) Whether to use sparse (thin) provisioning for the volume. Changing this forces a new resource.

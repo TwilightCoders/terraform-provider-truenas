@@ -5,10 +5,13 @@ import "github.com/TwilightCoders/terraform-provider-truenas/internal/engine"
 
 // All lists every resource the provider serves.
 var All = []engine.Resource{
+	ACMEDNSAuthenticator,
+	Certificate,
 	CloudSyncCredentials,
 	CloudSyncTask,
 	CronJob,
 	Dataset,
+	GeneralConfig,
 	Group,
 	InitScript,
 	NetworkConfig,
@@ -194,5 +197,46 @@ var Replication = engine.Resource{
 		// Run status, not configuration.
 		"state": engine.Omit,
 		"job":   engine.Omit,
+	},
+}
+
+// ACMEDNSAuthenticator manages DNS providers used to solve ACME DNS-01 challenges
+// (acme.dns.authenticator).
+var ACMEDNSAuthenticator = engine.Resource{
+	Type:      "acme_dns_authenticator",
+	Namespace: "acme.dns.authenticator",
+	Description: "Manages a DNS provider for ACME DNS-01 challenges. Set exactly one provider under `authenticator`. " +
+		"Its credentials are sensitive but stored in Terraform state, because TrueNAS reports them back.",
+	Fields: map[string]engine.Field{
+		"attributes": {Name: "authenticator"},
+	},
+}
+
+// Certificate manages certificates: imported, CSRs, and ACME certificates issued from a CSR
+// (certificate). TrueNAS 25.10 cannot create self-signed certificates or certificate authorities.
+var Certificate = engine.Resource{
+	Type:      "certificate",
+	Namespace: "certificate",
+	Description: "Manages a certificate. `create_type` selects how: `CERTIFICATE_CREATE_IMPORTED` (bring `certificate` and " +
+		"`privatekey`), `CERTIFICATE_CREATE_CSR` (TrueNAS generates the key and a CSR), `CERTIFICATE_CREATE_IMPORTED_CSR`, or " +
+		"`CERTIFICATE_CREATE_ACME` (issue from an existing CSR via `csr_id`, `dns_mapping` and `tos`). " +
+		"Private keys never enter Terraform state. TrueNAS renews ACME certificates itself.",
+	Fields: map[string]engine.Field{
+		// TrueNAS returns the private key on read; keep it out of state.
+		"privatekey": engine.WriteOnly,
+		"passphrase": engine.WriteOnly,
+	},
+}
+
+// GeneralConfig manages general system settings: web UI listeners and certificate, timezone,
+// keyboard map (system.general).
+var GeneralConfig = engine.Resource{
+	Type:      "general_config",
+	Namespace: "system.general",
+	Fields: map[string]engine.Field{
+		"ui_certificate": {Ref: "id"},
+		"ui_restart_delay": {Description: "Seconds after the update to restart the web UI and apply UI settings. " +
+			"Without it, UI changes take effect at the next UI restart. The restart aborts every HTTP connection, " +
+			"including the provider's own; reads retry across it."},
 	},
 }

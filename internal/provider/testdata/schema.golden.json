@@ -1,4 +1,429 @@
 {
+  "truenas_acme_dns_authenticator": {
+    "attributes": {
+      "authenticator": {
+        "attributes": {
+          "cloudflare": {
+            "attributes": {
+              "api_key": {
+                "mode": "optional",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "api_token": {
+                "mode": "optional",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "cloudflare_email": {
+                "mode": "optional",
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "digitalocean": {
+            "attributes": {
+              "digitalocean_token": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "ovh": {
+            "attributes": {
+              "application_key": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "application_secret": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "consumer_key": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              },
+              "endpoint": {
+                "mode": "required",
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "route53": {
+            "attributes": {
+              "access_key_id": {
+                "mode": "required",
+                "type": "tftypes.String"
+              },
+              "secret_access_key": {
+                "mode": "required",
+                "sensitive": true,
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "shell": {
+            "attributes": {
+              "delay": {
+                "mode": "optional+computed",
+                "type": "tftypes.Number"
+              },
+              "script": {
+                "mode": "required",
+                "type": "tftypes.String"
+              },
+              "timeout": {
+                "mode": "optional+computed",
+                "type": "tftypes.Number"
+              },
+              "user": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          }
+        },
+        "mode": "required",
+        "nesting": "SINGLE"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "name": {
+        "mode": "required",
+        "type": "tftypes.String"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_certificate": {
+    "attributes": {
+      "acme": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "acme_directory_uri": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "acme_uri": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "add_to_trusted_store": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "cert_extensions": {
+        "attributes": {
+          "basicconstraints": {
+            "attributes": {
+              "ca": {
+                "mode": "optional",
+                "type": "tftypes.Bool"
+              },
+              "enabled": {
+                "mode": "optional",
+                "type": "tftypes.Bool"
+              },
+              "extension_critical": {
+                "mode": "optional",
+                "type": "tftypes.Bool"
+              },
+              "path_length": {
+                "mode": "optional",
+                "type": "tftypes.Number"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "extendedkeyusage": {
+            "attributes": {
+              "enabled": {
+                "mode": "optional",
+                "type": "tftypes.Bool"
+              },
+              "extension_critical": {
+                "mode": "optional",
+                "type": "tftypes.Bool"
+              },
+              "usages": {
+                "mode": "optional",
+                "type": "tftypes.List[tftypes.String]"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "keyusage": {
+            "attributes": {
+              "content_commitment": {
+                "mode": "optional",
+                "type": "tftypes.Bool"
+              },
+              "crl_sign": {
+                "mode": "optional",
+                "type": "tftypes.Bool"
+              },
+              "data_encipherment": {
+                "mode": "optional",
+                "type": "tftypes.Bool"
+              },
+              "decipher_only": {
+                "mode": "optional",
+                "type": "tftypes.Bool"
+              },
+              "digital_signature": {
+                "mode": "optional",
+                "type": "tftypes.Bool"
+              },
+              "enabled": {
+                "mode": "optional",
+                "type": "tftypes.Bool"
+              },
+              "encipher_only": {
+                "mode": "optional",
+                "type": "tftypes.Bool"
+              },
+              "extension_critical": {
+                "mode": "optional",
+                "type": "tftypes.Bool"
+              },
+              "key_agreement": {
+                "mode": "optional",
+                "type": "tftypes.Bool"
+              },
+              "key_cert_sign": {
+                "mode": "optional",
+                "type": "tftypes.Bool"
+              },
+              "key_encipherment": {
+                "mode": "optional",
+                "type": "tftypes.Bool"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          }
+        },
+        "mode": "optional",
+        "nesting": "SINGLE"
+      },
+      "cert_type": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "cert_type_ca": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "cert_type_csr": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "cert_type_existing": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "certificate": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "certificate_path": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "chain": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "chain_list": {
+        "mode": "computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "city": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "common": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "country": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "create_type": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "csr": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "csr_id": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "csr_path": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "digest_algorithm": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "dn": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "dns_mapping": {
+        "mode": "optional",
+        "type": "tftypes.Map[tftypes.Number]"
+      },
+      "domains_authenticators": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "ec_curve": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "email": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "expired": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "extensions": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "fingerprint": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "from": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "key_length": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "key_type": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "lifetime": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "name": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "organization": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "organizational_unit": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "parsed": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "passphrase": {
+        "mode": "optional",
+        "sensitive": true,
+        "type": "tftypes.String",
+        "write_only": true
+      },
+      "passphrase_wo_version": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "privatekey": {
+        "mode": "optional",
+        "sensitive": true,
+        "type": "tftypes.String",
+        "write_only": true
+      },
+      "privatekey_path": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "privatekey_wo_version": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "renew_days": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "root_path": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "san": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "serial": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "state": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "subject_name_hash": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "tos": {
+        "mode": "optional",
+        "type": "tftypes.Bool"
+      },
+      "type": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "until": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
   "truenas_cloudsync_credentials": {
     "attributes": {
       "id": {
@@ -935,6 +1360,89 @@
     },
     "identity": {
       "id": "tftypes.String"
+    }
+  },
+  "truenas_general_config": {
+    "attributes": {
+      "ds_auth": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "kbdmap": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "rollback_timeout": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "timezone": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "ui_address": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "ui_allowlist": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "ui_certificate": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "ui_consolemsg": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "ui_httpsport": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "ui_httpsprotocols": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "ui_httpsredirect": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "ui_port": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "ui_restart_delay": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "ui_v6address": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "ui_x_frame_options": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "usage_collection": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "usage_collection_is_set": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "wizardshown": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
     }
   },
   "truenas_group": {

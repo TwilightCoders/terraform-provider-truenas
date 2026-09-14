@@ -11,10 +11,13 @@ import and resource identity.
 
 | Resource | TrueNAS service |
 |---|---|
+| `truenas_acme_dns_authenticator` | `acme.dns.authenticator` |
+| `truenas_certificate` | `certificate` |
 | `truenas_cloudsync_credentials` | `cloudsync.credentials` |
 | `truenas_cloudsync_task` | `cloudsync` |
 | `truenas_cron_job` | `cronjob` |
 | `truenas_dataset` | `pool.dataset` (filesystems) |
+| `truenas_general_config` | `system.general` (settings) |
 | `truenas_group` | `group` |
 | `truenas_init_script` | `initshutdownscript` |
 | `truenas_network_config` | `network.configuration` (settings) |
