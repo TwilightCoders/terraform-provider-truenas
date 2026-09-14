@@ -53,6 +53,10 @@ coverage: ## Write coverage.out and coverage.html
 	go tool cover -func=coverage.out | tail -1
 	go tool cover -html=coverage.out -o coverage.html
 
+.PHONY: schema-golden
+schema-golden: ## Accept resource schema changes into internal/provider/testdata/schema.golden.json
+	go test ./internal/provider -run TestSchemaGolden -update
+
 .PHONY: lint
 lint: ## Run golangci-lint
 	$(TOOL) golangci-lint run ./...
