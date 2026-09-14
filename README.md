@@ -22,14 +22,18 @@ import and resource identity.
 | `truenas_general_config` | `system.general` (settings) |
 | `truenas_group` | `group` |
 | `truenas_init_script` | `initshutdownscript` |
+| `truenas_iscsi_auth`, `_extent`, `_initiator`, `_portal`, `_target`, `_target_extent` | `iscsi.*` |
 | `truenas_network_config` | `network.configuration` (settings) |
 | `truenas_nfs_config` | `nfs` (settings) |
+| `truenas_nfs_share` | `sharing.nfs` |
 | `truenas_replication` | `replication` |
 | `truenas_service` | `service` (adopts existing services) |
 | `truenas_smb_config` | `smb` (settings) |
 | `truenas_smb_share` | `sharing.smb` |
 | `truenas_snapshot_task` | `pool.snapshottask` |
 | `truenas_ssh_config` | `ssh` (settings) |
+| `truenas_static_route` | `staticroute` |
+| `truenas_tunable` | `tunable` |
 | `truenas_user` | `user` |
 | `truenas_vm` | `vm` |
 | `truenas_vm_device` | `vm.device` |
@@ -167,6 +171,7 @@ nothing; bump the matching `*_wo_version` attribute to send it again.
 | `truenas_replication` | `encryption_key` | `encryption_key_wo_version` |
 | `truenas_dataset`, `truenas_zvol` | `encryption_options.passphrase`, `encryption_options.key` | `encryption_options_wo_version` |
 | `truenas_vm_device` | display `password` under `attributes` | `attributes_wo_version` |
+| `truenas_iscsi_auth` | `secret`, `peersecret` | `secret_wo_version`, `peersecret_wo_version` |
 
 Values the provider cannot recognize as secrets are stored normally: commands in `truenas_cron_job`
 and `truenas_init_script`, and compose files, are recorded as written. Keep secrets in `.env` files

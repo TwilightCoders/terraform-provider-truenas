@@ -795,6 +795,264 @@
       }
     }
   },
+  "data.truenas_iscsi_auth": {
+    "attributes": {
+      "discovery_auth": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "peeruser": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "query_filters": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "tag": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "user": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      }
+    }
+  },
+  "data.truenas_iscsi_extent": {
+    "attributes": {
+      "avail_threshold": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "blocksize": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "comment": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "disk": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "enabled": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "filesize": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "insecure_tpc": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "locked": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "naa": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "name": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "path": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "pblocksize": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "product_id": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "query_filters": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "ro": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "rpm": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "serial": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "type": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "vendor": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "xen": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      }
+    }
+  },
+  "data.truenas_iscsi_initiator": {
+    "attributes": {
+      "comment": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "initiators": {
+        "mode": "computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "query_filters": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      }
+    }
+  },
+  "data.truenas_iscsi_portal": {
+    "attributes": {
+      "comment": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "listen": {
+        "attributes": {
+          "ip": {
+            "mode": "computed",
+            "type": "tftypes.String"
+          },
+          "port": {
+            "mode": "computed",
+            "type": "tftypes.Number"
+          }
+        },
+        "mode": "computed",
+        "nesting": "LIST"
+      },
+      "query_filters": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "tag": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      }
+    }
+  },
+  "data.truenas_iscsi_target": {
+    "attributes": {
+      "alias": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "auth_networks": {
+        "mode": "computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "groups": {
+        "attributes": {
+          "auth": {
+            "mode": "computed",
+            "type": "tftypes.Number"
+          },
+          "authmethod": {
+            "mode": "computed",
+            "type": "tftypes.String"
+          },
+          "initiator": {
+            "mode": "computed",
+            "type": "tftypes.Number"
+          },
+          "portal": {
+            "mode": "computed",
+            "type": "tftypes.Number"
+          }
+        },
+        "mode": "computed",
+        "nesting": "LIST"
+      },
+      "id": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "iscsi_parameters": {
+        "attributes": {
+          "queuedcommands": {
+            "mode": "computed",
+            "type": "tftypes.Number"
+          }
+        },
+        "mode": "computed",
+        "nesting": "SINGLE"
+      },
+      "mode": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "name": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "query_filters": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "rel_tgt_id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      }
+    }
+  },
+  "data.truenas_iscsi_target_extent": {
+    "attributes": {
+      "extent": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "id": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "lunid": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "query_filters": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "target": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      }
+    }
+  },
   "data.truenas_network_config": {
     "attributes": {
       "activity": {
@@ -956,6 +1214,74 @@
       "v4_krb_enabled": {
         "mode": "computed",
         "type": "tftypes.Bool"
+      }
+    }
+  },
+  "data.truenas_nfs_share": {
+    "attributes": {
+      "aliases": {
+        "mode": "computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "comment": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "enabled": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "expose_snapshots": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "hosts": {
+        "mode": "computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "id": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "locked": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "mapall_group": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "mapall_user": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "maproot_group": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "maproot_user": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "networks": {
+        "mode": "computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "path": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "query_filters": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "ro": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "security": {
+        "mode": "computed",
+        "type": "tftypes.List[tftypes.String]"
       }
     }
   },
@@ -1836,6 +2162,70 @@
       "weak_ciphers": {
         "mode": "computed",
         "type": "tftypes.List[tftypes.String]"
+      }
+    }
+  },
+  "data.truenas_static_route": {
+    "attributes": {
+      "description": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "destination": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "gateway": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "query_filters": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      }
+    }
+  },
+  "data.truenas_tunable": {
+    "attributes": {
+      "comment": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "enabled": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "id": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "orig_value": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "query_filters": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "type": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "update_initramfs": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "value": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "var": {
+        "mode": "computed",
+        "type": "tftypes.String"
       }
     }
   },
@@ -4042,6 +4432,278 @@
       "id": "tftypes.Number"
     }
   },
+  "truenas_iscsi_auth": {
+    "attributes": {
+      "discovery_auth": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "peersecret": {
+        "mode": "optional",
+        "sensitive": true,
+        "type": "tftypes.String",
+        "write_only": true
+      },
+      "peersecret_wo_version": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "peeruser": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "secret": {
+        "mode": "required",
+        "sensitive": true,
+        "type": "tftypes.String",
+        "write_only": true
+      },
+      "secret_wo_version": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "tag": {
+        "mode": "required",
+        "type": "tftypes.Number"
+      },
+      "user": {
+        "mode": "required",
+        "type": "tftypes.String"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_iscsi_extent": {
+    "attributes": {
+      "avail_threshold": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "blocksize": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "comment": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "disk": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "enabled": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "filesize": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "insecure_tpc": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "locked": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "naa": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "name": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "path": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "pblocksize": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "product_id": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "ro": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "rpm": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "serial": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "type": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "vendor": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "xen": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_iscsi_initiator": {
+    "attributes": {
+      "comment": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "initiators": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_iscsi_portal": {
+    "attributes": {
+      "comment": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "listen": {
+        "attributes": {
+          "ip": {
+            "mode": "required",
+            "type": "tftypes.String"
+          },
+          "port": {
+            "mode": "computed",
+            "type": "tftypes.Number"
+          }
+        },
+        "mode": "required",
+        "nesting": "LIST"
+      },
+      "tag": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_iscsi_target": {
+    "attributes": {
+      "alias": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "auth_networks": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "groups": {
+        "attributes": {
+          "auth": {
+            "mode": "optional",
+            "type": "tftypes.Number"
+          },
+          "authmethod": {
+            "mode": "optional+computed",
+            "type": "tftypes.String"
+          },
+          "initiator": {
+            "mode": "optional",
+            "type": "tftypes.Number"
+          },
+          "portal": {
+            "mode": "required",
+            "type": "tftypes.Number"
+          }
+        },
+        "mode": "optional+computed",
+        "nesting": "LIST"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "iscsi_parameters": {
+        "attributes": {
+          "queuedcommands": {
+            "mode": "optional",
+            "type": "tftypes.Number"
+          }
+        },
+        "mode": "optional",
+        "nesting": "SINGLE"
+      },
+      "mode": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "name": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "rel_tgt_id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_iscsi_target_extent": {
+    "attributes": {
+      "extent": {
+        "mode": "required",
+        "type": "tftypes.Number"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "lunid": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "target": {
+        "mode": "required",
+        "type": "tftypes.Number"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
   "truenas_network_config": {
     "attributes": {
       "activity": {
@@ -4206,6 +4868,73 @@
       "v4_krb_enabled": {
         "mode": "computed",
         "type": "tftypes.Bool"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_nfs_share": {
+    "attributes": {
+      "aliases": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "comment": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "enabled": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "expose_snapshots": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "hosts": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "locked": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "mapall_group": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "mapall_user": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "maproot_group": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "maproot_user": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "networks": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "path": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "ro": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "security": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
       }
     },
     "identity": {
@@ -5098,6 +5827,68 @@
       "weak_ciphers": {
         "mode": "optional+computed",
         "type": "tftypes.List[tftypes.String]"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_static_route": {
+    "attributes": {
+      "description": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "destination": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "gateway": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_tunable": {
+    "attributes": {
+      "comment": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "enabled": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "orig_value": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "type": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "update_initramfs": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "value": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "var": {
+        "mode": "required",
+        "type": "tftypes.String"
       }
     },
     "identity": {
