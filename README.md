@@ -19,10 +19,13 @@ import and resource identity.
 | `truenas_cron_job` | `cronjob` |
 | `truenas_dataset` | `pool.dataset` (filesystems) |
 | `truenas_filesystem_acl` | `filesystem.getacl` / `setacl` (hand-written) |
+| `truenas_ftp_config` | `ftp` (settings) |
 | `truenas_general_config` | `system.general` (settings) |
 | `truenas_group` | `group` |
 | `truenas_init_script` | `initshutdownscript` |
 | `truenas_iscsi_auth`, `_extent`, `_initiator`, `_portal`, `_target`, `_target_extent` | `iscsi.*` |
+| `truenas_iscsi_global_config` | `iscsi.global` (settings) |
+| `truenas_mail_config` | `mail` (settings) |
 | `truenas_network_config` | `network.configuration` (settings) |
 | `truenas_nfs_config` | `nfs` (settings) |
 | `truenas_nfs_share` | `sharing.nfs` |
@@ -30,10 +33,12 @@ import and resource identity.
 | `truenas_service` | `service` (adopts existing services) |
 | `truenas_smb_config` | `smb` (settings) |
 | `truenas_smb_share` | `sharing.smb` |
+| `truenas_snmp_config` | `snmp` (settings) |
 | `truenas_snapshot_task` | `pool.snapshottask` |
 | `truenas_ssh_config` | `ssh` (settings) |
 | `truenas_static_route` | `staticroute` |
 | `truenas_tunable` | `tunable` |
+| `truenas_ups_config` | `ups` (settings) |
 | `truenas_user` | `user` |
 | `truenas_vm` | `vm` |
 | `truenas_vm_device` | `vm.device` |
@@ -172,6 +177,9 @@ nothing; bump the matching `*_wo_version` attribute to send it again.
 | `truenas_dataset`, `truenas_zvol` | `encryption_options.passphrase`, `encryption_options.key` | `encryption_options_wo_version` |
 | `truenas_vm_device` | display `password` under `attributes` | `attributes_wo_version` |
 | `truenas_iscsi_auth` | `secret`, `peersecret` | `secret_wo_version`, `peersecret_wo_version` |
+| `truenas_mail_config` | `pass` | `pass_wo_version` |
+| `truenas_snmp_config` | `v3_password`, `v3_privpassphrase` | their `*_wo_version` |
+| `truenas_ups_config` | `monpwd` | `monpwd_wo_version` |
 
 Values the provider cannot recognize as secrets are stored normally: commands in `truenas_cron_job`
 and `truenas_init_script`, and compose files, are recorded as written. Keep secrets in `.env` files

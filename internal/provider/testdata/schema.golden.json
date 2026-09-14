@@ -623,6 +623,170 @@
       }
     }
   },
+  "data.truenas_ftp_config": {
+    "attributes": {
+      "anonpath": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "anonuserbw": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "anonuserdlbw": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "banner": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "clients": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "defaultroot": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "dirmask": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "filemask": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "fxp": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "ident": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "ipconnections": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "localuserbw": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "localuserdlbw": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "loginattempt": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "masqaddress": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "onlyanonymous": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "onlylocal": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "options": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "passiveportsmax": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "passiveportsmin": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "port": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "resume": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "reversedns": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "ssltls_certificate": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "timeout": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "timeout_notransfer": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "tls": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_allow_client_renegotiations": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_allow_dot_login": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_allow_per_user": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_common_name_required": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_dns_name_required": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_enable_diags": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_export_cert_data": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_ip_address_required": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_no_empty_fragments": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_no_session_reuse_required": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_stdenvvars": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_policy": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      }
+    }
+  },
   "data.truenas_general_config": {
     "attributes": {
       "ds_auth": {
@@ -911,6 +1075,38 @@
       }
     }
   },
+  "data.truenas_iscsi_global_config": {
+    "attributes": {
+      "alua": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "basename": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "iser": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "isns_servers": {
+        "mode": "computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "listen_port": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "pool_avail_threshold": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      }
+    }
+  },
   "data.truenas_iscsi_initiator": {
     "attributes": {
       "comment": {
@@ -1050,6 +1246,46 @@
       "target": {
         "mode": "computed",
         "type": "tftypes.Number"
+      }
+    }
+  },
+  "data.truenas_mail_config": {
+    "attributes": {
+      "fromemail": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "fromname": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "oauth": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "outgoingserver": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "port": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "security": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "smtp": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "user": {
+        "mode": "computed",
+        "type": "tftypes.String"
       }
     }
   },
@@ -2077,6 +2313,58 @@
       }
     }
   },
+  "data.truenas_snmp_config": {
+    "attributes": {
+      "community": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "contact": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "location": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "loglevel": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "options": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "traps": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "v3": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "v3_authtype": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "v3_privproto": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "v3_username": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "zilstat": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      }
+    }
+  },
   "data.truenas_ssh_config": {
     "attributes": {
       "bindiface": {
@@ -2226,6 +2514,90 @@
       "var": {
         "mode": "computed",
         "type": "tftypes.String"
+      }
+    }
+  },
+  "data.truenas_ups_config": {
+    "attributes": {
+      "complete_identifier": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "description": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "driver": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "extrausers": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "hostsync": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "identifier": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "mode": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "monuser": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "nocommwarntime": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "options": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "optionsupsd": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "port": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "powerdown": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "remotehost": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "remoteport": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "rmonitor": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "shutdown": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "shutdowncmd": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "shutdowntimer": {
+        "mode": "computed",
+        "type": "tftypes.Number"
       }
     }
   },
@@ -4251,6 +4623,173 @@
       }
     }
   },
+  "truenas_ftp_config": {
+    "attributes": {
+      "anonpath": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "anonuserbw": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "anonuserdlbw": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "banner": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "clients": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "defaultroot": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "dirmask": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "filemask": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "fxp": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "ident": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "ipconnections": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "localuserbw": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "localuserdlbw": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "loginattempt": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "masqaddress": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "onlyanonymous": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "onlylocal": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "options": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "passiveportsmax": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "passiveportsmin": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "port": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "resume": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "reversedns": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "ssltls_certificate": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "timeout": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "timeout_notransfer": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "tls": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_allow_client_renegotiations": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_allow_dot_login": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_allow_per_user": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_common_name_required": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_dns_name_required": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_enable_diags": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_export_cert_data": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_ip_address_required": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_no_empty_fragments": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_no_session_reuse_required": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_opt_stdenvvars": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "tls_policy": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
   "truenas_general_config": {
     "attributes": {
       "ds_auth": {
@@ -4566,6 +5105,41 @@
       "id": "tftypes.Number"
     }
   },
+  "truenas_iscsi_global_config": {
+    "attributes": {
+      "alua": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "basename": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "iser": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "isns_servers": {
+        "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "listen_port": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "pool_avail_threshold": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
   "truenas_iscsi_initiator": {
     "attributes": {
       "comment": {
@@ -4698,6 +5272,59 @@
       "target": {
         "mode": "required",
         "type": "tftypes.Number"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_mail_config": {
+    "attributes": {
+      "fromemail": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "fromname": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "oauth": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "outgoingserver": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "pass": {
+        "mode": "optional",
+        "sensitive": true,
+        "type": "tftypes.String",
+        "write_only": true
+      },
+      "pass_wo_version": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "port": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "security": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "smtp": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "user": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
       }
     },
     "identity": {
@@ -5742,6 +6369,81 @@
       "id": "tftypes.Number"
     }
   },
+  "truenas_snmp_config": {
+    "attributes": {
+      "community": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "contact": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "location": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "loglevel": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "options": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "traps": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "v3": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "v3_authtype": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "v3_password": {
+        "mode": "optional",
+        "sensitive": true,
+        "type": "tftypes.String",
+        "write_only": true
+      },
+      "v3_password_wo_version": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "v3_privpassphrase": {
+        "mode": "optional",
+        "sensitive": true,
+        "type": "tftypes.String",
+        "write_only": true
+      },
+      "v3_privpassphrase_wo_version": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "v3_privproto": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "v3_username": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "zilstat": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
   "truenas_ssh_config": {
     "attributes": {
       "bindiface": {
@@ -5889,6 +6591,103 @@
       "var": {
         "mode": "required",
         "type": "tftypes.String"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_ups_config": {
+    "attributes": {
+      "complete_identifier": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "description": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "driver": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "extrausers": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "hostsync": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "identifier": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "mode": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "monpwd": {
+        "mode": "optional",
+        "sensitive": true,
+        "type": "tftypes.String",
+        "write_only": true
+      },
+      "monpwd_wo_version": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "monuser": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "nocommwarntime": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "options": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "optionsupsd": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "port": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "powerdown": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "remotehost": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "remoteport": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "rmonitor": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "shutdown": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "shutdowncmd": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "shutdowntimer": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
       }
     },
     "identity": {

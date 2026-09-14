@@ -162,3 +162,33 @@ resource "truenas_service" "smb" {
 		},
 	})
 }
+
+func TestUPSConfigPasswordIsWriteOnly(t *testing.T) {
+	const addr = "truenas_ups_config.this"
+	srv := middlewaretest.NewServer(t)
+	cfg := srv.ServeConfig(apischema.MustLoad(api.Latest), "ups", map[string]any{
+		"id": json.Number("1"), "mode": "MASTER", "monuser": "upsmon", "monpwd": "old-secret",
+	})
+	resource.UnitTest(t, resource.TestCase{
+		ProtoV6ProviderFactories: factories,
+		Steps: []resource.TestStep{
+			{
+				Config: providerConfig(srv, "") + `
+resource "truenas_ups_config" "this" {
+  monuser = "upsmon"
+  monpwd  = "new-secret"
+}`,
+				ConfigStateChecks: []statecheck.StateCheck{
+					statecheck.ExpectKnownValue(addr, tfjsonpath.New("monpwd"), knownvalue.Null()),
+					statecheck.ExpectKnownValue(addr, tfjsonpath.New("mode"), knownvalue.StringExact("MASTER")),
+				},
+				Check: func(*terraform.State) error {
+					if got := cfg.Data()["monpwd"]; got != "new-secret" {
+						return fmt.Errorf("monpwd = %v", got)
+					}
+					return nil
+				},
+			},
+		},
+	})
+}

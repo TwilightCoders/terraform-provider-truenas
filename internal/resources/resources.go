@@ -22,9 +22,12 @@ var All = []engine.Resource{
 	CronJob,
 	Dataset,
 	GeneralConfig,
+	FTPConfig,
 	Group,
 	InitScript,
+	MailConfig,
 	ISCSIAuth,
+	ISCSIGlobalConfig,
 	ISCSIExtent,
 	ISCSIInitiator,
 	ISCSIPortal,
@@ -37,10 +40,12 @@ var All = []engine.Resource{
 	SMBConfig,
 	Service,
 	SMBShare,
+	SNMPConfig,
 	SnapshotTask,
 	SSHConfig,
 	StaticRoute,
 	Tunable,
+	UPSConfig,
 	User,
 	VM,
 	VMDevice,
@@ -346,5 +351,39 @@ var ISCSIAuth = engine.Resource{
 	Fields: map[string]engine.Field{
 		"secret":     engine.WriteOnly,
 		"peersecret": engine.WriteOnly,
+	},
+}
+
+// FTPConfig manages the FTP service settings (ftp).
+var FTPConfig = engine.Resource{Type: "ftp_config", Namespace: "ftp"}
+
+// ISCSIGlobalConfig manages global iSCSI settings (iscsi.global).
+var ISCSIGlobalConfig = engine.Resource{Type: "iscsi_global_config", Namespace: "iscsi.global"}
+
+// MailConfig manages outgoing email settings (mail).
+var MailConfig = engine.Resource{
+	Type:      "mail_config",
+	Namespace: "mail",
+	Fields: map[string]engine.Field{
+		"pass": engine.WriteOnly,
+	},
+}
+
+// SNMPConfig manages the SNMP service settings (snmp).
+var SNMPConfig = engine.Resource{
+	Type:      "snmp_config",
+	Namespace: "snmp",
+	Fields: map[string]engine.Field{
+		"v3_password":       engine.WriteOnly,
+		"v3_privpassphrase": engine.WriteOnly,
+	},
+}
+
+// UPSConfig manages the UPS service settings (ups).
+var UPSConfig = engine.Resource{
+	Type:      "ups_config",
+	Namespace: "ups",
+	Fields: map[string]engine.Field{
+		"monpwd": engine.WriteOnly,
 	},
 }
