@@ -30,6 +30,8 @@ import and resource identity.
 | `truenas_snapshot_task` | `pool.snapshottask` |
 | `truenas_ssh_config` | `ssh` (settings) |
 | `truenas_user` | `user` |
+| `truenas_vm` | `vm` |
+| `truenas_vm_device` | `vm.device` |
 | `truenas_zvol` | `pool.dataset` (volumes) |
 
 ## Usage
@@ -163,6 +165,7 @@ nothing; bump the matching `*_wo_version` attribute to send it again.
 | `truenas_acme_dns_authenticator` | every secret under `authenticator` | `authenticator_wo_version` |
 | `truenas_replication` | `encryption_key` | `encryption_key_wo_version` |
 | `truenas_dataset`, `truenas_zvol` | `encryption_options.passphrase`, `encryption_options.key` | `encryption_options_wo_version` |
+| `truenas_vm_device` | display `password` under `attributes` | `attributes_wo_version` |
 
 Values the provider cannot recognize as secrets are stored normally: commands in `truenas_cron_job`
 and `truenas_init_script`, and compose files, are recorded as written. Keep secrets in `.env` files

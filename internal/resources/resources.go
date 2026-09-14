@@ -32,6 +32,8 @@ var All = []engine.Resource{
 	SnapshotTask,
 	SSHConfig,
 	User,
+	VM,
+	VMDevice,
 	Zvol,
 }
 
@@ -251,5 +253,33 @@ var GeneralConfig = engine.Resource{
 		"ui_restart_delay": {Description: "Seconds after the update to restart the web UI and apply UI settings. " +
 			"Without it, UI changes take effect at the next UI restart. The restart aborts every HTTP connection, " +
 			"including the provider's own; reads retry across it."},
+	},
+}
+
+// VM manages bhyve/libvirt virtual machines (vm). Devices are separate truenas_vm_device resources.
+var VM = engine.Resource{
+	Type:      "vm",
+	Namespace: "vm",
+	Description: "Manages a virtual machine. Attach disks, NICs and displays with `truenas_vm_device`. " +
+		"Destroying the VM never deletes zvols attached to it.",
+	Fields: map[string]engine.Field{
+		// Devices are managed as their own resources.
+		"devices": engine.Omit,
+		// Assigned by TrueNAS when not given.
+		"uuid":         engine.Computed,
+		"arch_type":    engine.Computed,
+		"machine_type": engine.Computed,
+	},
+}
+
+// VMDevice manages one device of a virtual machine: disk, raw file, CD-ROM, NIC, display, PCI or USB
+// passthrough (vm.device).
+var VMDevice = engine.Resource{
+	Type:      "vm_device",
+	Namespace: "vm.device",
+	Description: "Manages a virtual machine device. Set exactly one device type under `attributes`. " +
+		"Display passwords are write-only. Most device changes require the VM to be stopped.",
+	Fields: map[string]engine.Field{
+		"attributes": {WriteOnlySecrets: true},
 	},
 }

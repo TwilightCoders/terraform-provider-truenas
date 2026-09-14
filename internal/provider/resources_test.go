@@ -236,3 +236,73 @@ resource "truenas_group" "media" {
 }`,
 	}.run(t)
 }
+
+func TestVMLifecycle(t *testing.T) {
+	const addr = "truenas_vm.vm1"
+	lifecycle{
+		namespace: "vm",
+		address:   addr,
+		onWrite: func(row map[string]any) {
+			if row["uuid"] == nil {
+				row["uuid"] = "1b4e28ba-2fa1-11d2-883f-0016d3cca427"
+			}
+			if row["machine_type"] == nil {
+				row["machine_type"] = "q35"
+			}
+			if row["arch_type"] == nil {
+				row["arch_type"] = "x86_64"
+			}
+		},
+		create: `
+resource "truenas_vm" "vm1" {
+  name   = "vm1"
+  memory = 8192
+  vcpus  = 1
+  cores  = 4
+}`,
+		update: `
+resource "truenas_vm" "vm1" {
+  name      = "vm1"
+  memory    = 16384
+  vcpus     = 1
+  cores     = 4
+  autostart = false
+}`,
+		checks: []statecheck.StateCheck{
+			statecheck.ExpectKnownValue(addr, tfjsonpath.New("uuid"), knownvalue.StringExact("1b4e28ba-2fa1-11d2-883f-0016d3cca427")),
+			statecheck.ExpectKnownValue(addr, tfjsonpath.New("bootloader"), knownvalue.StringExact("UEFI")),
+		},
+	}.run(t)
+}
+
+func TestVMDeviceLifecycle(t *testing.T) {
+	const addr = "truenas_vm_device.display"
+	lifecycle{
+		namespace: "vm.device",
+		address:   addr,
+		create: `
+resource "truenas_vm_device" "display" {
+  vm = 4
+  attributes = {
+    display = {
+      type     = "SPICE"
+      password = "view-only"
+    }
+  }
+}`,
+		update: `
+resource "truenas_vm_device" "display" {
+  vm    = 4
+  order = 1002
+  attributes = {
+    display = {
+      type     = "SPICE"
+      password = "view-only"
+    }
+  }
+}`,
+		checks: []statecheck.StateCheck{
+			statecheck.ExpectKnownValue(addr, tfjsonpath.New("attributes").AtMapKey("display").AtMapKey("password"), knownvalue.Null()),
+		},
+	}.run(t)
+}

@@ -1935,6 +1935,172 @@
       }
     }
   },
+  "data.truenas_vm": {
+    "attributes": {
+      "arch_type": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "autostart": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "bootloader": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "bootloader_ovmf": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "command_line_args": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "cores": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "cpu_mode": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "cpu_model": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "cpuset": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "description": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "display_available": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "enable_cpu_topology_extension": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "enable_secure_boot": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "ensure_display_device": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "hide_from_msr": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "hyperv_enlightenments": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "id": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "machine_type": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "memory": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "min_memory": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "name": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "nodeset": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "pin_vcpus": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "query_filters": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "shutdown_timeout": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "status": {
+        "attributes": {
+          "domain_state": {
+            "mode": "computed",
+            "type": "tftypes.String"
+          },
+          "pid": {
+            "mode": "computed",
+            "type": "tftypes.Number"
+          },
+          "state": {
+            "mode": "computed",
+            "type": "tftypes.String"
+          }
+        },
+        "mode": "computed",
+        "nesting": "SINGLE"
+      },
+      "suspend_on_snapshot": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "threads": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "time": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "trusted_platform_module": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "uuid": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "vcpus": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      }
+    }
+  },
+  "data.truenas_vm_device": {
+    "attributes": {
+      "id": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "order": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "query_filters": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "vm": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      }
+    }
+  },
   "data.truenas_zvol": {
     "attributes": {
       "aclmode": {
@@ -5026,6 +5192,374 @@
       "userns_idmap": {
         "mode": "optional",
         "type": "tftypes.String"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_vm": {
+    "attributes": {
+      "arch_type": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "autostart": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "bootloader": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "bootloader_ovmf": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "command_line_args": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "cores": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "cpu_mode": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "cpu_model": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "cpuset": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "description": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "display_available": {
+        "mode": "computed",
+        "type": "tftypes.Bool"
+      },
+      "enable_cpu_topology_extension": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "enable_secure_boot": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "ensure_display_device": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "hide_from_msr": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "hyperv_enlightenments": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "machine_type": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "memory": {
+        "mode": "required",
+        "type": "tftypes.Number"
+      },
+      "min_memory": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "name": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "nodeset": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "pin_vcpus": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "shutdown_timeout": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "status": {
+        "attributes": {
+          "domain_state": {
+            "mode": "computed",
+            "type": "tftypes.String"
+          },
+          "pid": {
+            "mode": "computed",
+            "type": "tftypes.Number"
+          },
+          "state": {
+            "mode": "computed",
+            "type": "tftypes.String"
+          }
+        },
+        "mode": "computed",
+        "nesting": "SINGLE"
+      },
+      "suspend_on_snapshot": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "threads": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "time": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "trusted_platform_module": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "uuid": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "vcpus": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      }
+    },
+    "identity": {
+      "id": "tftypes.Number"
+    }
+  },
+  "truenas_vm_device": {
+    "attributes": {
+      "attributes": {
+        "attributes": {
+          "cdrom": {
+            "attributes": {
+              "path": {
+                "mode": "required",
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "disk": {
+            "attributes": {
+              "create_zvol": {
+                "mode": "optional+computed",
+                "type": "tftypes.Bool"
+              },
+              "iotype": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "logical_sectorsize": {
+                "mode": "optional",
+                "type": "tftypes.Number"
+              },
+              "path": {
+                "mode": "optional",
+                "type": "tftypes.String"
+              },
+              "physical_sectorsize": {
+                "mode": "optional",
+                "type": "tftypes.Number"
+              },
+              "serial": {
+                "mode": "optional",
+                "type": "tftypes.String"
+              },
+              "type": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "zvol_name": {
+                "mode": "optional",
+                "type": "tftypes.String"
+              },
+              "zvol_volsize": {
+                "mode": "optional",
+                "type": "tftypes.Number"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "display": {
+            "attributes": {
+              "bind": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "password": {
+                "mode": "optional",
+                "sensitive": true,
+                "type": "tftypes.String",
+                "write_only": true
+              },
+              "port": {
+                "mode": "optional",
+                "type": "tftypes.Number"
+              },
+              "resolution": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "type": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "wait": {
+                "mode": "optional+computed",
+                "type": "tftypes.Bool"
+              },
+              "web": {
+                "mode": "optional+computed",
+                "type": "tftypes.Bool"
+              },
+              "web_port": {
+                "mode": "optional",
+                "type": "tftypes.Number"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "nic": {
+            "attributes": {
+              "mac": {
+                "mode": "optional",
+                "type": "tftypes.String"
+              },
+              "nic_attach": {
+                "mode": "optional",
+                "type": "tftypes.String"
+              },
+              "trust_guest_rx_filters": {
+                "mode": "optional+computed",
+                "type": "tftypes.Bool"
+              },
+              "type": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "pci": {
+            "attributes": {
+              "pptdev": {
+                "mode": "required",
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "raw": {
+            "attributes": {
+              "boot": {
+                "mode": "optional+computed",
+                "type": "tftypes.Bool"
+              },
+              "exists": {
+                "mode": "optional+computed",
+                "type": "tftypes.Bool"
+              },
+              "iotype": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "logical_sectorsize": {
+                "mode": "optional",
+                "type": "tftypes.Number"
+              },
+              "path": {
+                "mode": "required",
+                "type": "tftypes.String"
+              },
+              "physical_sectorsize": {
+                "mode": "optional",
+                "type": "tftypes.Number"
+              },
+              "serial": {
+                "mode": "optional",
+                "type": "tftypes.String"
+              },
+              "size": {
+                "mode": "optional",
+                "type": "tftypes.Number"
+              },
+              "type": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          },
+          "usb": {
+            "attributes": {
+              "controller_type": {
+                "mode": "optional+computed",
+                "type": "tftypes.String"
+              },
+              "device": {
+                "mode": "optional",
+                "type": "tftypes.String"
+              },
+              "usb": {
+                "attributes": {
+                  "product_id": {
+                    "mode": "required",
+                    "type": "tftypes.String"
+                  },
+                  "vendor_id": {
+                    "mode": "required",
+                    "type": "tftypes.String"
+                  }
+                },
+                "mode": "optional",
+                "nesting": "SINGLE"
+              }
+            },
+            "mode": "optional",
+            "nesting": "SINGLE"
+          }
+        },
+        "mode": "required",
+        "nesting": "SINGLE"
+      },
+      "attributes_wo_version": {
+        "mode": "optional",
+        "type": "tftypes.Number"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "order": {
+        "mode": "optional+computed",
+        "type": "tftypes.Number"
+      },
+      "vm": {
+        "mode": "required",
+        "type": "tftypes.Number"
       }
     },
     "identity": {
