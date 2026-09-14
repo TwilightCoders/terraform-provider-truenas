@@ -54,7 +54,29 @@ func SelectVersion(available []string, want string) (string, error) {
 	return best, nil
 }
 
-func fetchVersions(ctx context.Context, httpc *http.Client, host string) ([]string, error) {
+// ProxyError reports that the host is served by something other than TrueNAS's own web server.
+type ProxyError struct {
+	Host   string
+	Server string
+}
+
+func (e *ProxyError) Error() string {
+	return fmt.Sprintf("%s is answered by %q, not TrueNAS's own web server. TrueNAS permanently revokes an API key "+
+		"the first time it arrives over plaintext, which is what happens behind a reverse proxy that terminates TLS and "+
+		"forwards over HTTP. Point host at TrueNAS's HTTPS port directly, or set allow_reverse_proxy if the proxy "+
+		"re-encrypts to TrueNAS.", e.Host, e.Server)
+}
+
+// checkServer rejects responses from a web server other than TrueNAS's nginx.
+func checkServer(host string, resp *http.Response) error {
+	server := resp.Header.Get("Server")
+	if server == "" || strings.HasPrefix(strings.ToLower(server), "nginx") {
+		return nil
+	}
+	return &ProxyError{Host: host, Server: server}
+}
+
+func fetchVersions(ctx context.Context, httpc *http.Client, host string, allowProxy bool) ([]string, error) {
 	url := fmt.Sprintf("https://%s/api/versions", host)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody)
 	if err != nil {
@@ -65,6 +87,11 @@ func fetchVersions(ctx context.Context, httpc *http.Client, host string) ([]stri
 		return nil, fmt.Errorf("discovering API versions: %w", err)
 	}
 	defer func() { _ = resp.Body.Close() }()
+	if !allowProxy {
+		if err := checkServer(host, resp); err != nil {
+			return nil, err
+		}
+	}
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("discovering API versions: GET %s returned %s (TrueNAS 25.04 or later is required)", url, resp.Status)
 	}

@@ -48,6 +48,7 @@ type Server struct {
 	calls         []Call
 	conns         map[*websocket.Conn]struct{}
 	loginResponse string
+	serverHeader  string
 }
 
 // NewServer starts a TLS server offering APIVersion. It is closed when the test ends.
@@ -58,6 +59,7 @@ func NewServer(t testing.TB) *Server {
 		handlers:      make(map[string]Handler),
 		conns:         make(map[*websocket.Conn]struct{}),
 		loginResponse: "SUCCESS",
+		serverHeader:  "nginx",
 	}
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /api/versions", s.serveVersions)
@@ -129,10 +131,19 @@ func (s *Server) DropConnections() {
 	}
 }
 
+// SetServerHeader changes the HTTP Server header, to simulate a reverse proxy.
+func (s *Server) SetServerHeader(value string) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.serverHeader = value
+}
+
 func (s *Server) serveVersions(w http.ResponseWriter, _ *http.Request) {
 	s.mu.Lock()
 	versions := slices.Clone(s.versions)
+	header := s.serverHeader
 	s.mu.Unlock()
+	w.Header().Set("Server", header)
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(versions)
 }

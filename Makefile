@@ -5,7 +5,7 @@ SHELL := /usr/bin/env bash
 BINARY   := terraform-provider-truenas
 GOOS     := $(shell go env GOOS)
 GOARCH   := $(shell go env GOARCH)
-VERSION  ?= $(or $(patsubst v%,%,$(shell git describe --tags --abbrev=0 2>/dev/null)),0.0.0)
+VERSION  ?= $(or $(patsubst v%,%,$(shell git describe --tags --abbrev=0 2>/dev/null)),0.1.0)
 LDFLAGS  := -s -w -X main.version=$(VERSION)
 TOOL     := go tool -modfile=tools/go.mod
 

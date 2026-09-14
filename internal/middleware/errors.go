@@ -123,7 +123,9 @@ func (e *AuthError) Error() string {
 	case "AUTH_ERR":
 		return "truenas authentication failed: invalid username or API key"
 	case "EXPIRED":
-		return "truenas authentication failed: API key has expired"
+		return "truenas authentication failed: API key is expired or revoked. TrueNAS reports both as EXPIRED, " +
+			"including keys it revokes automatically after receiving them over plaintext HTTP; check the key's " +
+			"revoked_reason in the TrueNAS UI"
 	case "OTP_REQUIRED":
 		return "truenas authentication failed: account requires a one-time password, which API keys cannot provide"
 	default:

@@ -46,11 +46,12 @@ func New(version string) func() provider.Provider {
 }
 
 type config struct {
-	Host     types.String `tfsdk:"host"`
-	Username types.String `tfsdk:"username"`
-	APIKey   types.String `tfsdk:"api_key"`
-	TLS      *tlsConfig   `tfsdk:"tls"`
-	ReadOnly types.Bool   `tfsdk:"read_only"`
+	Host              types.String `tfsdk:"host"`
+	Username          types.String `tfsdk:"username"`
+	APIKey            types.String `tfsdk:"api_key"`
+	TLS               *tlsConfig   `tfsdk:"tls"`
+	ReadOnly          types.Bool   `tfsdk:"read_only"`
+	AllowReverseProxy types.Bool   `tfsdk:"allow_reverse_proxy"`
 }
 
 type tlsConfig struct {
@@ -70,8 +71,16 @@ func (p *Provider) Schema(_ context.Context, _ provider.SchemaRequest, resp *pro
 		MarkdownDescription: "Manage TrueNAS SCALE through its versioned JSON-RPC API. Requires TrueNAS 25.10 or later.",
 		Attributes: map[string]schema.Attribute{
 			"host": schema.StringAttribute{
-				Optional:            true,
-				MarkdownDescription: "TrueNAS web UI address with optional port, e.g. `nas.lan` or `nas.lan:8443`. Defaults to `$" + EnvHost + "`.",
+				Optional: true,
+				MarkdownDescription: "TrueNAS HTTPS address with optional port, e.g. `nas.lan` or `nas.lan:8443`. Defaults to `$" + EnvHost + "`. " +
+					"Point it at TrueNAS itself: TrueNAS permanently revokes an API key that reaches it over plaintext, " +
+					"which happens behind a reverse proxy that terminates TLS and forwards over HTTP.",
+			},
+			"allow_reverse_proxy": schema.BoolAttribute{
+				Optional: true,
+				MarkdownDescription: "Connect even when `host` is answered by a web server other than TrueNAS's own. " +
+					"The provider refuses by default because a TLS-terminating proxy that forwards over HTTP gets the API key revoked. " +
+					"Only set this for a proxy that re-encrypts to TrueNAS.",
 			},
 			"username": schema.StringAttribute{
 				Optional:            true,
@@ -145,6 +154,8 @@ func (p *Provider) Configure(ctx context.Context, req provider.ConfigureRequest,
 		Username:   username,
 		APIKey:     apiKey,
 		Logger:     tflogAdapter{},
+
+		AllowReverseProxy: cfg.AllowReverseProxy.ValueBool(),
 	}
 	if cfg.TLS != nil {
 		mwCfg.TLS = middleware.TLSConfig{

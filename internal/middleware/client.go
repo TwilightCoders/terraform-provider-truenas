@@ -43,6 +43,9 @@ type Config struct {
 	TLS TLSConfig
 	// HTTPClient overrides the client used for the handshake and version discovery.
 	HTTPClient *http.Client
+	// AllowReverseProxy skips the check that refuses to send the API key when the host is not
+	// TrueNAS's own web server. Only set it for proxies that re-encrypt to TrueNAS.
+	AllowReverseProxy bool
 	// MaxConcurrency bounds in-flight calls. Default 8.
 	MaxConcurrency int
 	// ReadLimit bounds a single response in bytes. Default 64 MiB.
@@ -88,7 +91,7 @@ func Dial(ctx context.Context, cfg Config) (*Client, error) {
 		httpc = &http.Client{Transport: &http.Transport{TLSClientConfig: tlsCfg, Proxy: http.ProxyFromEnvironment}}
 	}
 
-	available, err := fetchVersions(ctx, httpc, cfg.Host)
+	available, err := fetchVersions(ctx, httpc, cfg.Host, cfg.AllowReverseProxy)
 	if err != nil {
 		return nil, err
 	}

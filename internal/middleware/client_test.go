@@ -517,3 +517,25 @@ func TestCallIntoPropagatesCallError(t *testing.T) {
 		t.Errorf("core.ping = %s, %v", raw, err)
 	}
 }
+
+func TestDialRefusesReverseProxy(t *testing.T) {
+	srv := middlewaretest.NewServer(t)
+	srv.SetServerHeader("openresty")
+
+	_, err := middleware.Dial(context.Background(), srv.Config())
+	var pe *middleware.ProxyError
+	if !errors.As(err, &pe) || pe.Server != "openresty" || !strings.Contains(err.Error(), "revokes an API key") {
+		t.Fatalf("err = %v", err)
+	}
+	if calls := srv.Calls(); len(calls) != 0 {
+		t.Fatalf("server received calls despite proxy detection: %v", calls)
+	}
+
+	c := dial(t, srv, func(cfg *middleware.Config) { cfg.AllowReverseProxy = true })
+	if c.APIVersion() == "" {
+		t.Fatal("allow_reverse_proxy did not bypass the check")
+	}
+
+	srv.SetServerHeader("")
+	dial(t, srv)
+}
