@@ -61,6 +61,16 @@ resource "truenas_snapshot_task" "home" {
 }
 ```
 
+Every resource has a data source of the same name. Data sources for objects look up exactly one by
+`id`, `name` or `query_filters`; settings data sources read the current values. Data sources never
+expose sensitive or write-only attributes.
+
+```hcl
+data "truenas_acme_dns_authenticator" "cloudflare" {
+  name = "cloudflare"
+}
+```
+
 Settings resources (`*_config`) manage values that always exist: creating one applies only the
 attributes you set, and destroying it removes it from state without changing TrueNAS.
 

@@ -45,6 +45,9 @@ func TestSchemaGolden(t *testing.T) {
 		}
 		out[name] = entry
 	}
+	for name, s := range resp.DataSourceSchemas {
+		out["data."+name] = map[string]any{"attributes": attributes(s.Block.Attributes)}
+	}
 	got, err := json.MarshalIndent(out, "", "  ")
 	if err != nil {
 		t.Fatal(err)

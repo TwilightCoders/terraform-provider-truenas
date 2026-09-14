@@ -217,7 +217,11 @@ func (p *Provider) ListResources(_ context.Context) []func() list.ListResource {
 }
 
 func (p *Provider) DataSources(_ context.Context) []func() datasource.DataSource {
-	return nil
+	out := make([]func() datasource.DataSource, 0, len(resources.All))
+	for _, spec := range resources.All {
+		out = append(out, engine.NewDataSource(p.snapshot, spec))
+	}
+	return out
 }
 
 func stringOrEnv(v types.String, env string) string {
