@@ -12,6 +12,7 @@ import and resource identity.
 | Resource | TrueNAS service |
 |---|---|
 | `truenas_acme_dns_authenticator` | `acme.dns.authenticator` |
+| `truenas_app` | `app` custom apps (hand-written) |
 | `truenas_certificate` | `certificate` |
 | `truenas_cloudsync_credentials` | `cloudsync.credentials` |
 | `truenas_cloudsync_task` | `cloudsync` |

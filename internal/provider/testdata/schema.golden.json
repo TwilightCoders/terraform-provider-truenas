@@ -2260,6 +2260,54 @@
       "id": "tftypes.Number"
     }
   },
+  "truenas_app": {
+    "attributes": {
+      "compose": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "delete_images": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "delete_ix_volumes": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "desired_state": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "hold": {
+        "mode": "optional+computed",
+        "type": "tftypes.Bool"
+      },
+      "include": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "name": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "notes": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "portals": {
+        "mode": "optional+computed",
+        "type": "tftypes.Map[tftypes.String]"
+      },
+      "redeploy_trigger": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "state": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      }
+    }
+  },
   "truenas_certificate": {
     "attributes": {
       "acme": {

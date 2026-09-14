@@ -1,0 +1,18 @@
+{
+ "config": {
+  "include": [
+   "/mnt/tank/apps/docker/plex.yml"
+  ]
+ },
+ "custom_app": true,
+ "human_version": "1.0.0_custom",
+ "id": "plex",
+ "name": "plex",
+ "notes": "# Plex\n**Network:** host\n**Compose:** /mnt/tank/apps/docker/plex.yml\nPlexPass. Library at /mnt/tank/data/media. External: plex.example.com.\n",
+ "portals": {
+  "Direct": "http://192.0.2.10:32400/web",
+  "Web UI": "http://plex.example.lan/"
+ },
+ "state": "RUNNING",
+ "version": "1.0.0"
+}
