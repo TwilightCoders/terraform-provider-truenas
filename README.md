@@ -95,6 +95,21 @@ import {
 
 `terraform plan -generate-config-out=generated.tf` then writes the configuration for everything imported.
 
+With Terraform 1.14 or later, `terraform query` finds existing objects without knowing their IDs.
+Put `list` blocks in a `.tfquery.hcl` file:
+
+```hcl
+list "truenas_dataset" "tank" {
+  provider = truenas
+  config {
+    query_filters = jsonencode([["pool", "=", "tank"]])
+  }
+}
+```
+
+`terraform query -generate-config-out=datasets.tf` writes import blocks and configuration for every
+match. Users and groups list only non-built-in accounts.
+
 ## Requirements
 
 | Component | Version |

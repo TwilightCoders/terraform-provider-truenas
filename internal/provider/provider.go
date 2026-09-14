@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
@@ -30,7 +31,10 @@ const (
 	EnvAPIKey   = "TRUENAS_API_KEY"
 )
 
-var _ provider.Provider = (*Provider)(nil)
+var (
+	_ provider.Provider                  = (*Provider)(nil)
+	_ provider.ProviderWithListResources = (*Provider)(nil)
+)
 
 // Provider is the TrueNAS provider.
 type Provider struct {
@@ -189,12 +193,23 @@ func (p *Provider) Configure(ctx context.Context, req provider.ConfigureRequest,
 	data := &engine.ProviderData{Client: client, ReadOnly: cfg.ReadOnly.ValueBool()}
 	resp.ResourceData = data
 	resp.DataSourceData = data
+	resp.ListResourceData = data
 }
 
 func (p *Provider) Resources(_ context.Context) []func() resource.Resource {
 	out := make([]func() resource.Resource, 0, len(resources.All))
 	for _, spec := range resources.All {
 		out = append(out, engine.NewResource(p.snapshot, spec))
+	}
+	return out
+}
+
+func (p *Provider) ListResources(_ context.Context) []func() list.ListResource {
+	var out []func() list.ListResource
+	for _, spec := range resources.All {
+		if engine.Listable(p.snapshot, spec) {
+			out = append(out, engine.NewListResource(p.snapshot, spec))
+		}
 	}
 	return out
 }

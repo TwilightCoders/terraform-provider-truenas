@@ -35,7 +35,7 @@ WARNING: The TrueNAS server does not check if external paths are reachable.
 ### Optional
 
 - `access_based_share_enumeration` (Boolean) If set, the share is only included when an SMB client requests a list of shares on the SMB server if     the share (not filesystem) access control list (see `sharing.smb.getacl`) grants access to the user.  Defaults to `false`.
-- `audit` (Attributes) Audit configuration for monitoring SMB share access and operations. (see [below for nested schema](#nestedatt--audit))
+- `audit` (Attributes) Audit configuration for monitoring SMB share access and operations. Defaults to `{"enable":false,"ignore_list":[],"watch_list":[]}`. (see [below for nested schema](#nestedatt--audit))
 - `browsable` (Boolean) If set, the share is included when an SMB client requests a list of SMB shares on the TrueNAS server.  Defaults to `true`.
 - `comment` (String) Text field that is seen next to a share when an SMB client requests a list of SMB shares on the TrueNAS     server.  Defaults to `""`.
 - `enabled` (Boolean) If unset, the SMB share is not available over the SMB protocol.  Defaults to `true`.

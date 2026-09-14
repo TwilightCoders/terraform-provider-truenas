@@ -47,7 +47,7 @@ and must contain `%Y`, `%m`, `%d`, `%H` and `%M`.
 - `lifetime_value` (Number) Number of time units to retain snapshots. `lifetime_unit` gives the time unit. Defaults to `2`.
 - `naming_schema` (String) Naming pattern for generated snapshots using strftime format. Defaults to `"auto-%Y-%m-%d_%H-%M"`.
 - `recursive` (Boolean) Whether to recursively snapshot child datasets. Defaults to `false`.
-- `schedule` (Attributes) Cron schedule for when snapshots should be taken. (see [below for nested schema](#nestedatt--schedule))
+- `schedule` (Attributes) Cron schedule for when snapshots should be taken. Defaults to `{"begin":"00:00","dom":"*","dow":"*","end":"23:59","hour":"*","minute":"00","month":"*"}`. (see [below for nested schema](#nestedatt--schedule))
 
 ### Read-Only
 

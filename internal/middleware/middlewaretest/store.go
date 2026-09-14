@@ -206,8 +206,54 @@ func (st *Store) handleDelete(_ context.Context, params []json.RawMessage) (any,
 	return true, nil
 }
 
-func (st *Store) handleQuery(context.Context, []json.RawMessage) (any, error) {
-	return st.Rows(), nil
+// handleQuery supports "=" and "!=" filters on top-level fields and the limit option.
+func (st *Store) handleQuery(_ context.Context, params []json.RawMessage) (any, error) {
+	var filters [][]any
+	if len(params) > 0 {
+		v, err := decode(params[0])
+		if err != nil {
+			return nil, err
+		}
+		list, _ := v.([]any)
+		for _, f := range list {
+			triple, ok := f.([]any)
+			if !ok || len(triple) != 3 {
+				return nil, &middleware.Error{Code: middleware.CodeInvalidParams, Errno: 22, Errname: "EINVAL", Reason: fmt.Sprintf("unsupported filter %v", f)}
+			}
+			filters = append(filters, triple)
+		}
+	}
+	limit := 0
+	if len(params) > 1 {
+		var opts struct {
+			Limit int `json:"limit"`
+		}
+		_ = json.Unmarshal(params[1], &opts)
+		limit = opts.Limit
+	}
+
+	out := []map[string]any{}
+	for _, row := range st.Rows() {
+		if matches(row, filters) {
+			out = append(out, row)
+		}
+		if limit > 0 && len(out) == limit {
+			break
+		}
+	}
+	return out, nil
+}
+
+func matches(row map[string]any, filters [][]any) bool {
+	for _, f := range filters {
+		field, _ := f[0].(string)
+		op, _ := f[1].(string)
+		equal := fmt.Sprint(row[field]) == fmt.Sprint(f[2])
+		if (op == "=" && !equal) || (op == "!=" && equal) {
+			return false
+		}
+	}
+	return true
 }
 
 func (st *Store) decodeArg(params []json.RawMessage, index int) (map[string]any, error) {
@@ -268,6 +314,8 @@ func checkObject(prefix string, t *apischema.Type, obj map[string]any, applyDefa
 			switch {
 			case applyDefaults && f.Type.HasDefault:
 				obj[f.Name] = deepCopy(f.Type.Default)
+			case applyDefaults && !f.Type.Nullable && objectDefaults(f.Type) != nil:
+				obj[f.Name] = objectDefaults(f.Type)
 			case applyDefaults && f.Required:
 				*errs = append(*errs, middleware.FieldError{Attribute: path, Message: "Field required", Errno: 22})
 			}
@@ -345,6 +393,22 @@ func checkValue(path string, t *apischema.Type, v any, errs *[]middleware.FieldE
 		}
 		*errs = append(*errs, middleware.FieldError{Attribute: path + "." + t.Discriminator, Message: "Input tag does not match any expected tags", Errno: 22})
 	}
+}
+
+// objectDefaults returns the default object Pydantic's default_factory would build: every field
+// of t has a default. It returns nil otherwise.
+func objectDefaults(t *apischema.Type) map[string]any {
+	if t.Kind != apischema.KindObject || len(t.Fields) == 0 {
+		return nil
+	}
+	out := map[string]any{}
+	for _, f := range t.Fields {
+		if !f.Type.HasDefault {
+			return nil
+		}
+		out[f.Name] = deepCopy(f.Type.Default)
+	}
+	return out
 }
 
 // fillReadOnly adds zero values for read-shape fields the stored row lacks.

@@ -32,8 +32,9 @@ var CronJob = engine.Resource{
 
 // Group manages local groups (group).
 var Group = engine.Resource{
-	Type:      "group",
-	Namespace: "group",
+	Type:        "group",
+	Namespace:   "group",
+	ListFilters: [][]any{{"builtin", "=", false}},
 	Fields: map[string]engine.Field{
 		// "group" is a read-only alias of name.
 		"group": engine.Omit,
@@ -69,8 +70,9 @@ var SnapshotTask = engine.Resource{
 
 // User manages local user accounts (user).
 var User = engine.Resource{
-	Type:      "user",
-	Namespace: "user",
+	Type:        "user",
+	Namespace:   "user",
+	ListFilters: [][]any{{"builtin", "=", false}},
 	Fields: map[string]engine.Field{
 		"password": engine.WriteOnly,
 		// Password hashes; never useful in state.
@@ -88,6 +90,7 @@ var Dataset = engine.Resource{
 	Type:        "dataset",
 	Namespace:   "pool.dataset",
 	Variant:     "FILESYSTEM",
+	ListOptions: map[string]any{"extra": map[string]any{"flat": true}},
 	Description: "Manages a ZFS filesystem dataset. Properties set to `INHERIT` (the default for most) follow the parent dataset. Destroying the resource fails while the dataset has children.",
 	Fields: map[string]engine.Field{
 		// Child datasets are resources of their own.
@@ -106,6 +109,7 @@ var Zvol = engine.Resource{
 	Type:        "zvol",
 	Namespace:   "pool.dataset",
 	Variant:     "VOLUME",
+	ListOptions: map[string]any{"extra": map[string]any{"flat": true}},
 	Description: "Manages a ZFS volume (zvol). Destroying the resource fails while the volume has snapshots or dependents.",
 	Fields: map[string]engine.Field{
 		"children":        engine.Omit,
