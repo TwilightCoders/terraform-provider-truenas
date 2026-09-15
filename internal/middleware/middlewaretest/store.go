@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math/big"
 	"slices"
 	"strings"
 	"sync"
@@ -370,7 +371,8 @@ func checkValue(path string, t *apischema.Type, v any, errs *[]middleware.FieldE
 		}
 	case apischema.KindInt:
 		n, ok := v.(json.Number)
-		if _, err := n.Int64(); !ok || err != nil {
+		// Wider than int64 is still an integer: TrueNAS reports certificate serials that way.
+		if _, isInt := new(big.Int).SetString(n.String(), 10); !ok || !isInt {
 			bad("integer")
 		}
 	case apischema.KindNumber:
