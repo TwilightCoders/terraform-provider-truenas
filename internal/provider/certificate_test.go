@@ -44,7 +44,10 @@ resource "truenas_certificate" "lan" {
   renew_days  = 30
 }`,
 		checks: []statecheck.StateCheck{
-			statecheck.ExpectKnownValue(addr, tfjsonpath.New("privatekey"), knownvalue.Null()),
+			// TrueNAS generates the key for ACME and CSR certificates and reports it on read.
+			// Refusing to store it would leave the only copy unreachable, so it is in state.
+			statecheck.ExpectKnownValue(addr, tfjsonpath.New("privatekey"),
+				knownvalue.StringExact("-----BEGIN PRIVATE KEY-----generated")),
 			statecheck.ExpectKnownValue(addr, tfjsonpath.New("renew_days"), knownvalue.Int64Exact(10)),
 		},
 		// TrueNAS never reports how a certificate was created.

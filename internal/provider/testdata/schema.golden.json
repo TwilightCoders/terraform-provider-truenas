@@ -3517,18 +3517,13 @@
         "type": "tftypes.Number"
       },
       "privatekey": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "sensitive": true,
-        "type": "tftypes.String",
-        "write_only": true
+        "type": "tftypes.String"
       },
       "privatekey_path": {
         "mode": "computed",
         "type": "tftypes.String"
-      },
-      "privatekey_wo_version": {
-        "mode": "optional",
-        "type": "tftypes.Number"
       },
       "renew_days": {
         "mode": "optional+computed",

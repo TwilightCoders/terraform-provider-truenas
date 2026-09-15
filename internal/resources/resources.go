@@ -251,10 +251,19 @@ var Certificate = engine.Resource{
 	Description: "Manages a certificate. `create_type` selects how: `CERTIFICATE_CREATE_IMPORTED` (bring `certificate` and " +
 		"`privatekey`), `CERTIFICATE_CREATE_CSR` (TrueNAS generates the key and a CSR), `CERTIFICATE_CREATE_IMPORTED_CSR`, or " +
 		"`CERTIFICATE_CREATE_ACME` (issue from an existing CSR via `csr_id`, `dns_mapping` and `tos`). " +
-		"Private keys never enter Terraform state. TrueNAS renews ACME certificates itself.",
+		"TrueNAS renews ACME certificates itself.\n\n" +
+		"TrueNAS generates the private key for the CSR and ACME types and reports it on read, so " +
+		"`privatekey` is stored in Terraform state. That is what lets an issued certificate be served " +
+		"elsewhere, and it means state holds key material: protect it accordingly.",
 	Fields: map[string]engine.Field{
-		// TrueNAS returns the private key on read; keep it out of state.
-		"privatekey": engine.WriteOnly,
+		// TrueNAS generates the key for the ACME and CSR types, and reports it on read. Keeping it
+		// write-only would mean the resource refused to surface the only copy of a key its user
+		// never supplied, which makes an issued certificate impossible to serve anywhere else.
+		// It is therefore readable and lands in Terraform state, for imported keys too.
+		"privatekey": {Computed: true, Sensitive: true, Description: "PEM-encoded private key. " +
+			"TrueNAS generates one for `CERTIFICATE_CREATE_ACME` and `CERTIFICATE_CREATE_CSR`, and reports it " +
+			"on read, so it is stored in Terraform state for every certificate this resource manages. " +
+			"Protect state accordingly."},
 		"passphrase": engine.WriteOnly,
 		// TrueNAS stores every SAN with its type prefix, so a bare name written here reads back
 		// prefixed. Without this the rewrite is drift on a RequiresReplace field, and every plan

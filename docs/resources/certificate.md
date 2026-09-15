@@ -3,12 +3,15 @@
 page_title: "truenas_certificate Resource - truenas"
 subcategory: ""
 description: |-
-  Manages a certificate. create_type selects how: CERTIFICATE_CREATE_IMPORTED (bring certificate and privatekey), CERTIFICATE_CREATE_CSR (TrueNAS generates the key and a CSR), CERTIFICATE_CREATE_IMPORTED_CSR, or CERTIFICATE_CREATE_ACME (issue from an existing CSR via csr_id, dns_mapping and tos). Private keys never enter Terraform state. TrueNAS renews ACME certificates itself.
+  Manages a certificate. create_type selects how: CERTIFICATE_CREATE_IMPORTED (bring certificate and privatekey), CERTIFICATE_CREATE_CSR (TrueNAS generates the key and a CSR), CERTIFICATE_CREATE_IMPORTED_CSR, or CERTIFICATE_CREATE_ACME (issue from an existing CSR via csr_id, dns_mapping and tos). TrueNAS renews ACME certificates itself.
+  TrueNAS generates the private key for the CSR and ACME types and reports it on read, so privatekey is stored in Terraform state. That is what lets an issued certificate be served elsewhere, and it means state holds key material: protect it accordingly.
 ---
 
 # truenas_certificate (Resource)
 
-Manages a certificate. `create_type` selects how: `CERTIFICATE_CREATE_IMPORTED` (bring `certificate` and `privatekey`), `CERTIFICATE_CREATE_CSR` (TrueNAS generates the key and a CSR), `CERTIFICATE_CREATE_IMPORTED_CSR`, or `CERTIFICATE_CREATE_ACME` (issue from an existing CSR via `csr_id`, `dns_mapping` and `tos`). Private keys never enter Terraform state. TrueNAS renews ACME certificates itself.
+Manages a certificate. `create_type` selects how: `CERTIFICATE_CREATE_IMPORTED` (bring `certificate` and `privatekey`), `CERTIFICATE_CREATE_CSR` (TrueNAS generates the key and a CSR), `CERTIFICATE_CREATE_IMPORTED_CSR`, or `CERTIFICATE_CREATE_ACME` (issue from an existing CSR via `csr_id`, `dns_mapping` and `tos`). TrueNAS renews ACME certificates itself.
+
+TrueNAS generates the private key for the CSR and ACME types and reports it on read, so `privatekey` is stored in Terraform state. That is what lets an issued certificate be served elsewhere, and it means state holds key material: protect it accordingly.
 
 
 
@@ -43,8 +46,7 @@ Manages a certificate. `create_type` selects how: `CERTIFICATE_CREATE_IMPORTED` 
 - `organizational_unit` (String) Organizational unit for certificate subject or `null`. Changing this forces a new resource.
 - `passphrase` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Passphrase to protect the private key or `null`.
 - `passphrase_wo_version` (Number) Change this value to send `passphrase` again. Terraform never stores `passphrase`.
-- `privatekey` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) PEM-encoded private key to import or `null`. Changing this forces a new resource.
-- `privatekey_wo_version` (Number) Change this value to send `privatekey` again. Terraform never stores `privatekey`.
+- `privatekey` (String, Sensitive) PEM-encoded private key. TrueNAS generates one for `CERTIFICATE_CREATE_ACME` and `CERTIFICATE_CREATE_CSR`, and reports it on read, so it is stored in Terraform state for every certificate this resource manages. Protect state accordingly. Changing this forces a new resource.
 - `renew_days` (Number) Number of days before the certificate expiration date to attempt certificate renewal. If certificate renewal     fails, renewal will be reattempted every day until expiration. Defaults to `10`.
 - `san` (List of String) Subject alternative names. Write them bare (`example.com`) or DNS-prefixed (`DNS:example.com`); both are accepted and mean the same name. Prefix an address with `IP:` to request an IP name. TrueNAS treats every other prefix, including `email:` and `URI:`, as part of a DNS name rather than as that name type. Changing this forces a new resource.
 - `state` (String) State or province name for certificate subject or `null`. Changing this forces a new resource.
