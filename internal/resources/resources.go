@@ -10,6 +10,7 @@ import (
 // Custom lists hand-written resources that the engine cannot derive.
 var Custom = []func() resource.Resource{
 	NewApp,
+	NewFile,
 	NewFilesystemACL,
 }
 

@@ -4545,6 +4545,47 @@
       "id": "tftypes.String"
     }
   },
+  "truenas_file": {
+    "attributes": {
+      "content": {
+        "mode": "required",
+        "type": "tftypes.String",
+        "write_only": true
+      },
+      "content_sha256": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "drift_detection": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "id": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
+      "mode": {
+        "mode": "optional",
+        "type": "tftypes.String"
+      },
+      "mtime": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      },
+      "on_destroy": {
+        "mode": "optional+computed",
+        "type": "tftypes.String"
+      },
+      "path": {
+        "mode": "required",
+        "type": "tftypes.String"
+      },
+      "size": {
+        "mode": "computed",
+        "type": "tftypes.Number"
+      }
+    }
+  },
   "truenas_filesystem_acl": {
     "attributes": {
       "acltype": {
