@@ -49,6 +49,9 @@ type Server struct {
 	conns         map[*websocket.Conn]struct{}
 	loginResponse string
 	serverHeader  string
+
+	// Files backs the /_download and /_upload endpoints.
+	Files *Files
 }
 
 // NewServer starts a TLS server offering APIVersion. It is closed when the test ends.
@@ -71,10 +74,13 @@ func newServer(t testing.TB, start func(http.Handler) *httptest.Server) *Server 
 		conns:         make(map[*websocket.Conn]struct{}),
 		loginResponse: "SUCCESS",
 		serverHeader:  "nginx",
+		Files:         newFiles(),
 	}
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /api/versions", s.serveVersions)
 	mux.HandleFunc("/api/{version}", s.serveWebsocket)
+	mux.HandleFunc("/_download/", s.serveDownload)
+	mux.HandleFunc("POST /_upload", s.serveUpload)
 	s.Server = start(mux)
 	t.Cleanup(s.Close)
 	return s
@@ -147,6 +153,14 @@ func (s *Server) SetServerHeader(value string) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.serverHeader = value
+}
+
+// setServerHeader writes the Server header the reverse-proxy guard inspects.
+func (s *Server) setServerHeader(w http.ResponseWriter) {
+	s.mu.Lock()
+	header := s.serverHeader
+	s.mu.Unlock()
+	w.Header().Set("Server", header)
 }
 
 func (s *Server) serveVersions(w http.ResponseWriter, _ *http.Request) {
@@ -246,6 +260,11 @@ func (ss *serverSession) handle(ctx context.Context, method string, params []jso
 	h, ok := s.handlers[method]
 	s.calls = append(s.calls, Call{Method: method, Params: params})
 	s.mu.Unlock()
+	if !ok {
+		if result, handled, err := s.handleFileMethod(method, params); handled {
+			return result, err
+		}
+	}
 	if !ok {
 		return nil, &middleware.Error{Code: middleware.CodeMethodNotFound, Message: "Method does not exist"}
 	}
