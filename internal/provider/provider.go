@@ -197,7 +197,7 @@ func (p *Provider) Configure(ctx context.Context, req provider.ConfigureRequest,
 	}
 	tflog.Info(ctx, "connected to TrueNAS", map[string]any{"host": host, "api_version": client.APIVersion()})
 
-	data := &engine.ProviderData{Client: client, ReadOnly: cfg.ReadOnly.ValueBool()}
+	data := &engine.ProviderData{Client: engineClient{client}, ReadOnly: cfg.ReadOnly.ValueBool()}
 	resp.ResourceData = data
 	resp.DataSourceData = data
 	resp.ListResourceData = data
