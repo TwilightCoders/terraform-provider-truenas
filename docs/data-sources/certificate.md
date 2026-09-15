@@ -39,7 +39,6 @@ Looks up exactly one existing `certificate` object by `id`, `name` or `query_fil
 - `country` (String) Country name for certificate subject or `null`.
 - `csr` (String) PEM-encoded certificate signing request to import or `null`.
 - `csr_path` (String) Filesystem path to the certificate signing request file (.csr). `null` if no CSR is available.
-- `digest_algorithm` (String) Hash algorithm for certificate signing.
 - `dn` (String) Distinguished Name (DN) of the certificate subject in RFC 2253 format. `null` if certificate parsing failed.
 - `domains_authenticators` (String) Mapping of domain names to ACME DNS authenticator IDs for domain validation. `null` for non-ACME     certificates. JSON-encoded.
 - `email` (String) Email address for certificate subject or `null`.

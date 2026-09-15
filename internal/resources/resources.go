@@ -265,6 +265,8 @@ var Certificate = engine.Resource{
 			"on read, so it is stored in Terraform state for every certificate this resource manages. " +
 			"Protect state accordingly."},
 		"passphrase": engine.WriteOnly,
+		// Applied, but reported as null forever; see engine.Field.Unreported.
+		"digest_algorithm": {Unreported: true},
 		// TrueNAS stores every SAN with its type prefix, so a bare name written here reads back
 		// prefixed. Without this the rewrite is drift on a RequiresReplace field, and every plan
 		// proposes replacing the certificate.

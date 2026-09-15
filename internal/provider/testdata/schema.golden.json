@@ -81,10 +81,6 @@
         "mode": "computed",
         "type": "tftypes.String"
       },
-      "digest_algorithm": {
-        "mode": "computed",
-        "type": "tftypes.String"
-      },
       "dn": {
         "mode": "computed",
         "type": "tftypes.String"
@@ -3435,7 +3431,7 @@
         "type": "tftypes.String"
       },
       "digest_algorithm": {
-        "mode": "optional+computed",
+        "mode": "optional",
         "type": "tftypes.String"
       },
       "dn": {

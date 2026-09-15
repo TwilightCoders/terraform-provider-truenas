@@ -172,3 +172,39 @@ resource "truenas_certificate" "lan" {
 		},
 	})
 }
+
+// TestCertificateUnreportedFieldIsStable covers a field TrueNAS accepts and applies but never
+// reports: digest_algorithm is honoured — the generated CSR really is signed sha256WithRSAEncryption
+// — yet certificate.query returns null for it forever. Setting it explicitly must not leave the
+// configuration permanently different from state, because the attribute also forces replacement and
+// the certificate would be reissued on every apply.
+func TestCertificateUnreportedFieldIsStable(t *testing.T) {
+	srv := middlewaretest.NewServer(t)
+	store := srv.ServeCRUD(apischema.MustLoad(api.Latest), "certificate")
+	store.OnWrite = func(row map[string]any) {
+		row["privatekey"] = "-----BEGIN PRIVATE KEY-----generated"
+		row["digest_algorithm"] = nil // middlewared never reports it back
+	}
+
+	cfg := providerConfig(srv, "") + `
+resource "truenas_certificate" "lan" {
+  name             = "truenas-lan"
+  create_type      = "CERTIFICATE_CREATE_CSR"
+  common           = "nas.example.com"
+  san              = ["nas.example.com"]
+  digest_algorithm = "SHA256"
+}`
+
+	resource.UnitTest(t, resource.TestCase{
+		ProtoV6ProviderFactories: factories,
+		Steps: []resource.TestStep{
+			{Config: cfg},
+			{
+				Config: cfg,
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{plancheck.ExpectEmptyPlan()},
+				},
+			},
+		},
+	})
+}
