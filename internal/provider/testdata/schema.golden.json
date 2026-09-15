@@ -3391,7 +3391,7 @@
         "type": "tftypes.Bool"
       },
       "certificate": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "certificate_path": {
@@ -3407,15 +3407,15 @@
         "type": "tftypes.List[tftypes.String]"
       },
       "city": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "common": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "country": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "create_type": {
@@ -3423,7 +3423,7 @@
         "type": "tftypes.String"
       },
       "csr": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "csr_id": {
@@ -3455,7 +3455,7 @@
         "type": "tftypes.String"
       },
       "email": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "expired": {
@@ -3479,7 +3479,7 @@
         "type": "tftypes.Number"
       },
       "key_length": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.Number"
       },
       "key_type": {
@@ -3495,11 +3495,11 @@
         "type": "tftypes.String"
       },
       "organization": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "organizational_unit": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "parsed": {
@@ -3547,7 +3547,7 @@
         "type": "tftypes.Number"
       },
       "state": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "subject_name_hash": {

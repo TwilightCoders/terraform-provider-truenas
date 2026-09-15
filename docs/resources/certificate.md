@@ -33,12 +33,12 @@ Manages a certificate. `create_type` selects how: `CERTIFICATE_CREATE_IMPORTED` 
 - `country` (String) Country name for certificate subject or `null`. Changing this forces a new resource.
 - `csr` (String) PEM-encoded certificate signing request to import or `null`. Changing this forces a new resource.
 - `csr_id` (Number) CSR to be used for ACME certificate creation. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS.
-- `digest_algorithm` (String) Hash algorithm for certificate signing. Defaults to `"SHA256"`. Changing this forces a new resource.
+- `digest_algorithm` (String) Hash algorithm for certificate signing. Changing this forces a new resource.
 - `dns_mapping` (Map of Number) A mapping of domain to ACME DNS Authenticator ID for each domain listed in SAN or common name of the CSR. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS.
 - `ec_curve` (String) Elliptic curve to use for EC keys. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS.
 - `email` (String) Email address for certificate subject or `null`. Changing this forces a new resource.
 - `key_length` (Number) RSA key length in bits or `null`. Changing this forces a new resource.
-- `key_type` (String) Type of cryptographic key to generate. Defaults to `"RSA"`. Changing this forces a new resource.
+- `key_type` (String) Type of cryptographic key to generate. Changing this forces a new resource.
 - `organization` (String) Organization name for certificate subject or `null`. Changing this forces a new resource.
 - `organizational_unit` (String) Organizational unit for certificate subject or `null`. Changing this forces a new resource.
 - `passphrase` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Passphrase to protect the private key or `null`.

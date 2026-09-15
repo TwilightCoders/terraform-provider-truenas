@@ -37,7 +37,7 @@ Manages a virtual machine. Attach disks, NICs and displays with `truenas_vm_devi
 - `cpuset` (String) Set of host CPU cores to pin VM CPUs to. `null` for no pinning.
 - `description` (String) Optional description or notes about the virtual machine. Defaults to `""`.
 - `enable_cpu_topology_extension` (Boolean) Whether to expose detailed CPU topology information to the guest OS. Defaults to `false`.
-- `enable_secure_boot` (Boolean) Whether to enable UEFI Secure Boot for enhanced security. Defaults to `false`. Changing this forces a new resource.
+- `enable_secure_boot` (Boolean) Whether to enable UEFI Secure Boot for enhanced security. Changing this forces a new resource.
 - `ensure_display_device` (Boolean) Whether to ensure at least one display device is configured for the VM. Defaults to `true`.
 - `hide_from_msr` (Boolean) Whether to hide hypervisor signatures from guest OS MSR access. Defaults to `false`.
 - `hyperv_enlightenments` (Boolean) Whether to enable Hyper-V enlightenments for improved Windows guest performance. Defaults to `false`.
