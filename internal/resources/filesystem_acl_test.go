@@ -78,11 +78,11 @@ func TestPOSIXEntries(t *testing.T) {
 }
 
 func TestAllSpecsResolve(t *testing.T) {
-	snap := apischema.MustLoad(api.Latest)
-	if err := engine.Validate(context.Background(), snap, All...); err != nil {
+	eng := engine.New(apischema.MustLoad(api.Latest), Dialect)
+	if err := eng.Validate(context.Background(), All...); err != nil {
 		t.Fatal(err)
 	}
-	if err := engine.ValidateActions(context.Background(), snap, Actions...); err != nil {
+	if err := eng.ValidateActions(context.Background(), Actions...); err != nil {
 		t.Fatal(err)
 	}
 }

@@ -43,14 +43,14 @@ var (
 
 // Provider is the TrueNAS provider.
 type Provider struct {
-	version  string
-	snapshot *apischema.Snapshot
+	version string
+	engine  *engine.Engine
 }
 
 // New returns a constructor for the provider at the given version.
 func New(version string) func() provider.Provider {
 	return func() provider.Provider {
-		return &Provider{version: version, snapshot: apischema.MustLoad(api.Latest)}
+		return &Provider{version: version, engine: engine.New(apischema.MustLoad(api.Latest), resources.Dialect)}
 	}
 }
 
@@ -173,7 +173,7 @@ func (p *Provider) Configure(ctx context.Context, req provider.ConfigureRequest,
 
 	mwCfg := middleware.Config{
 		Host:       host,
-		APIVersion: p.snapshot.Version,
+		APIVersion: p.engine.Snapshot().Version,
 		Username:   username,
 		APIKey:     apiKey,
 		Logger:     tflogAdapter{},
@@ -207,7 +207,7 @@ func (p *Provider) Configure(ctx context.Context, req provider.ConfigureRequest,
 func (p *Provider) Resources(_ context.Context) []func() resource.Resource {
 	out := make([]func() resource.Resource, 0, len(resources.All)+len(resources.Custom))
 	for _, spec := range resources.All {
-		out = append(out, engine.NewResource(p.snapshot, spec))
+		out = append(out, p.engine.Resource(spec))
 	}
 	return append(out, resources.Custom...)
 }
@@ -215,7 +215,7 @@ func (p *Provider) Resources(_ context.Context) []func() resource.Resource {
 func (p *Provider) Actions(_ context.Context) []func() action.Action {
 	out := make([]func() action.Action, 0, len(resources.Actions))
 	for _, spec := range resources.Actions {
-		out = append(out, engine.NewAction(p.snapshot, spec))
+		out = append(out, p.engine.Action(spec))
 	}
 	return out
 }
@@ -227,8 +227,8 @@ func (p *Provider) Functions(_ context.Context) []func() function.Function {
 func (p *Provider) ListResources(_ context.Context) []func() list.ListResource {
 	var out []func() list.ListResource
 	for _, spec := range resources.All {
-		if engine.Listable(p.snapshot, spec) {
-			out = append(out, engine.NewListResource(p.snapshot, spec))
+		if p.engine.Listable(spec) {
+			out = append(out, p.engine.ListResource(spec))
 		}
 	}
 	return out
@@ -237,7 +237,7 @@ func (p *Provider) ListResources(_ context.Context) []func() list.ListResource {
 func (p *Provider) DataSources(_ context.Context) []func() datasource.DataSource {
 	out := make([]func() datasource.DataSource, 0, len(resources.All))
 	for _, spec := range resources.All {
-		out = append(out, engine.NewDataSource(p.snapshot, spec))
+		out = append(out, p.engine.DataSource(spec))
 	}
 	return out
 }

@@ -191,4 +191,3 @@ func parseFieldErrors(extra []json.RawMessage) []FieldError {
 	}
 	return fields
 }
-
