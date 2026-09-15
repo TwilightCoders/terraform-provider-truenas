@@ -18,6 +18,7 @@ import (
 func scriptedServer(t *testing.T, reply func(ctx context.Context, conn *websocket.Conn, method string, id json.RawMessage)) Config {
 	t.Helper()
 	srv := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Server", "nginx") // what TrueNAS's own web server sends
 		if r.URL.Path == "/api/versions" {
 			_, _ = w.Write([]byte(`["v25.10.5"]`))
 			return
@@ -189,6 +190,7 @@ func TestPingFailureKillsSession(t *testing.T) {
 	blocked := make(chan struct{})
 	t.Cleanup(func() { close(blocked) })
 	srv := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Server", "nginx") // what TrueNAS's own web server sends
 		if r.URL.Path == "/api/versions" {
 			_, _ = w.Write([]byte(`["v25.10.5"]`))
 			return

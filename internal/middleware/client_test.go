@@ -199,9 +199,15 @@ func TestDialNegotiatesVersion(t *testing.T) {
 }
 
 func TestDialVersionDiscoveryFailures(t *testing.T) {
-	notFound := httptest.NewTLSServer(http.NotFoundHandler())
+	notFound := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Server", "nginx")
+		http.NotFound(w, r)
+	}))
 	defer notFound.Close()
-	garbage := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) { _, _ = w.Write([]byte("<html>")) }))
+	garbage := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Server", "nginx")
+		_, _ = w.Write([]byte("<html>"))
+	}))
 	defer garbage.Close()
 
 	for name, srv := range map[string]*httptest.Server{"404": notFound, "garbage": garbage} {
@@ -219,6 +225,7 @@ func TestDialVersionDiscoveryFailures(t *testing.T) {
 
 func TestDialFailsWhenWebsocketUnavailable(t *testing.T) {
 	versionsOnly := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Server", "nginx")
 		if r.URL.Path == "/api/versions" {
 			_, _ = w.Write([]byte(`["v25.10.5"]`))
 			return
@@ -536,7 +543,14 @@ func TestDialRefusesReverseProxy(t *testing.T) {
 		t.Fatal("allow_reverse_proxy did not bypass the check")
 	}
 
+	// A stripped Server header is refused too: something removed it, and the cost of being wrong
+	// here is a revoked API key.
 	srv.SetServerHeader("")
+	if _, err := middleware.Dial(context.Background(), srv.Config()); !errors.As(err, &pe) {
+		t.Fatalf("empty Server header accepted: %v", err)
+	}
+
+	srv.SetServerHeader("nginx/1.24.0")
 	dial(t, srv)
 }
 
@@ -581,5 +595,29 @@ func TestInsecureLoopback(t *testing.T) {
 	plain.HTTPClient = nil
 	if _, err := middleware.Dial(context.Background(), plain); err == nil {
 		t.Error("TLS client accepted a plaintext server")
+	}
+}
+
+// TestCheckServerIsExact pins the guard against the two ways a prefix match fails open: a proxy
+// whose name merely starts with "nginx", and one that strips the header entirely.
+func TestCheckServerIsExact(t *testing.T) {
+	for header, allowed := range map[string]bool{
+		"nginx":               true,
+		"nginx/1.24.0":        true,
+		"nginx-proxy-manager": false, // starts with "nginx" but is a proxy
+		"openresty":           false, // what Nginx Proxy Manager actually sends
+		"Apache/2.4":          false,
+		"":                    false, // stripped by something in the path
+	} {
+		srv := middlewaretest.NewServer(t)
+		srv.SetServerHeader(header)
+		_, err := middleware.Dial(context.Background(), srv.Config())
+		var pe *middleware.ProxyError
+		switch {
+		case allowed && err != nil:
+			t.Errorf("Server: %q was refused: %v", header, err)
+		case !allowed && !errors.As(err, &pe):
+			t.Errorf("Server: %q was accepted, want ProxyError; got %v", header, err)
+		}
 	}
 }

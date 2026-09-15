@@ -61,16 +61,26 @@ type ProxyError struct {
 }
 
 func (e *ProxyError) Error() string {
-	return fmt.Sprintf("%s is answered by %q, not TrueNAS's own web server. TrueNAS permanently revokes an API key "+
+	answered := fmt.Sprintf("is answered by %q", e.Server)
+	if e.Server == "" {
+		answered = "does not say what web server answers it"
+	}
+	return fmt.Sprintf("%s %s, not TrueNAS's own web server. TrueNAS permanently revokes an API key "+
 		"the first time it arrives over plaintext, which is what happens behind a reverse proxy that terminates TLS and "+
 		"forwards over HTTP. Point host at TrueNAS's HTTPS port directly, or set allow_reverse_proxy if the proxy "+
-		"re-encrypts to TrueNAS.", e.Host, e.Server)
+		"re-encrypts to TrueNAS.", e.Host, answered)
 }
 
 // checkServer rejects responses from a web server other than TrueNAS's nginx.
+//
+// The match is exact rather than a prefix, and an absent header is refused too. A guard whose
+// failure mode is a permanently revoked API key should refuse what it does not recognise: a prefix
+// admits "nginx-proxy-manager" verbatim, and a proxy that strips the header would pass unnoticed.
+// Nothing here is a security boundary — a proxy can claim to be nginx — but being too strict costs
+// an operator one allow_reverse_proxy, while being too loose costs them a credential.
 func checkServer(host string, resp *http.Response) error {
 	server := resp.Header.Get("Server")
-	if server == "" || strings.HasPrefix(strings.ToLower(server), "nginx") {
+	if server == "nginx" || strings.HasPrefix(server, "nginx/") {
 		return nil
 	}
 	return &ProxyError{Host: host, Server: server}
