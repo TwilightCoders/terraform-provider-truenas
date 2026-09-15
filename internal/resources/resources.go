@@ -255,6 +255,13 @@ var Certificate = engine.Resource{
 		// TrueNAS returns the private key on read; keep it out of state.
 		"privatekey": engine.WriteOnly,
 		"passphrase": engine.WriteOnly,
+		// TrueNAS stores every SAN with its type prefix, so a bare name written here reads back
+		// prefixed. Without this the rewrite is drift on a RequiresReplace field, and every plan
+		// proposes replacing the certificate.
+		"san": {Canonical: engine.CanonicalSAN, Description: "Subject alternative names. Write them bare " +
+			"(`example.com`) or DNS-prefixed (`DNS:example.com`); both are accepted and mean the same name. " +
+			"Prefix an address with `IP:` to request an IP name. TrueNAS treats every other prefix, including " +
+			"`email:` and `URI:`, as part of a DNS name rather than as that name type."},
 	},
 }
 

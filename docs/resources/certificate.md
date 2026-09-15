@@ -46,7 +46,7 @@ Manages a certificate. `create_type` selects how: `CERTIFICATE_CREATE_IMPORTED` 
 - `privatekey` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) PEM-encoded private key to import or `null`. Changing this forces a new resource.
 - `privatekey_wo_version` (Number) Change this value to send `privatekey` again. Terraform never stores `privatekey`.
 - `renew_days` (Number) Number of days before the certificate expiration date to attempt certificate renewal. If certificate renewal     fails, renewal will be reattempted every day until expiration. Defaults to `10`.
-- `san` (List of String) Subject alternative names for the certificate. Changing this forces a new resource.
+- `san` (List of String) Subject alternative names. Write them bare (`example.com`) or DNS-prefixed (`DNS:example.com`); both are accepted and mean the same name. Prefix an address with `IP:` to request an IP name. TrueNAS treats every other prefix, including `email:` and `URI:`, as part of a DNS name rather than as that name type. Changing this forces a new resource.
 - `state` (String) State or province name for certificate subject or `null`. Changing this forces a new resource.
 - `tos` (Boolean) Set this when creating an ACME certificate to accept terms of service of the ACME service. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS.
 

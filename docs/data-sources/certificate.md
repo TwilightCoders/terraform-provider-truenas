@@ -56,7 +56,7 @@ Looks up exactly one existing `certificate` object by `id`, `name` or `query_fil
 - `privatekey_path` (String) Filesystem path to the private key file (.key). `null` if no private key is available.
 - `renew_days` (Number) Number of days before the certificate expiration date to attempt certificate renewal. If certificate renewal     fails, renewal will be reattempted every day until expiration.
 - `root_path` (String) Filesystem path where certificate-related files are stored.
-- `san` (List of String) Subject alternative names for the certificate.
+- `san` (List of String) Subject alternative names. Write them bare (`example.com`) or DNS-prefixed (`DNS:example.com`); both are accepted and mean the same name. Prefix an address with `IP:` to request an IP name. TrueNAS treats every other prefix, including `email:` and `URI:`, as part of a DNS name rather than as that name type.
 - `serial` (Number) Certificate serial number. `null` if certificate parsing failed.
 - `state` (String) State or province name for certificate subject or `null`.
 - `subject_name_hash` (Number) Hash of the certificate subject name. `null` if certificate parsing failed.
