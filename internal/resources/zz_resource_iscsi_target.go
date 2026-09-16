@@ -21,10 +21,10 @@ var modelISCSITarget = &model{
 	namespace:    "iscsi.target",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	createMethod: "iscsi.target.create",
 	updateMethod: "iscsi.target.update",
 	getMethod:    "iscsi.target.get_instance",
 	deleteMethod: "iscsi.target.delete",
-	createMethod: "iscsi.target.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

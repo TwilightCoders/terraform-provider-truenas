@@ -22,10 +22,10 @@ var modelCloudsyncTask = &model{
 	namespace:    "cloudsync",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	deleteMethod: "cloudsync.delete",
 	createMethod: "cloudsync.create",
 	updateMethod: "cloudsync.update",
 	getMethod:    "cloudsync.get_instance",
-	deleteMethod: "cloudsync.delete",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

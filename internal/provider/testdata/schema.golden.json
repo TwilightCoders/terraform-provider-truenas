@@ -6829,7 +6829,7 @@
         "type": "tftypes.String"
       },
       "group": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.Number"
       },
       "group_create": {

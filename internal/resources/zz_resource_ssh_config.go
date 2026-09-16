@@ -21,8 +21,8 @@ var modelSSHConfig = &model{
 	primaryKey:   "id",
 	idKind:       kindInt,
 	singleton:    true,
-	getMethod:    "ssh.config",
 	updateMethod: "ssh.update",
+	getMethod:    "ssh.config",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

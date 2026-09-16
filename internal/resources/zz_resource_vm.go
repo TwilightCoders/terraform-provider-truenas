@@ -23,10 +23,10 @@ var modelVM = &model{
 	namespace:    "vm",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	createMethod: "vm.create",
 	updateMethod: "vm.update",
 	getMethod:    "vm.get_instance",
 	deleteMethod: "vm.delete",
-	createMethod: "vm.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

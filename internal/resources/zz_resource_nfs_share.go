@@ -21,10 +21,10 @@ var modelNFSShare = &model{
 	namespace:    "sharing.nfs",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	createMethod: "sharing.nfs.create",
 	updateMethod: "sharing.nfs.update",
 	getMethod:    "sharing.nfs.get_instance",
 	deleteMethod: "sharing.nfs.delete",
+	createMethod: "sharing.nfs.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

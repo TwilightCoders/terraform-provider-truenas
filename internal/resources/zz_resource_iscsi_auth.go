@@ -20,10 +20,10 @@ var modelISCSIAuth = &model{
 	namespace:    "iscsi.auth",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	createMethod: "iscsi.auth.create",
 	updateMethod: "iscsi.auth.update",
 	getMethod:    "iscsi.auth.get_instance",
 	deleteMethod: "iscsi.auth.delete",
+	createMethod: "iscsi.auth.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

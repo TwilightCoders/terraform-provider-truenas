@@ -22,10 +22,10 @@ var modelUser = &model{
 	namespace:    "user",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	getMethod:    "user.get_instance",
 	deleteMethod: "user.delete",
 	createMethod: "user.create",
 	updateMethod: "user.update",
+	getMethod:    "user.get_instance",
 	listFilters:  [][]interface{}{[]interface{}{"builtin", "=", false}},
 	listOptions:  map[string]interface{}(nil),
 	attrs: []*node{
@@ -83,7 +83,7 @@ var modelUser = &model{
 		},
 		{
 			name: "group", api: "group", path: "group",
-			kind: kindInt, role: roleOptional,
+			kind: kindInt, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "The group entry `id` for the user's primary group. This is not the same as the Unix group `gid` value.     This is required if `group_create` is `false`. ",
 			ref:         "id",
@@ -336,7 +336,7 @@ func (r *userResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 				MarkdownDescription: "Specifies the subuid mapping for this user. If DIRECT then the UID will be     directly mapped to all containers. Alternatively, the target UID may be     explicitly specified. If `null`, then the UID will not be mapped.\n\nNOTE: This field will be ignored for users that have been assigned TrueNAS roles.",
 			},
 			"group": schema.NumberAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "The group entry `id` for the user's primary group. This is not the same as the Unix group `gid` value.     This is required if `group_create` is `false`. ",
 				Validators:          []validator.Number{numberIsInteger{}},
 			},

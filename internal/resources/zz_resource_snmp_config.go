@@ -21,8 +21,8 @@ var modelSnmpConfig = &model{
 	primaryKey:   "id",
 	idKind:       kindInt,
 	singleton:    true,
-	getMethod:    "snmp.config",
 	updateMethod: "snmp.update",
+	getMethod:    "snmp.config",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
