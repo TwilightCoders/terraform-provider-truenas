@@ -25,10 +25,10 @@ var modelReplication = &model{
 	namespace:    "replication",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	deleteMethod: "replication.delete",
-	createMethod: "replication.create",
 	updateMethod: "replication.update",
 	getMethod:    "replication.get_instance",
+	deleteMethod: "replication.delete",
+	createMethod: "replication.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

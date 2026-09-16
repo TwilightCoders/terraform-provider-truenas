@@ -129,6 +129,47 @@ var ListResources = []func() list.ListResource{
 	NewZvolList,
 }
 
+// descriptors maps a resource type to its model, for code in this package that needs the
+// shape of a call rather than a resource: the fake server the tests run against. Keyed by
+// type rather than namespace, because two resources can be variants of one namespace.
+var descriptors = map[string]*model{
+	"acme_dns_authenticator": modelAcmeDnsAuthenticator,
+	"certificate":            modelCertificate,
+	"cloudsync_credentials":  modelCloudsyncCredentials,
+	"cloudsync_task":         modelCloudsyncTask,
+	"cron_job":               modelCronJob,
+	"dataset":                modelDataset,
+	"general_config":         modelGeneralConfig,
+	"ftp_config":             modelFTPConfig,
+	"group":                  modelGroup,
+	"init_script":            modelInitScript,
+	"mail_config":            modelMailConfig,
+	"iscsi_auth":             modelISCSIAuth,
+	"iscsi_global_config":    modelISCSIGlobalConfig,
+	"iscsi_extent":           modelISCSIExtent,
+	"iscsi_initiator":        modelISCSIInitiator,
+	"iscsi_portal":           modelISCSIPortal,
+	"iscsi_target":           modelISCSITarget,
+	"iscsi_target_extent":    modelISCSITargetExtent,
+	"network_config":         modelNetworkConfig,
+	"nfs_config":             modelNFSConfig,
+	"nfs_share":              modelNFSShare,
+	"replication":            modelReplication,
+	"smb_config":             modelSMBConfig,
+	"service":                modelService,
+	"smb_share":              modelSMBShare,
+	"snmp_config":            modelSnmpConfig,
+	"snapshot_task":          modelSnapshotTask,
+	"ssh_config":             modelSSHConfig,
+	"static_route":           modelStaticRoute,
+	"tunable":                modelTunable,
+	"ups_config":             modelUPSConfig,
+	"user":                   modelUser,
+	"vm":                     modelVM,
+	"vm_device":              modelVMDevice,
+	"zvol":                   modelZvol,
+}
+
 // Actions lists every generated action.
 var Actions = []func() action.Action{
 	NewReplicationRunAction,

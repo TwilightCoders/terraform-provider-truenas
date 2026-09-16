@@ -7,7 +7,7 @@ import (
 func TestSimpleResourceLifecycles(t *testing.T) {
 	cases := []lifecycle{
 		{
-			namespace: "sharing.nfs", address: "truenas_nfs_share.media",
+			resourceType: "nfs_share", address: "truenas_nfs_share.media",
 			create: `resource "truenas_nfs_share" "media" {
   path = "/mnt/tank/data/media"
 }`,
@@ -18,7 +18,7 @@ func TestSimpleResourceLifecycles(t *testing.T) {
 }`,
 		},
 		{
-			namespace: "staticroute", address: "truenas_static_route.vpn",
+			resourceType: "static_route", address: "truenas_static_route.vpn",
 			create: `resource "truenas_static_route" "vpn" {
   destination = "198.51.100.0/24"
   gateway     = "192.0.2.1"
@@ -30,7 +30,7 @@ func TestSimpleResourceLifecycles(t *testing.T) {
 }`,
 		},
 		{
-			namespace: "tunable", address: "truenas_tunable.arc",
+			resourceType: "tunable", address: "truenas_tunable.arc",
 			create: `resource "truenas_tunable" "arc" {
   type  = "ZFS"
   var   = "zfs_arc_max"
@@ -44,7 +44,7 @@ func TestSimpleResourceLifecycles(t *testing.T) {
 }`,
 		},
 		{
-			namespace: "iscsi.target", address: "truenas_iscsi_target.vm1",
+			resourceType: "iscsi_target", address: "truenas_iscsi_target.vm1",
 			create: `resource "truenas_iscsi_target" "vm1" {
   name = "vm1-data"
 }`,
@@ -54,7 +54,7 @@ func TestSimpleResourceLifecycles(t *testing.T) {
 }`,
 		},
 		{
-			namespace: "iscsi.extent", address: "truenas_iscsi_extent.vm1",
+			resourceType: "iscsi_extent", address: "truenas_iscsi_extent.vm1",
 			onWrite: func(row map[string]any) {
 				if row["serial"] == nil {
 					row["serial"] = "a1b2c3d4"
@@ -73,7 +73,7 @@ func TestSimpleResourceLifecycles(t *testing.T) {
 }`,
 		},
 		{
-			namespace: "iscsi.auth", address: "truenas_iscsi_auth.vm1",
+			resourceType: "iscsi_auth", address: "truenas_iscsi_auth.vm1",
 			create: `resource "truenas_iscsi_auth" "vm1" {
   tag    = 1
   user   = "vm1"
@@ -88,6 +88,6 @@ func TestSimpleResourceLifecycles(t *testing.T) {
 		},
 	}
 	for _, lc := range cases {
-		t.Run(lc.namespace, func(t *testing.T) { lc.run(t) })
+		t.Run(lc.resourceType, func(t *testing.T) { lc.run(t) })
 	}
 }

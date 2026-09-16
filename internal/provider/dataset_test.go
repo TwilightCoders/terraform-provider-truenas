@@ -11,22 +11,21 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/statecheck"
 	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
 
-	"github.com/TwilightCoders/terraform-provider-truenas/api"
-	"github.com/TwilightCoders/terraform-provider-truenas/internal/apischema"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware/middlewaretest"
+	"github.com/TwilightCoders/terraform-provider-truenas/internal/resources"
 )
 
 // wrapProperties rewrites plain values into the {value, rawvalue, parsed, source} objects
 // pool.dataset returns, the way middlewared reports ZFS properties.
 func wrapProperties(t *testing.T) func(row map[string]any) {
 	t.Helper()
-	get, err := apischema.MustLoad(api.Latest).Method("pool.dataset.get_instance")
-	if err != nil {
-		t.Fatal(err)
+	shape, ok := resources.ShapeFor("dataset")
+	if !ok {
+		t.Fatal("no dataset shape")
 	}
 	var props []string
-	for _, f := range get.Returns.Fields {
-		if f.Type.Kind == apischema.KindObject && f.Type.Field("rawvalue") != nil {
+	for _, f := range shape.Fields {
+		if f.Property {
 			props = append(props, f.Name)
 		}
 	}
@@ -56,9 +55,9 @@ func wrapProperties(t *testing.T) func(row map[string]any) {
 func TestDatasetLifecycle(t *testing.T) {
 	const addr = "truenas_dataset.media"
 	lifecycle{
-		namespace: "pool.dataset",
-		address:   addr,
-		onWrite:   wrapProperties(t),
+		resourceType: "dataset",
+		address:      addr,
+		onWrite:      wrapProperties(t),
 		create: `
 resource "truenas_dataset" "media" {
   name        = "tank/data/media"
@@ -86,9 +85,9 @@ resource "truenas_dataset" "media" {
 func TestZvolLifecycle(t *testing.T) {
 	const addr = "truenas_zvol.disk"
 	lifecycle{
-		namespace: "pool.dataset",
-		address:   addr,
-		onWrite:   wrapProperties(t),
+		resourceType: "zvol",
+		address:      addr,
+		onWrite:      wrapProperties(t),
 		create: `
 resource "truenas_zvol" "disk" {
   name    = "tank/vm/disk0"
@@ -107,7 +106,7 @@ resource "truenas_zvol" "disk" {
 
 func TestDatasetRefusesToImportZvol(t *testing.T) {
 	srv := middlewaretest.NewServer(t)
-	store := srv.ServeCRUD(apischema.MustLoad(api.Latest), "pool.dataset")
+	store := srv.ServeCRUD("dataset", "zvol")
 	store.OnWrite = wrapProperties(t)
 
 	resource.UnitTest(t, resource.TestCase{

@@ -20,8 +20,8 @@ var modelNFSConfig = &model{
 	primaryKey:   "id",
 	idKind:       kindInt,
 	singleton:    true,
-	getMethod:    "nfs.config",
 	updateMethod: "nfs.update",
+	getMethod:    "nfs.config",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

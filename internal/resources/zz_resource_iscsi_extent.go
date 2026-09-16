@@ -24,10 +24,10 @@ var modelISCSIExtent = &model{
 	namespace:    "iscsi.extent",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	deleteMethod: "iscsi.extent.delete",
 	createMethod: "iscsi.extent.create",
 	updateMethod: "iscsi.extent.update",
 	getMethod:    "iscsi.extent.get_instance",
+	deleteMethod: "iscsi.extent.delete",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

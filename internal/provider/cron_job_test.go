@@ -15,8 +15,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 
-	"github.com/TwilightCoders/terraform-provider-truenas/api"
-	"github.com/TwilightCoders/terraform-provider-truenas/internal/apischema"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware/middlewaretest"
 )
@@ -25,7 +23,7 @@ const cronJobAddr = "truenas_cron_job.backup"
 
 func TestCronJobLifecycle(t *testing.T) {
 	srv := middlewaretest.NewServer(t)
-	store := srv.ServeCRUD(apischema.MustLoad(api.Latest), "cronjob")
+	store := srv.ServeCRUD("cron_job")
 
 	resource.UnitTest(t, resource.TestCase{
 		ProtoV6ProviderFactories: factories,
@@ -162,7 +160,7 @@ resource "truenas_cron_job" "backup" {
 
 func TestCronJobValidationErrorsPointAtAttributes(t *testing.T) {
 	srv := middlewaretest.NewServer(t)
-	srv.ServeCRUD(apischema.MustLoad(api.Latest), "cronjob")
+	srv.ServeCRUD("cron_job")
 	srv.Handle("cronjob.create", func(context.Context, []json.RawMessage) (any, error) {
 		return nil, &middleware.Error{Errno: 22, Errname: "EINVAL", Fields: []middleware.FieldError{
 			{Attribute: "cronjob_create.schedule.minute", Message: "Invalid minute value 61", Errno: 22},

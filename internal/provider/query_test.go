@@ -10,14 +10,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 
-	"github.com/TwilightCoders/terraform-provider-truenas/api"
-	"github.com/TwilightCoders/terraform-provider-truenas/internal/apischema"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware/middlewaretest"
 )
 
 func TestSnapshotTaskQuery(t *testing.T) {
 	srv := middlewaretest.NewServer(t)
-	srv.ServeCRUD(apischema.MustLoad(api.Latest), "pool.snapshottask")
+	srv.ServeCRUD("snapshot_task")
 
 	resource.UnitTest(t, resource.TestCase{
 		ProtoV6ProviderFactories: factories,

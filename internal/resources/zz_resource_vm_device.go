@@ -22,10 +22,10 @@ var modelVMDevice = &model{
 	namespace:    "vm.device",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	createMethod: "vm.device.create",
 	updateMethod: "vm.device.update",
 	getMethod:    "vm.device.get_instance",
 	deleteMethod: "vm.device.delete",
+	createMethod: "vm.device.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

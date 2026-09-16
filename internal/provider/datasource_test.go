@@ -13,18 +13,15 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/statecheck"
 	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
 
-	"github.com/TwilightCoders/terraform-provider-truenas/api"
-	"github.com/TwilightCoders/terraform-provider-truenas/internal/apischema"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware/middlewaretest"
 )
 
 func TestDataSourceLookupsNeverExposeSecrets(t *testing.T) {
 	srv := middlewaretest.NewServer(t)
-	snap := apischema.MustLoad(api.Latest)
-	srv.ServeCRUD(snap, "acme.dns.authenticator")
-	datasets := srv.ServeCRUD(snap, "pool.dataset")
+	srv.ServeCRUD("acme_dns_authenticator")
+	datasets := srv.ServeCRUD("dataset")
 	datasets.OnWrite = wrapProperties(t)
-	srv.ServeConfig(snap, "ssh", map[string]any{
+	srv.ServeConfig("ssh_config", map[string]any{
 		"id": json.Number("1"), "tcpport": json.Number("22"), "host_rsa_key": "PRIVATE", "host_rsa_key_pub": "ssh-rsa AAAA",
 	})
 

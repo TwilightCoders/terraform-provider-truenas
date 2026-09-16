@@ -21,8 +21,8 @@ var modelNetworkConfig = &model{
 	primaryKey:   "id",
 	idKind:       kindInt,
 	singleton:    true,
-	getMethod:    "network.configuration.config",
 	updateMethod: "network.configuration.update",
+	getMethod:    "network.configuration.config",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

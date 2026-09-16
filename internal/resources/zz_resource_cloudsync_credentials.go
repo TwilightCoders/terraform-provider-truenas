@@ -24,10 +24,10 @@ var modelCloudsyncCredentials = &model{
 	namespace:    "cloudsync.credentials",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	deleteMethod: "cloudsync.credentials.delete",
-	createMethod: "cloudsync.credentials.create",
 	updateMethod: "cloudsync.credentials.update",
 	getMethod:    "cloudsync.credentials.get_instance",
+	deleteMethod: "cloudsync.credentials.delete",
+	createMethod: "cloudsync.credentials.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

@@ -23,10 +23,10 @@ var modelCronJob = &model{
 	namespace:    "cronjob",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	getMethod:    "cronjob.get_instance",
 	deleteMethod: "cronjob.delete",
 	createMethod: "cronjob.create",
 	updateMethod: "cronjob.update",
-	getMethod:    "cronjob.get_instance",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

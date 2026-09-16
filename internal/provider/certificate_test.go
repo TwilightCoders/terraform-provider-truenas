@@ -14,16 +14,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
 	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
 
-	"github.com/TwilightCoders/terraform-provider-truenas/api"
-	"github.com/TwilightCoders/terraform-provider-truenas/internal/apischema"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware/middlewaretest"
 )
 
 func TestCertificateLifecycle(t *testing.T) {
 	const addr = "truenas_certificate.lan"
 	lifecycle{
-		namespace: "certificate",
-		address:   addr,
+		resourceType: "certificate",
+		address:      addr,
 		// Like middlewared, report the private key back on read.
 		onWrite: func(row map[string]any) {
 			row["privatekey"] = "-----BEGIN PRIVATE KEY-----generated"
@@ -58,8 +56,8 @@ resource "truenas_certificate" "lan" {
 
 func TestACMEDNSAuthenticatorLifecycle(t *testing.T) {
 	lifecycle{
-		namespace: "acme.dns.authenticator",
-		address:   "truenas_acme_dns_authenticator.cloudflare",
+		resourceType: "acme_dns_authenticator",
+		address:      "truenas_acme_dns_authenticator.cloudflare",
 		create: `
 resource "truenas_acme_dns_authenticator" "cloudflare" {
   name = "cloudflare"
@@ -84,7 +82,7 @@ resource "truenas_acme_dns_authenticator" "cloudflare" {
 func TestGeneralConfigUICertificate(t *testing.T) {
 	const addr = "truenas_general_config.this"
 	srv := middlewaretest.NewServer(t)
-	srv.ServeConfig(apischema.MustLoad(api.Latest), "system.general", map[string]any{
+	srv.ServeConfig("general_config", map[string]any{
 		"id": json.Number("1"), "ui_httpsport": json.Number("8443"), "ui_port": json.Number("8080"),
 		"ui_address": []any{"0.0.0.0"}, "timezone": "UTC",
 		"ui_certificate": map[string]any{"id": json.Number("1"), "name": "truenas_default"},
@@ -111,7 +109,7 @@ resource "truenas_general_config" "this" {
 func TestCreateOnlyChangeReplaces(t *testing.T) {
 	const addr = "truenas_certificate.lan"
 	srv := middlewaretest.NewServer(t)
-	srv.ServeCRUD(apischema.MustLoad(api.Latest), "certificate")
+	srv.ServeCRUD("certificate")
 	config := func(createType string) string {
 		return providerConfig(srv, "") + `
 resource "truenas_certificate" "lan" {
@@ -136,7 +134,7 @@ resource "truenas_certificate" "lan" {
 
 func TestReadOnlyRecordsCreateOnlyValuesAfterImport(t *testing.T) {
 	srv := middlewaretest.NewServer(t)
-	store := srv.ServeCRUD(apischema.MustLoad(api.Latest), "certificate")
+	store := srv.ServeCRUD("certificate")
 	store.Seed(map[string]any{"id": json.Number("7"), "name": "truenas-lan", "common": "nas.example.com", "renew_days": json.Number("10")})
 	config := providerConfig(srv, "read_only = true") + `
 import {
@@ -180,7 +178,7 @@ resource "truenas_certificate" "lan" {
 // the certificate would be reissued on every apply.
 func TestCertificateUnreportedFieldIsStable(t *testing.T) {
 	srv := middlewaretest.NewServer(t)
-	store := srv.ServeCRUD(apischema.MustLoad(api.Latest), "certificate")
+	store := srv.ServeCRUD("certificate")
 	store.OnWrite = func(row map[string]any) {
 		row["privatekey"] = "-----BEGIN PRIVATE KEY-----generated"
 		row["digest_algorithm"] = nil // middlewared never reports it back

@@ -24,10 +24,10 @@ var modelInitScript = &model{
 	namespace:    "initshutdownscript",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	createMethod: "initshutdownscript.create",
 	updateMethod: "initshutdownscript.update",
 	getMethod:    "initshutdownscript.get_instance",
 	deleteMethod: "initshutdownscript.delete",
-	createMethod: "initshutdownscript.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

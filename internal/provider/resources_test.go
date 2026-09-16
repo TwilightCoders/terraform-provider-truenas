@@ -12,19 +12,17 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
 	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
 
-	"github.com/TwilightCoders/terraform-provider-truenas/api"
-	"github.com/TwilightCoders/terraform-provider-truenas/internal/apischema"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware/middlewaretest"
 )
 
 // lifecycle runs create, both import styles, an in-place update and destroy for one resource.
 type lifecycle struct {
-	namespace string
-	address   string
-	create    string
-	update    string
-	checks    []statecheck.StateCheck
-	onWrite   func(row map[string]any)
+	resourceType string
+	address      string
+	create       string
+	update       string
+	checks       []statecheck.StateCheck
+	onWrite      func(row map[string]any)
 	// importIgnore lists attributes that cannot survive import, such as write-only companions.
 	importIgnore []string
 	// importUpdates is set when an import block plans an update that records create-only values
@@ -35,14 +33,14 @@ type lifecycle struct {
 func (lc lifecycle) run(t *testing.T) {
 	t.Helper()
 	srv := middlewaretest.NewServer(t)
-	store := srv.ServeCRUD(apischema.MustLoad(api.Latest), lc.namespace)
+	store := srv.ServeCRUD(lc.resourceType)
 	store.OnWrite = lc.onWrite
 
 	resource.UnitTest(t, resource.TestCase{
 		ProtoV6ProviderFactories: factories,
 		CheckDestroy: func(*terraform.State) error {
 			if n := len(store.Rows()); n != 0 {
-				return fmt.Errorf("%d %s rows remain after destroy", n, lc.namespace)
+				return fmt.Errorf("%d %s rows remain after destroy", n, lc.resourceType)
 			}
 			return nil
 		},
@@ -89,8 +87,8 @@ func (lc lifecycle) run(t *testing.T) {
 func TestSnapshotTaskLifecycle(t *testing.T) {
 	const addr = "truenas_snapshot_task.home"
 	lifecycle{
-		namespace: "pool.snapshottask",
-		address:   addr,
+		resourceType: "snapshot_task",
+		address:      addr,
 		create: `
 resource "truenas_snapshot_task" "home" {
   dataset        = "tank/home"
@@ -126,8 +124,8 @@ resource "truenas_snapshot_task" "home" {
 func TestSMBShareLifecycle(t *testing.T) {
 	const addr = "truenas_smb_share.media"
 	lifecycle{
-		namespace: "sharing.smb",
-		address:   addr,
+		resourceType: "smb_share",
+		address:      addr,
 		// Like middlewared, return options without the purpose that selects them.
 		onWrite: func(row map[string]any) {
 			if opts, ok := row["options"].(map[string]any); ok {
@@ -160,8 +158,8 @@ resource "truenas_smb_share" "media" {
 
 func TestInitScriptLifecycle(t *testing.T) {
 	lifecycle{
-		namespace: "initshutdownscript",
-		address:   "truenas_init_script.governor",
+		resourceType: "init_script",
+		address:      "truenas_init_script.governor",
 		create: `
 resource "truenas_init_script" "governor" {
   type    = "COMMAND"
@@ -183,8 +181,8 @@ resource "truenas_init_script" "governor" {
 func TestUserLifecycle(t *testing.T) {
 	const addr = "truenas_user.media"
 	lifecycle{
-		namespace: "user",
-		address:   addr,
+		resourceType: "user",
+		address:      addr,
 		// Like middlewared: assign a uid, and return the primary group as an object.
 		onWrite: func(row map[string]any) {
 			if row["uid"] == nil {
@@ -218,8 +216,8 @@ resource "truenas_user" "media" {
 
 func TestGroupLifecycle(t *testing.T) {
 	lifecycle{
-		namespace: "group",
-		address:   "truenas_group.media",
+		resourceType: "group",
+		address:      "truenas_group.media",
 		onWrite: func(row map[string]any) {
 			if row["gid"] == nil {
 				row["gid"] = json.Number("3001")
@@ -240,8 +238,8 @@ resource "truenas_group" "media" {
 func TestVMLifecycle(t *testing.T) {
 	const addr = "truenas_vm.vm1"
 	lifecycle{
-		namespace: "vm",
-		address:   addr,
+		resourceType: "vm",
+		address:      addr,
 		onWrite: func(row map[string]any) {
 			if row["uuid"] == nil {
 				row["uuid"] = "1b4e28ba-2fa1-11d2-883f-0016d3cca427"
@@ -278,8 +276,8 @@ resource "truenas_vm" "vm1" {
 func TestVMDeviceLifecycle(t *testing.T) {
 	const addr = "truenas_vm_device.display"
 	lifecycle{
-		namespace: "vm.device",
-		address:   addr,
+		resourceType: "vm_device",
+		address:      addr,
 		create: `
 resource "truenas_vm_device" "display" {
   vm = 4

@@ -14,8 +14,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/knownvalue"
 	"github.com/hashicorp/terraform-plugin-testing/statecheck"
 
-	"github.com/TwilightCoders/terraform-provider-truenas/api"
-	"github.com/TwilightCoders/terraform-provider-truenas/internal/apischema"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware/middlewaretest"
 )
 
@@ -105,7 +103,7 @@ resource "truenas_cron_job" "x" {
 
 func TestProviderInsecureLoopback(t *testing.T) {
 	srv := middlewaretest.NewPlaintextServer(t)
-	srv.ServeCRUD(apischema.MustLoad(api.Latest), "cronjob")
+	srv.ServeCRUD("cron_job")
 	block := func(extra string) string {
 		return fmt.Sprintf(`
 provider "truenas" {

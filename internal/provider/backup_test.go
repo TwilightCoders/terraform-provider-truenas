@@ -8,8 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
 
-	"github.com/TwilightCoders/terraform-provider-truenas/api"
-	"github.com/TwilightCoders/terraform-provider-truenas/internal/apischema"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware/middlewaretest"
 
 	"github.com/hashicorp/terraform-plugin-testing/knownvalue"
@@ -38,9 +36,9 @@ func asObject(fields ...string) func(row map[string]any) {
 func TestReplicationLifecycle(t *testing.T) {
 	const addr = "truenas_replication.archive"
 	lifecycle{
-		namespace: "replication",
-		address:   addr,
-		onWrite:   asObject("ssh_credentials", "periodic_snapshot_tasks"),
+		resourceType: "replication",
+		address:      addr,
+		onWrite:      asObject("ssh_credentials", "periodic_snapshot_tasks"),
 		create: `
 resource "truenas_replication" "archive" {
   name                    = "archive to backup host"
@@ -78,8 +76,8 @@ resource "truenas_replication" "archive" {
 func TestCloudSyncCredentialsLifecycle(t *testing.T) {
 	const addr = "truenas_cloudsync_credentials.b2"
 	lifecycle{
-		namespace: "cloudsync.credentials",
-		address:   addr,
+		resourceType: "cloudsync_credentials",
+		address:      addr,
 		create: `
 resource "truenas_cloudsync_credentials" "b2" {
   name = "Backblaze"
@@ -111,7 +109,7 @@ resource "truenas_cloudsync_credentials" "b2" {
 
 func TestWriteOnlySecretsAreSentOnlyOnVersionBump(t *testing.T) {
 	srv := middlewaretest.NewServer(t)
-	store := srv.ServeCRUD(apischema.MustLoad(api.Latest), "cloudsync.credentials")
+	store := srv.ServeCRUD("cloudsync_credentials")
 	config := func(key, version string) string {
 		return providerConfig(srv, "") + `
 resource "truenas_cloudsync_credentials" "b2" {
@@ -163,9 +161,9 @@ resource "truenas_cloudsync_credentials" "b2" {
 func TestCloudSyncTaskLifecycle(t *testing.T) {
 	const addr = "truenas_cloudsync_task.photos"
 	lifecycle{
-		namespace: "cloudsync",
-		address:   addr,
-		onWrite:   asObject("credentials"),
+		resourceType: "cloudsync_task",
+		address:      addr,
+		onWrite:      asObject("credentials"),
 		create: `
 resource "truenas_cloudsync_task" "photos" {
   path          = "/mnt/tank/data/cloud"

@@ -14,8 +14,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
 	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
 
-	"github.com/TwilightCoders/terraform-provider-truenas/api"
-	"github.com/TwilightCoders/terraform-provider-truenas/internal/apischema"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware/middlewaretest"
 )
 
@@ -26,7 +24,7 @@ func TestSSHConfigSingleton(t *testing.T) {
 		"id": json.Number("1"), "tcpport": json.Number("22"), "passwordauth": true, "options": "",
 		"host_rsa_key": "-----BEGIN OPENSSH PRIVATE KEY-----secret", "host_rsa_key_pub": "ssh-rsa AAAA",
 	}
-	cfg := srv.ServeConfig(apischema.MustLoad(api.Latest), "ssh", initial)
+	cfg := srv.ServeConfig("ssh_config", initial)
 
 	resource.UnitTest(t, resource.TestCase{
 		ProtoV6ProviderFactories: factories,
@@ -99,7 +97,7 @@ resource "truenas_ssh_config" "this" {
 func TestServiceAdoption(t *testing.T) {
 	const addr = "truenas_service.smb"
 	srv := middlewaretest.NewServer(t)
-	store := srv.ServeCRUD(apischema.MustLoad(api.Latest), "service")
+	store := srv.ServeCRUD("service")
 	for _, row := range []map[string]any{
 		{"id": json.Number("4"), "service": "cifs", "enable": false, "state": "STOPPED", "pids": []any{}},
 		{"id": json.Number("9"), "service": "nfs", "enable": false, "state": "STOPPED", "pids": []any{}},
@@ -166,7 +164,7 @@ resource "truenas_service" "smb" {
 func TestUPSConfigPasswordIsWriteOnly(t *testing.T) {
 	const addr = "truenas_ups_config.this"
 	srv := middlewaretest.NewServer(t)
-	cfg := srv.ServeConfig(apischema.MustLoad(api.Latest), "ups", map[string]any{
+	cfg := srv.ServeConfig("ups_config", map[string]any{
 		"id": json.Number("1"), "mode": "MASTER", "monuser": "upsmon", "monpwd": "old-secret",
 	})
 	resource.UnitTest(t, resource.TestCase{
