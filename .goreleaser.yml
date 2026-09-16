@@ -38,11 +38,6 @@ archives:
   - formats: [zip]
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
 
-# The registry reads the protocol version from a manifest published beside the archives.
-extra_files:
-  - glob: terraform-registry-manifest.json
-    name_template: "{{ .ProjectName }}_{{ .Version }}_manifest.json"
-
 checksum:
   name_template: "{{ .ProjectName }}_{{ .Version }}_SHA256SUMS"
   algorithm: sha256
@@ -60,6 +55,10 @@ signs:
 
 release:
   draft: false
+  # The registry reads the protocol version from a manifest published beside the archives.
+  extra_files:
+    - glob: terraform-registry-manifest.json
+      name_template: "{{ .ProjectName }}_{{ .Version }}_manifest.json"
 
 changelog:
   disable: true
