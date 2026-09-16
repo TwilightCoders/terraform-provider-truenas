@@ -186,9 +186,12 @@ func (p *Provider) Configure(ctx context.Context, req provider.ConfigureRequest,
 		}
 	}
 
-	client, err := middleware.Dial(ctx, mwCfg)
+	// Nothing is contacted here. Terraform configures every provider in a root module on every
+	// invocation, so connecting now would log in to TrueNAS during operations on other providers.
+	// The first call that needs the connection reports a failure, and names what it was doing.
+	client, err := middleware.New(mwCfg)
 	if err != nil {
-		resp.Diagnostics.AddError("Unable to connect to TrueNAS", err.Error())
+		resp.Diagnostics.AddError("Invalid TrueNAS provider configuration", err.Error())
 		return
 	}
 	tflog.Info(ctx, "connected to TrueNAS", map[string]any{"host": host, "api_version": client.APIVersion()})

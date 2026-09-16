@@ -78,44 +78,41 @@ type Client struct {
 	closed bool
 }
 
-// Dial negotiates the API version, connects and authenticates.
-func Dial(ctx context.Context, cfg Config) (*Client, error) {
+// New returns a client that has not yet contacted the server.
+//
+// Nothing reaches the network until the first call. Terraform configures every provider in a root
+// module on every invocation, whether or not the run touches that provider, so connecting here
+// would log in to TrueNAS during an operation on something else entirely — wasted logins that can
+// trip a rate limit, and, worse, TrueNAS errors surfacing in operations that never touch TrueNAS.
+//
+// The cost is that an unreachable host is reported by the first call that needs it rather than at
+// configuration time. That is the better trade: the error then names the resource it was serving.
+func New(cfg Config) (*Client, error) {
 	if err := cfg.validate(); err != nil {
 		return nil, err
 	}
 	cfg.applyDefaults()
 
-	scheme := "https"
 	httpc := cfg.HTTPClient
-	switch {
-	case cfg.InsecureLoopback:
-		scheme = "http"
-		if httpc == nil {
-			httpc = loopbackHTTPClient()
-		}
-	case httpc == nil:
+	if httpc == nil && !cfg.InsecureLoopback {
 		tlsCfg, err := cfg.TLS.build()
 		if err != nil {
 			return nil, err
 		}
 		httpc = &http.Client{Transport: &http.Transport{TLSClientConfig: tlsCfg, Proxy: http.ProxyFromEnvironment}}
 	}
+	if httpc == nil {
+		httpc = loopbackHTTPClient()
+	}
+	return &Client{cfg: cfg, httpc: httpc, sem: make(chan struct{}, cfg.MaxConcurrency)}, nil
+}
 
-	available, err := fetchVersions(ctx, httpc, scheme+"://"+cfg.Host, cfg.AllowReverseProxy)
+// Dial returns a client that has already connected and authenticated. Prefer New unless the caller
+// genuinely wants to fail early.
+func Dial(ctx context.Context, cfg Config) (*Client, error) {
+	c, err := New(cfg)
 	if err != nil {
 		return nil, err
-	}
-	version, err := SelectVersion(available, cfg.APIVersion)
-	if err != nil {
-		return nil, err
-	}
-
-	c := &Client{
-		cfg:      cfg,
-		httpc:    httpc,
-		version:  version,
-		endpoint: fmt.Sprintf("%s://%s/api/%s", map[string]string{"https": "wss", "http": "ws"}[scheme], cfg.Host, version),
-		sem:      make(chan struct{}, cfg.MaxConcurrency),
 	}
 	if _, err := c.session(ctx); err != nil {
 		return nil, err
@@ -123,8 +120,35 @@ func Dial(ctx context.Context, cfg Config) (*Client, error) {
 	return c, nil
 }
 
-// APIVersion returns the negotiated API version.
-func (c *Client) APIVersion() string { return c.version }
+// negotiate picks the API version and the endpoint, once, on the first connection. The caller
+// holds c.mu.
+func (c *Client) negotiate(ctx context.Context) error {
+	if c.endpoint != "" {
+		return nil
+	}
+	scheme := "https"
+	if c.cfg.InsecureLoopback {
+		scheme = "http"
+	}
+	available, err := fetchVersions(ctx, c.httpc, scheme+"://"+c.cfg.Host, c.cfg.AllowReverseProxy)
+	if err != nil {
+		return err
+	}
+	version, err := SelectVersion(available, c.cfg.APIVersion)
+	if err != nil {
+		return err
+	}
+	c.version = version
+	c.endpoint = fmt.Sprintf("%s://%s/api/%s", map[string]string{"https": "wss", "http": "ws"}[scheme], c.cfg.Host, version)
+	return nil
+}
+
+// APIVersion returns the negotiated API version, which is empty until the first call.
+func (c *Client) APIVersion() string {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.version
+}
 
 // Call invokes method with positional params and returns the raw JSON result.
 func (c *Client) Call(ctx context.Context, method string, params ...any) (json.RawMessage, error) {
@@ -202,6 +226,9 @@ func (c *Client) session(ctx context.Context) (*session, error) {
 	}
 	if c.sess != nil && c.sess.alive() {
 		return c.sess, nil
+	}
+	if err := c.negotiate(ctx); err != nil {
+		return nil, err
 	}
 	s, err := c.connect(ctx)
 	if err != nil {

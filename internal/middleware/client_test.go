@@ -662,3 +662,42 @@ func TestIsBusy(t *testing.T) {
 		}
 	}
 }
+
+// TestNewContactsNothing pins the property the provider depends on: Terraform configures every
+// provider in a root module on every invocation, so constructing a client must not reach the
+// network. A run that touches another provider entirely should never log in to TrueNAS.
+func TestNewContactsNothing(t *testing.T) {
+	var dialed atomic.Bool
+	httpc := &http.Client{Transport: roundTripperFunc(func(*http.Request) (*http.Response, error) {
+		dialed.Store(true)
+		return nil, errors.New("should not be called")
+	})}
+
+	c, err := middleware.New(middleware.Config{
+		Host: "203.0.113.1:443", APIVersion: "v25.10.5",
+		Username: "u", APIKey: "k", HTTPClient: httpc,
+	})
+	if err != nil {
+		t.Fatalf("New: %v", err)
+	}
+	t.Cleanup(func() { _ = c.Close() })
+
+	if dialed.Load() {
+		t.Error("constructing the client reached the network")
+	}
+	if v := c.APIVersion(); v != "" {
+		t.Errorf("APIVersion = %q before any call, want empty", v)
+	}
+
+	// The first call is what discovers the host is unreachable.
+	if _, err := c.Call(context.Background(), "core.ping"); err == nil {
+		t.Error("expected the first call to report the unreachable host")
+	}
+	if !dialed.Load() {
+		t.Error("the first call did not reach the network")
+	}
+}
+
+type roundTripperFunc func(*http.Request) (*http.Response, error)
+
+func (f roundTripperFunc) RoundTrip(r *http.Request) (*http.Response, error) { return f(r) }
