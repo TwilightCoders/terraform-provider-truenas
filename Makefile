@@ -41,7 +41,9 @@ clean: ## Remove build and coverage output
 
 .PHONY: test
 test: ## Run unit tests
-	go test -race -cover ./...
+	# The provider package drives a real plugin server per test; -race on a shared CI runner
+	# takes it past Go's default 10 minute limit.
+	go test -race -cover -timeout 30m ./...
 
 .PHONY: testacc
 testacc: ## Run acceptance tests against TRUENAS_HOST (RUN=regex TIMEOUT=30m)
