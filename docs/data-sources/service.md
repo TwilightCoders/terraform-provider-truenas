@@ -23,5 +23,5 @@ Looks up exactly one existing `service` object by `id` or `query_filters`. Secre
 ### Read-Only
 
 - `enable` (Boolean) Whether the service should start on boot.
-- `service` (String) Name of the system service.
+- `service` (String) Name of the system service. Changing this forces a new resource.
 - `state` (String) Current state of the service (e.g., 'RUNNING', 'STOPPED').

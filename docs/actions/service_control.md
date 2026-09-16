@@ -22,13 +22,13 @@ Starts, stops, restarts or reloads a system service and waits for it to finish.
 
 ### Optional
 
-- `options` (Attributes) Options for controlling the service operation behavior. (see [below for nested schema](#nestedatt--options))
+- `options` (Attributes) Options for controlling the service operation behavior. TrueNAS does not report this value, so changes made outside Terraform are not detected. (see [below for nested schema](#nestedatt--options))
 
 <a id="nestedatt--options"></a>
 ### Nested Schema for `options`
 
 Optional:
 
-- `ha_propagate` (Boolean) Whether to propagate the service operation to the HA peer in a high-availability setup.
-- `silent` (Boolean) Return `false` instead of an error if the operation fails.
-- `timeout` (Number) Maximum time in seconds to wait for the service operation to complete. `null` for no timeout.
+- `ha_propagate` (Boolean) Whether to propagate the service operation to the HA peer in a high-availability setup. TrueNAS does not report this value, so changes made outside Terraform are not detected.
+- `silent` (Boolean) Return `false` instead of an error if the operation fails. TrueNAS does not report this value, so changes made outside Terraform are not detected.
+- `timeout` (Number) Maximum time in seconds to wait for the service operation to complete. `null` for no timeout. TrueNAS does not report this value, so changes made outside Terraform are not detected.

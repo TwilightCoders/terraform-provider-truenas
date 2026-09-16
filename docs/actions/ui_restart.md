@@ -17,4 +17,4 @@ Restarts the web UI after `delay` seconds, applying UI settings. Aborts every HT
 
 ### Optional
 
-- `delay` (Number) How long to wait before the UI is restarted.
+- `delay` (Number) How long to wait before the UI is restarted. TrueNAS does not report this value, so changes made outside Terraform are not detected.

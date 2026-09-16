@@ -10,10 +10,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 )
@@ -126,17 +124,14 @@ func (r *tunableResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 			"comment": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Optional descriptive comment explaining the purpose of this tunable. Defaults to `\"\"`.",
-				Default:             stringdefault.StaticString(""),
 			},
 			"enabled": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether this tunable is active and should be applied. Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"update_initramfs": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "If `false`, then initramfs will not be updated after creating a ZFS tunable and you will need to run     `system boot update_initramfs` manually. Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"orig_value": schema.StringAttribute{
 				Computed:            true,

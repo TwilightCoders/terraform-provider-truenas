@@ -21,11 +21,11 @@ Runs a cloud sync task now and waits for it to finish.
 
 ### Optional
 
-- `options` (Attributes) Options for the sync operation. (see [below for nested schema](#nestedatt--options))
+- `options` (Attributes) Options for the sync operation. TrueNAS does not report this value, so changes made outside Terraform are not detected. (see [below for nested schema](#nestedatt--options))
 
 <a id="nestedatt--options"></a>
 ### Nested Schema for `options`
 
 Optional:
 
-- `dry_run` (Boolean) Whether to perform a dry run without making actual changes.
+- `dry_run` (Boolean) Whether to perform a dry run without making actual changes. TrueNAS does not report this value, so changes made outside Terraform are not detected.

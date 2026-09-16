@@ -45,7 +45,7 @@ target. This allows xcopy operations otherwise blocked by access control.
 - `comment` (String) Optional comment describing the extent. Defaults to `""`.
 - `disk` (String) Disk device to use for the extent or `null` if using a file.
 - `enabled` (Boolean) Whether the extent is enabled and available for use. Defaults to `true`.
-- `filesize` (String) Size of the file-based extent in bytes. Defaults to `"0"`. JSON-encoded; use `jsonencode()`.
+- `filesize` (String) Size of the file-based extent in bytes. Defaults to `"0"`.
 - `insecure_tpc` (Boolean) Whether to enable insecure Third Party Copy (TPC) operations. Defaults to `true`.
 - `path` (String) File path for file-based extents or `null` if using a disk.
 - `pblocksize` (Boolean) Whether to use physical block size reporting. Defaults to `false`.

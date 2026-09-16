@@ -12,7 +12,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 )
 
@@ -21,10 +20,10 @@ var modelISCSIAuth = &model{
 	namespace:    "iscsi.auth",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	updateMethod: "iscsi.auth.update",
 	getMethod:    "iscsi.auth.get_instance",
 	deleteMethod: "iscsi.auth.delete",
 	createMethod: "iscsi.auth.create",
-	updateMethod: "iscsi.auth.update",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -125,7 +124,6 @@ func (r *iSCSIAuthResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 			"peeruser": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Username for mutual CHAP authentication or empty string if not configured. Defaults to `\"\"`.",
-				Default:             stringdefault.StaticString(""),
 			},
 			"peersecret": schema.StringAttribute{
 				Optional: true, Sensitive: true, WriteOnly: true,
@@ -135,7 +133,6 @@ func (r *iSCSIAuthResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 				Optional: true, Computed: true,
 				MarkdownDescription: "Authentication method for target discovery. If \"CHAP_MUTUAL\" is selected for target discovery, it is only     permitted for a single entry systemwide. Defaults to `\"NONE\"`.",
 				Validators:          []validator.String{stringvalidator.OneOf("NONE", "CHAP", "CHAP_MUTUAL")},
-				Default:             stringdefault.StaticString("NONE"),
 			},
 			"secret_wo_version": schema.NumberAttribute{
 				Optional:            true,

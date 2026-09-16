@@ -22,28 +22,28 @@ Looks up exactly one existing `cloudsync` object by `id` or `query_filters`. Sec
 
 ### Read-Only
 
-- `args` (String) (Slated for removal).
+- `args` (String) (Slated for removal). Defaults to `""`.
 - `attributes` (Attributes) Additional information for each backup, e.g. bucket name. (see [below for nested schema](#nestedatt--attributes))
 - `bwlimit` (Attributes List) Schedule of bandwidth limits. (see [below for nested schema](#nestedatt--bwlimit))
-- `create_empty_src_dirs` (Boolean) Whether to create empty directories in the destination that exist in the source.
+- `create_empty_src_dirs` (Boolean) Whether to create empty directories in the destination that exist in the source. Defaults to `false`.
 - `credentials` (Number) ID of the cloud credential.
-- `description` (String) The name of the task to display in the UI.
+- `description` (String) The name of the task to display in the UI. Defaults to `""`.
 - `direction` (String) Direction of the cloud sync operation.
 
 * `PUSH`: Upload local files to cloud storage
 * `PULL`: Download files from cloud storage to local storage
-- `enabled` (Boolean) Can enable/disable the task.
-- `encryption` (Boolean) Whether to encrypt files before uploading to cloud storage.
+- `enabled` (Boolean) Can enable/disable the task. Defaults to `true`.
+- `encryption` (Boolean) Whether to encrypt files before uploading to cloud storage. Defaults to `false`.
 - `exclude` (List of String) Paths to pass to `restic backup --exclude`.
-- `filename_encryption` (Boolean) Whether to encrypt filenames in addition to file contents.
-- `follow_symlinks` (Boolean) Whether to follow symbolic links and sync the files they point to.
+- `filename_encryption` (Boolean) Whether to encrypt filenames in addition to file contents. Defaults to `false`.
+- `follow_symlinks` (Boolean) Whether to follow symbolic links and sync the files they point to. Defaults to `false`.
 - `include` (List of String) Paths to pass to `restic backup --include`.
 - `locked` (Boolean) A locked task cannot run.
 - `path` (String) The local path to back up beginning with `/mnt` or `/dev/zvol`.
-- `post_script` (String) A Bash script to run immediately after every backup if it succeeds.
-- `pre_script` (String) A Bash script to run immediately before every backup.
-- `schedule` (Attributes) Cron schedule dictating when the task should run. (see [below for nested schema](#nestedatt--schedule))
-- `snapshot` (Boolean) Whether to create a temporary snapshot of the dataset before every backup.
+- `post_script` (String) A Bash script to run immediately after every backup if it succeeds. Defaults to `""`.
+- `pre_script` (String) A Bash script to run immediately before every backup. Defaults to `""`.
+- `schedule` (Attributes) Cron schedule dictating when the task should run. Defaults to `{"dom":"*","dow":"*","hour":"*","minute":"00","month":"*"}`. (see [below for nested schema](#nestedatt--schedule))
+- `snapshot` (Boolean) Whether to create a temporary snapshot of the dataset before every backup. Defaults to `false`.
 - `transfer_mode` (String) How files are transferred between local and cloud storage.
 
 * `SYNC`: Synchronize directories (add new, update changed, remove deleted)
@@ -81,8 +81,8 @@ Read-Only:
 
 Read-Only:
 
-- `dom` (String) "1" - "31"
-- `dow` (String) "1" (Monday) - "7" (Sunday)
-- `hour` (String) "00" - "23"
-- `minute` (String)
-- `month` (String) "1" (January) - "12" (December)
+- `dom` (String) "1" - "31" Defaults to `"*"`.
+- `dow` (String) "1" (Monday) - "7" (Sunday) Defaults to `"*"`.
+- `hour` (String) "00" - "23" Defaults to `"*"`.
+- `minute` (String) Defaults to `"00"`.
+- `month` (String) "1" (January) - "12" (December) Defaults to `"*"`.

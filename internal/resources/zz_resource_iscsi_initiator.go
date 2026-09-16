@@ -11,7 +11,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -20,10 +19,10 @@ var modelISCSIInitiator = &model{
 	namespace:    "iscsi.initiator",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	deleteMethod: "iscsi.initiator.delete",
 	createMethod: "iscsi.initiator.create",
 	updateMethod: "iscsi.initiator.update",
 	getMethod:    "iscsi.initiator.get_instance",
+	deleteMethod: "iscsi.initiator.delete",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -87,7 +86,6 @@ func (r *iSCSIInitiatorResource) Schema(_ context.Context, _ resource.SchemaRequ
 			"comment": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Optional comment describing the authorized initiator group. Defaults to `\"\"`.",
-				Default:             stringdefault.StaticString(""),
 			},
 		},
 	}

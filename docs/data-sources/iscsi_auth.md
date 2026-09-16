@@ -22,7 +22,7 @@ Looks up exactly one existing `iscsi.auth` object by `id` or `query_filters`. Se
 
 ### Read-Only
 
-- `discovery_auth` (String) Authentication method for target discovery. If "CHAP_MUTUAL" is selected for target discovery, it is only     permitted for a single entry systemwide.
-- `peeruser` (String) Username for mutual CHAP authentication or empty string if not configured.
+- `discovery_auth` (String) Authentication method for target discovery. If "CHAP_MUTUAL" is selected for target discovery, it is only     permitted for a single entry systemwide. Defaults to `"NONE"`.
+- `peeruser` (String) Username for mutual CHAP authentication or empty string if not configured. Defaults to `""`.
 - `tag` (Number) Numeric tag used to associate this credential with iSCSI targets.
 - `user` (String) Username for iSCSI CHAP authentication.

@@ -23,11 +23,11 @@ Looks up exactly one existing `cronjob` object by `id` or `query_filters`. Secre
 ### Read-Only
 
 - `command` (String) Shell command or script to execute.
-- `description` (String) Human-readable description of what this cron job does.
-- `enabled` (Boolean) Whether the cron job is active and will be executed.
-- `ignore_stderr` (Boolean) Whether to IGNORE standard error (if `false`, it will be added to email).
-- `ignore_stdout` (Boolean) Whether to IGNORE standard output (if `false`, it will be added to email).
-- `schedule` (Attributes) Cron schedule configuration for when the job runs. (see [below for nested schema](#nestedatt--schedule))
+- `description` (String) Human-readable description of what this cron job does. Defaults to `""`.
+- `enabled` (Boolean) Whether the cron job is active and will be executed. Defaults to `true`.
+- `ignore_stderr` (Boolean) Whether to IGNORE standard error (if `false`, it will be added to email). Defaults to `false`.
+- `ignore_stdout` (Boolean) Whether to IGNORE standard output (if `false`, it will be added to email). Defaults to `true`.
+- `schedule` (Attributes) Cron schedule configuration for when the job runs. Defaults to `{"dom":"*","dow":"*","hour":"*","minute":"00","month":"*"}`. (see [below for nested schema](#nestedatt--schedule))
 - `user` (String) System user account to run the command as.
 
 <a id="nestedatt--schedule"></a>
@@ -35,8 +35,8 @@ Looks up exactly one existing `cronjob` object by `id` or `query_filters`. Secre
 
 Read-Only:
 
-- `dom` (String) "1" - "31"
-- `dow` (String) "1" (Monday) - "7" (Sunday)
-- `hour` (String) "00" - "23"
-- `minute` (String) "00" - "59"
-- `month` (String) "1" (January) - "12" (December)
+- `dom` (String) "1" - "31" Defaults to `"*"`.
+- `dow` (String) "1" (Monday) - "7" (Sunday) Defaults to `"*"`.
+- `hour` (String) "00" - "23" Defaults to `"*"`.
+- `minute` (String) "00" - "59" Defaults to `"00"`.
+- `month` (String) "1" (January) - "12" (December) Defaults to `"*"`.

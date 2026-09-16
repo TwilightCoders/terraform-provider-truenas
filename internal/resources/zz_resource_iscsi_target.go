@@ -12,7 +12,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -164,7 +163,6 @@ func (r *iSCSITargetResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Optional: true, Computed: true,
 				MarkdownDescription: "Protocol mode for the target.\n\n* `ISCSI`: iSCSI protocol only\n* `FC`: Fibre Channel protocol only\n* `BOTH`: Both iSCSI and Fibre Channel protocols\n\nFibre Channel may only be selected on TrueNAS Enterprise-licensed systems with a suitable Fibre Channel HBA. Defaults to `\"ISCSI\"`.",
 				Validators:          []validator.String{stringvalidator.OneOf("ISCSI", "FC", "BOTH")},
-				Default:             stringdefault.StaticString("ISCSI"),
 			},
 			"groups": schema.ListNestedAttribute{
 				Optional: true, Computed: true,

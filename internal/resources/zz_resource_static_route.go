@@ -12,7 +12,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 )
 
@@ -93,7 +92,6 @@ func (r *staticRouteResource) Schema(_ context.Context, _ resource.SchemaRequest
 			"description": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Optional description for this static route. Defaults to `\"\"`.",
-				Default:             stringdefault.StaticString(""),
 			},
 		},
 	}

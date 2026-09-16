@@ -9,7 +9,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/numberplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
@@ -22,10 +21,10 @@ var modelGroup = &model{
 	namespace:    "group",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	getMethod:    "group.get_instance",
 	deleteMethod: "group.delete",
 	createMethod: "group.create",
 	updateMethod: "group.update",
-	getMethod:    "group.get_instance",
 	listFilters:  [][]interface{}{[]interface{}{"builtin", "=", false}},
 	listOptions:  map[string]interface{}(nil),
 	attrs: []*node{
@@ -186,7 +185,6 @@ func (r *groupResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 			"smb": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "If set to `True`, the group can be used for SMB share ACL entries. The group is mapped to an NT group account     on the TrueNAS SMB server and has a `sid` value.  Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"userns_idmap": schema.StringAttribute{
 				Optional: true,

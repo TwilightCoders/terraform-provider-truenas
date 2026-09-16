@@ -54,7 +54,7 @@ TrueNAS generates the private key for the CSR and ACME types and reports it on r
 
 ### Read-Only
 
-- `acme` (String) ACME registration and account information used for certificate lifecycle management. `null` for     non-ACME certificates. JSON-encoded; use `jsonencode()`.
+- `acme` (String) ACME registration and account information used for certificate lifecycle management. `null` for     non-ACME certificates.
 - `acme_uri` (String) ACME directory server URI used for automated certificate management. `null` for non-ACME certificates.
 - `cert_type` (String) Human-readable certificate type, typically 'CERTIFICATE' for standard certificates.
 - `cert_type_ca` (Boolean) Whether this certificate is a Certificate Authority (CA) certificate.
@@ -65,9 +65,9 @@ TrueNAS generates the private key for the CSR and ACME types and reports it on r
 - `chain_list` (List of String) Array of PEM-encoded certificates in the certificate chain, starting with the leaf certificate.
 - `csr_path` (String) Filesystem path to the certificate signing request file (.csr). `null` if no CSR is available.
 - `dn` (String) Distinguished Name (DN) of the certificate subject in RFC 2253 format. `null` if certificate parsing failed.
-- `domains_authenticators` (String) Mapping of domain names to ACME DNS authenticator IDs for domain validation. `null` for non-ACME     certificates. JSON-encoded; use `jsonencode()`.
+- `domains_authenticators` (String) Mapping of domain names to ACME DNS authenticator IDs for domain validation. `null` for non-ACME     certificates.
 - `expired` (Boolean) Whether the certificate has expired. `null` if certificate parsing failed.
-- `extensions` (String) X.509 certificate extensions parsed into a dictionary structure. JSON-encoded; use `jsonencode()`.
+- `extensions` (String) X.509 certificate extensions parsed into a dictionary structure.
 - `fingerprint` (String) SHA-256 fingerprint of the certificate in hexadecimal format. `null` if certificate parsing failed.
 - `from` (String) Certificate validity start date in ISO 8601 format. `null` if certificate parsing failed.
 - `id` (Number) Identifier assigned by TrueNAS.

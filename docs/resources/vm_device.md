@@ -17,7 +17,7 @@ Manages a virtual machine device. Set exactly one device type under `attributes`
 
 ### Required
 
-- `attributes` (Attributes) Device-specific configuration attributes. Set exactly one of the nested attributes. (see [below for nested schema](#nestedatt--attributes))
+- `attributes` (Attributes) Device-specific configuration attributes. (see [below for nested schema](#nestedatt--attributes))
 - `vm` (Number) ID of the virtual machine this device belongs to.
 
 ### Optional

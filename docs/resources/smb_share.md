@@ -39,7 +39,7 @@ WARNING: The TrueNAS server does not check if external paths are reachable.
 - `browsable` (Boolean) If set, the share is included when an SMB client requests a list of SMB shares on the TrueNAS server.  Defaults to `true`.
 - `comment` (String) Text field that is seen next to a share when an SMB client requests a list of SMB shares on the TrueNAS     server.  Defaults to `""`.
 - `enabled` (Boolean) If unset, the SMB share is not available over the SMB protocol.  Defaults to `true`.
-- `options` (Attributes) Additional configuration related to the configured SMB share purpose. If null, then the default     options related to the share purpose will be applied.  Set exactly one of the nested attributes. (see [below for nested schema](#nestedatt--options))
+- `options` (Attributes) Additional configuration related to the configured SMB share purpose. If null, then the default     options related to the share purpose will be applied. (see [below for nested schema](#nestedatt--options))
 - `purpose` (String) This parameter sets the purpose of the SMB share. It controls how the SMB share behaves and what features are     available through options. The DEFAULT_SHARE setting is best for most applications, and should be used, unless     there is a specific reason to change it.
 
 * `DEFAULT_SHARE`: Set the SMB share for best compatibility with common SMB clients.

@@ -25,39 +25,39 @@ Looks up exactly one existing `certificate` object by `id`, `name` or `query_fil
 
 - `acme` (String) ACME registration and account information used for certificate lifecycle management. `null` for     non-ACME certificates. JSON-encoded.
 - `acme_uri` (String) ACME directory server URI used for automated certificate management. `null` for non-ACME certificates.
-- `add_to_trusted_store` (Boolean) Whether to add this certificate to the trusted certificate store.
+- `add_to_trusted_store` (Boolean) Whether to add this certificate to the trusted certificate store. Defaults to `false`.
 - `cert_type` (String) Human-readable certificate type, typically 'CERTIFICATE' for standard certificates.
 - `cert_type_ca` (Boolean) Whether this certificate is a Certificate Authority (CA) certificate.
 - `cert_type_csr` (Boolean) Whether this entry represents a Certificate Signing Request (CSR) rather than a signed certificate.
 - `cert_type_existing` (Boolean) Whether this is an existing certificate (imported or generated).
-- `certificate` (String) PEM-encoded certificate to import or `null`.
+- `certificate` (String) PEM-encoded certificate to import or `null`. Changing this forces a new resource.
 - `certificate_path` (String) Filesystem path to the certificate file (.crt). `null` if no certificate is available.
 - `chain` (Boolean) Whether this certificate has an associated certificate chain. `null` if unavailable.
 - `chain_list` (List of String) Array of PEM-encoded certificates in the certificate chain, starting with the leaf certificate.
-- `city` (String) City or locality name for certificate subject or `null`.
-- `common` (String) Common name for certificate subject or `null`.
-- `country` (String) Country name for certificate subject or `null`.
-- `csr` (String) PEM-encoded certificate signing request to import or `null`.
+- `city` (String) City or locality name for certificate subject or `null`. Changing this forces a new resource.
+- `common` (String) Common name for certificate subject or `null`. Changing this forces a new resource.
+- `country` (String) Country name for certificate subject or `null`. Changing this forces a new resource.
+- `csr` (String) PEM-encoded certificate signing request to import or `null`. Changing this forces a new resource.
 - `csr_path` (String) Filesystem path to the certificate signing request file (.csr). `null` if no CSR is available.
 - `dn` (String) Distinguished Name (DN) of the certificate subject in RFC 2253 format. `null` if certificate parsing failed.
 - `domains_authenticators` (String) Mapping of domain names to ACME DNS authenticator IDs for domain validation. `null` for non-ACME     certificates. JSON-encoded.
-- `email` (String) Email address for certificate subject or `null`.
+- `email` (String) Email address for certificate subject or `null`. Changing this forces a new resource.
 - `expired` (Boolean) Whether the certificate has expired. `null` if certificate parsing failed.
 - `extensions` (String) X.509 certificate extensions parsed into a dictionary structure. JSON-encoded.
 - `fingerprint` (String) SHA-256 fingerprint of the certificate in hexadecimal format. `null` if certificate parsing failed.
 - `from` (String) Certificate validity start date in ISO 8601 format. `null` if certificate parsing failed.
-- `key_length` (Number) RSA key length in bits or `null`.
-- `key_type` (String) Type of cryptographic key to generate.
+- `key_length` (Number) RSA key length in bits or `null`. Changing this forces a new resource.
+- `key_type` (String) Type of cryptographic key to generate. Changing this forces a new resource.
 - `lifetime` (Number) Certificate validity period in seconds. `null` if certificate parsing failed.
-- `organization` (String) Organization name for certificate subject or `null`.
-- `organizational_unit` (String) Organizational unit for certificate subject or `null`.
+- `organization` (String) Organization name for certificate subject or `null`. Changing this forces a new resource.
+- `organizational_unit` (String) Organizational unit for certificate subject or `null`. Changing this forces a new resource.
 - `parsed` (Boolean) Whether the certificate data was successfully parsed and validated.
 - `privatekey_path` (String) Filesystem path to the private key file (.key). `null` if no private key is available.
-- `renew_days` (Number) Number of days before the certificate expiration date to attempt certificate renewal. If certificate renewal     fails, renewal will be reattempted every day until expiration.
+- `renew_days` (Number) Number of days before the certificate expiration date to attempt certificate renewal. If certificate renewal     fails, renewal will be reattempted every day until expiration. Defaults to `10`.
 - `root_path` (String) Filesystem path where certificate-related files are stored.
-- `san` (List of String) Subject alternative names. Write them bare (`example.com`) or DNS-prefixed (`DNS:example.com`); both are accepted and mean the same name. Prefix an address with `IP:` to request an IP name. TrueNAS treats every other prefix, including `email:` and `URI:`, as part of a DNS name rather than as that name type.
+- `san` (List of String) Subject alternative names. Write them bare (`example.com`) or DNS-prefixed (`DNS:example.com`); both are accepted and mean the same name. Prefix an address with `IP:` to request an IP name. TrueNAS treats every other prefix, including `email:` and `URI:`, as part of a DNS name rather than as that name type. Changing this forces a new resource.
 - `serial` (Number) Certificate serial number. `null` if certificate parsing failed.
-- `state` (String) State or province name for certificate subject or `null`.
+- `state` (String) State or province name for certificate subject or `null`. Changing this forces a new resource.
 - `subject_name_hash` (Number) Hash of the certificate subject name. `null` if certificate parsing failed.
 - `type` (Number) Internal certificate type identifier used to determine certificate capabilities.
 - `until` (String) Certificate validity end date in ISO 8601 format. `null` if certificate parsing failed.

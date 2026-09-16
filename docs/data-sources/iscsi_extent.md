@@ -24,12 +24,12 @@ Looks up exactly one existing `iscsi.extent` object by `id`, `name` or `query_fi
 ### Read-Only
 
 - `avail_threshold` (Number) Available space threshold percentage or `null` to disable.
-- `blocksize` (Number) Block size for the extent in bytes.
-- `comment` (String) Optional comment describing the extent.
+- `blocksize` (Number) Block size for the extent in bytes. Defaults to `512`.
+- `comment` (String) Optional comment describing the extent. Defaults to `""`.
 - `disk` (String) Disk device to use for the extent or `null` if using a file.
-- `enabled` (Boolean) Whether the extent is enabled and available for use.
-- `filesize` (String) Size of the file-based extent in bytes. JSON-encoded.
-- `insecure_tpc` (Boolean) Whether to enable insecure Third Party Copy (TPC) operations.
+- `enabled` (Boolean) Whether the extent is enabled and available for use. Defaults to `true`.
+- `filesize` (String) Size of the file-based extent in bytes. Defaults to `"0"`. JSON-encoded.
+- `insecure_tpc` (Boolean) Whether to enable insecure Third Party Copy (TPC) operations. Defaults to `true`.
 - `locked` (Boolean) Read-only value indicating whether the iscsi extent is located on a locked dataset.
 
 - `true`: The extent is in a locked dataset.
@@ -37,11 +37,11 @@ Looks up exactly one existing `iscsi.extent` object by `id`, `name` or `query_fi
 - `null`: Lock status is not available because path locking information was not requested.
 - `naa` (String) Network Address Authority (NAA) identifier for the extent.
 - `path` (String) File path for file-based extents or `null` if using a disk.
-- `pblocksize` (Boolean) Whether to use physical block size reporting.
+- `pblocksize` (Boolean) Whether to use physical block size reporting. Defaults to `false`.
 - `product_id` (String) Product ID string for the extent or `null` for default.
-- `ro` (Boolean) Whether the extent is read-only.
-- `rpm` (String) Reported RPM type for the extent.
+- `ro` (Boolean) Whether the extent is read-only. Defaults to `false`.
+- `rpm` (String) Reported RPM type for the extent. Defaults to `"SSD"`.
 - `serial` (String) Serial number for the extent or `null` to auto-generate.
-- `type` (String) Type of the extent storage backend.
+- `type` (String) Type of the extent storage backend. Defaults to `"DISK"`.
 - `vendor` (String) Vendor string reported by the extent.
-- `xen` (Boolean) Whether to enable Xen compatibility mode.
+- `xen` (Boolean) Whether to enable Xen compatibility mode. Defaults to `false`.

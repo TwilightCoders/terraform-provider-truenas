@@ -10,10 +10,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -23,10 +21,10 @@ var modelNFSShare = &model{
 	namespace:    "sharing.nfs",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	getMethod:    "sharing.nfs.get_instance",
-	deleteMethod: "sharing.nfs.delete",
 	createMethod: "sharing.nfs.create",
 	updateMethod: "sharing.nfs.update",
+	getMethod:    "sharing.nfs.get_instance",
+	deleteMethod: "sharing.nfs.delete",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -193,7 +191,6 @@ func (r *nFSShareResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 			"comment": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "User comment associated with share.  Defaults to `\"\"`.",
-				Default:             stringdefault.StaticString(""),
 			},
 			"networks": schema.ListAttribute{
 				Optional: true, Computed: true,
@@ -208,7 +205,6 @@ func (r *nFSShareResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 			"ro": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Export the share as read only.  Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"maproot_user": schema.StringAttribute{
 				Optional:            true,
@@ -234,12 +230,10 @@ func (r *nFSShareResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 			"enabled": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Enable or disable the share.  Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"expose_snapshots": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Enterprise feature to enable access to the ZFS snapshot directory for the export.\nExport path must be the root directory of a ZFS dataset. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"locked": schema.BoolAttribute{
 				Computed: true,

@@ -18,7 +18,7 @@ Looks up exactly one existing `pool.dataset` object by `id`, `name` or `query_fi
 ### Optional
 
 - `id` (String) Identifier of the object to read.
-- `name` (String) The name of the dataset to create.
+- `name` (String) The name of the dataset to create. Changing this forces a new resource.
 - `query_filters` (String) Middleware query filters as JSON, e.g. `jsonencode([["path", "=", "/mnt/tank/x"]])`. Must match exactly one object.
 
 ### Read-Only
@@ -28,44 +28,44 @@ Looks up exactly one existing `pool.dataset` object by `id`, `name` or `query_fi
 - `atime` (String) Whether file access times are updated when files are accessed.
 - `available` (String) Amount of disk space available to this dataset and its children.
 - `casesensitivity` (String) File name case sensitivity setting (sensitive/insensitive).
-- `checksum` (String) Checksum algorithm to verify data integrity. Higher security algorithms like SHA256 provide better     protection but use more CPU.
-- `comments` (String) Comments or description for the dataset.
-- `compression` (String) Compression algorithm to use for the dataset. Higher numbered variants provide better compression     but use more CPU. 'INHERIT' uses the parent dataset's setting.
+- `checksum` (String) Checksum algorithm to verify data integrity. Higher security algorithms like SHA256 provide better     protection but use more CPU. Defaults to `"INHERIT"`.
+- `comments` (String) Comments or description for the dataset. Defaults to `"INHERIT"`.
+- `compression` (String) Compression algorithm to use for the dataset. Higher numbered variants provide better compression     but use more CPU. 'INHERIT' uses the parent dataset's setting. Defaults to `"INHERIT"`.
 - `compressratio` (String) The achieved compression ratio as a decimal (e.g., '2.50x').
-- `copies` (String) Number of copies of data blocks to maintain for redundancy.
+- `copies` (String) Number of copies of data blocks to maintain for redundancy. Defaults to `"INHERIT"`.
 - `creation` (String) Timestamp when this dataset was created.
-- `deduplication` (String) Deduplication setting. 'ON' enables dedup, 'VERIFY' enables with checksum verification, 'OFF' disables.
+- `deduplication` (String) Deduplication setting. 'ON' enables dedup, 'VERIFY' enables with checksum verification, 'OFF' disables. Defaults to `"INHERIT"`.
 - `encrypted` (Boolean) Whether the dataset is encrypted.
 - `encryption_algorithm` (String) Encryption algorithm used (e.g., AES-256-GCM). Only relevant for encrypted datasets.
 - `encryption_root` (String) The root dataset where encryption is enabled. `null` if the dataset is not encrypted.
-- `exec` (String) Whether files in this dataset can be executed.
+- `exec` (String) Whether files in this dataset can be executed. Defaults to `"INHERIT"`.
 - `key_format` (String) Format of the encryption key (hex/raw/passphrase). Only relevant for encrypted datasets.
 - `key_loaded` (Boolean) Whether the encryption key is currently loaded for encrypted datasets. `null` for unencrypted datasets.
 - `locked` (Boolean) Whether an encrypted dataset is currently locked (key not loaded).
-- `managedby` (String) Identifies which service or system manages this dataset.
+- `managedby` (String) Identifies which service or system manages this dataset. Defaults to `"INHERIT"`.
 - `origin` (String) The snapshot from which this clone was created. Empty for non-clone datasets.
 - `pbkdf2iters` (String) Number of PBKDF2 iterations used for passphrase-based encryption keys.
 - `pool` (String) The name of the ZFS pool containing this dataset.
 - `quota` (String) Maximum amount of disk space this dataset and its children can consume.
-- `quota_critical` (String) Percentage of dataset quota at which to issue a critical alert. 0-100 or 'INHERIT'.
-- `quota_warning` (String) Percentage of dataset quota at which to issue a warning. 0-100 or 'INHERIT'.
-- `readonly` (String) Whether the dataset is read-only.
+- `quota_critical` (String) Percentage of dataset quota at which to issue a critical alert. 0-100 or 'INHERIT'. Defaults to `"INHERIT"`.
+- `quota_warning` (String) Percentage of dataset quota at which to issue a warning. 0-100 or 'INHERIT'. Defaults to `"INHERIT"`.
+- `readonly` (String) Whether the dataset is read-only. Defaults to `"INHERIT"`.
 - `recordsize` (String) The suggested block size for files in this filesystem dataset.
 - `refquota` (String) Maximum amount of disk space this dataset itself can consume (excluding children).
-- `refquota_critical` (String) Percentage of reference quota at which to issue a critical alert. 0-100 or 'INHERIT'.
-- `refquota_warning` (String) Percentage of reference quota at which to issue a warning. 0-100 or 'INHERIT'.
+- `refquota_critical` (String) Percentage of reference quota at which to issue a critical alert. 0-100 or 'INHERIT'. Defaults to `"INHERIT"`.
+- `refquota_warning` (String) Percentage of reference quota at which to issue a warning. 0-100 or 'INHERIT'. Defaults to `"INHERIT"`.
 - `refreservation` (Number) Minimum disk space guaranteed to this dataset itself in bytes.
 - `reservation` (Number) Minimum disk space guaranteed to this dataset and its children in bytes.
 - `snapdev` (String) Controls visibility of volume snapshots under /dev/zvol/.
-- `snapdir` (String) Controls visibility of the `.zfs/snapshot` directory. 'DISABLED' hides snapshots, 'VISIBLE' shows them,     'HIDDEN' makes them accessible but not listed.
-- `sparse` (Boolean) Whether to use sparse (thin) provisioning for the volume.
+- `snapdir` (String) Controls visibility of the `.zfs/snapshot` directory. 'DISABLED' hides snapshots, 'VISIBLE' shows them,     'HIDDEN' makes them accessible but not listed. Defaults to `"INHERIT"`.
+- `sparse` (Boolean) Whether to use sparse (thin) provisioning for the volume. Changing this forces a new resource.
 - `special_small_block_size` (String) Size threshold below which blocks are stored on special vdevs.
-- `sync` (String) Synchronous write behavior for the dataset.
+- `sync` (String) Synchronous write behavior for the dataset. Defaults to `"INHERIT"`.
 - `used` (String) Total amount of disk space consumed by this dataset and all its children.
 - `usedbychildren` (String) Amount of disk space consumed by child datasets.
 - `usedbydataset` (String) Amount of disk space consumed by this dataset itself, excluding children and snapshots.
 - `usedbyrefreservation` (String) Amount of disk space consumed by the refreservation of this dataset.
 - `usedbysnapshots` (String) Amount of disk space consumed by snapshots of this dataset.
-- `volblocksize` (String) Defaults to `128K` if the parent pool is a DRAID pool or `16K` otherwise.
+- `volblocksize` (String) Defaults to `128K` if the parent pool is a DRAID pool or `16K` otherwise. Changing this forces a new resource.
 - `volsize` (Number) The volume size in bytes; supposed to be a multiple of the block size.
 - `xattr` (String) Extended attributes storage method (on/off).

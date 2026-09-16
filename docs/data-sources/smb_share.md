@@ -31,11 +31,11 @@ Looks up exactly one existing `sharing.smb` object by `id`, `name` or `query_fil
 
 ### Read-Only
 
-- `access_based_share_enumeration` (Boolean) If set, the share is only included when an SMB client requests a list of shares on the SMB server if     the share (not filesystem) access control list (see `sharing.smb.getacl`) grants access to the user.
-- `audit` (Attributes) Audit configuration for monitoring SMB share access and operations. (see [below for nested schema](#nestedatt--audit))
-- `browsable` (Boolean) If set, the share is included when an SMB client requests a list of SMB shares on the TrueNAS server.
-- `comment` (String) Text field that is seen next to a share when an SMB client requests a list of SMB shares on the TrueNAS     server.
-- `enabled` (Boolean) If unset, the SMB share is not available over the SMB protocol.
+- `access_based_share_enumeration` (Boolean) If set, the share is only included when an SMB client requests a list of shares on the SMB server if     the share (not filesystem) access control list (see `sharing.smb.getacl`) grants access to the user.  Defaults to `false`.
+- `audit` (Attributes) Audit configuration for monitoring SMB share access and operations. Defaults to `{"enable":false,"ignore_list":[],"watch_list":[]}`. (see [below for nested schema](#nestedatt--audit))
+- `browsable` (Boolean) If set, the share is included when an SMB client requests a list of SMB shares on the TrueNAS server.  Defaults to `true`.
+- `comment` (String) Text field that is seen next to a share when an SMB client requests a list of SMB shares on the TrueNAS     server.  Defaults to `""`.
+- `enabled` (Boolean) If unset, the SMB share is not available over the SMB protocol.  Defaults to `true`.
 - `locked` (Boolean) Read-only value indicating whether the share is located on a locked dataset.
 
 Returns:
@@ -71,19 +71,19 @@ WARNING: The TrueNAS server does not check if external paths are reachable.
 * `VEEAM_REPOSITORY_SHARE`: The SMB share is a repository for Veeam Backup & Replication and supports Fast Clone.
   NOTE: This feature is available only for TrueNAS Enterprise customers.
 
-* `FCP_SHARE`: The SMB share is a used for Final Cut Pro storage. This feature automatically configures the share       to provide storage according to Apple support guidelines described in https://support.apple.com/en-ca/101919.       NOTE: `aapl_extensions` must be set in the global `smb.config`.       WARNING: This feature forcibly enables `aapl_name_mangling` on the SMB share which may cause unexpected behavior       for data that was written without this feature enabled.
+* `FCP_SHARE`: The SMB share is a used for Final Cut Pro storage. This feature automatically configures the share       to provide storage according to Apple support guidelines described in https://support.apple.com/en-ca/101919.       NOTE: `aapl_extensions` must be set in the global `smb.config`.       WARNING: This feature forcibly enables `aapl_name_mangling` on the SMB share which may cause unexpected behavior       for data that was written without this feature enabled. Defaults to `"DEFAULT_SHARE"`.
 - `readonly` (Boolean) If set, SMB clients cannot create or change files and directories in the SMB share.
 
-NOTE: If set, the share path is still writeable by local processes or other file sharing protocols.
+NOTE: If set, the share path is still writeable by local processes or other file sharing protocols.  Defaults to `false`.
 
 <a id="nestedatt--audit"></a>
 ### Nested Schema for `audit`
 
 Read-Only:
 
-- `enable` (Boolean) Turn on auditing for the SMB share. SMB share auditing may not be enabled if `enable_smb1` is `true`     in the SMB service configuration.
-- `ignore_list` (List of String) List of groups that will not be audited.
-- `watch_list` (List of String) Only audit the listed group accounts. If the list is empty, all groups will be audited.
+- `enable` (Boolean) Turn on auditing for the SMB share. SMB share auditing may not be enabled if `enable_smb1` is `true`     in the SMB service configuration. Defaults to `false`.
+- `ignore_list` (List of String) List of groups that will not be audited.  Defaults to `[]`.
+- `watch_list` (List of String) Only audit the listed group accounts. If the list is empty, all groups will be audited.  Defaults to `[]`.
 
 
 <a id="nestedatt--options"></a>
@@ -110,11 +110,11 @@ Read-Only:
 
 NOTE: Files with illegal NTFS characters in their names may not be accessible to non-MacOS SMB clients.
 
-WARNING: This value should not be changed once data is written to the SMB share.
+WARNING: This value should not be changed once data is written to the SMB share.  Defaults to `false`.
 - `hostsallow` (List of String) A list of IP addresses or subnets that are allowed to access the SMB share. The EXCEPT keyword     may be used to limit a wildcard list.
 
-NOTE: Hostname lookups are disabled on the SMB server for performance reasons.
-- `hostsdeny` (List of String) A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.
+NOTE: Hostname lookups are disabled on the SMB server for performance reasons.  Defaults to `[]`.
+- `hostsdeny` (List of String) A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.  Defaults to `[]`.
 
 
 <a id="nestedatt--options--external_share"></a>
@@ -134,11 +134,11 @@ Read-Only:
 
 - `aapl_name_mangling` (Boolean) Illegal NTFS characters commonly used by MacOS clients are stored with their native values on the SMB     server's local filesystem.
 
-NOTE: Files with illegal NTFS characters in their names may not be accessible to non-MacOS SMB clients.
+NOTE: Files with illegal NTFS characters in their names may not be accessible to non-MacOS SMB clients.  Defaults to `true`.
 - `hostsallow` (List of String) A list of IP addresses or subnets that are allowed to access the SMB share. The EXCEPT keyword     may be used to limit a wildcard list.
 
-NOTE: Hostname lookups are disabled on the SMB server for performance reasons.
-- `hostsdeny` (List of String) A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.
+NOTE: Hostname lookups are disabled on the SMB server for performance reasons.  Defaults to `[]`.
+- `hostsdeny` (List of String) A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.  Defaults to `[]`.
 
 
 <a id="nestedatt--options--legacy_share"></a>
@@ -150,48 +150,48 @@ Read-Only:
 
 NOTE: Files with illegal NTFS characters in their names may not be accessible to non-MacOS SMB clients.
 
-WARNING: This value should not be changed once data is written to the SMB share.
-- `acl` (Boolean) If set, enable mapping of local filesystem ACLs to NT ACLs for SMB clients.
+WARNING: This value should not be changed once data is written to the SMB share.  Defaults to `false`.
+- `acl` (Boolean) If set, enable mapping of local filesystem ACLs to NT ACLs for SMB clients.  Defaults to `true`.
 - `afp` (Boolean) If set, SMB server will read and store file metadata in an on-disk format compatible with the     legacy AFP file server.
 
-WARNING: This should not be set unless the SMB server is sharing data that was originally written     via the AFP protocol.
+WARNING: This should not be set unless the SMB server is sharing data that was originally written     via the AFP protocol.  Defaults to `false`.
 - `auxsmbconf` (String) Additional parameters to set on the SMB share. Parameters must be separated by the new-line character.
 
 WARNING: These parameters are not validated and may cause undefined server behavior including     data corruption or data loss.
 
-WARNING: Auxiliary parameters are an unsupported configuration.
+WARNING: Auxiliary parameters are an unsupported configuration. Defaults to `""`.
 - `durablehandle` (Boolean) If set, support for SMB durable handles is enabled.
 
-WARNING: This feature is incompatible with multiprotocol and local filesystem access.
-- `fsrvp` (Boolean) If set, enable support for the File Server Remote VSS Protocol. This allows clients to manage     snapshots for the specified SMB share.
+WARNING: This feature is incompatible with multiprotocol and local filesystem access.  Defaults to `true`.
+- `fsrvp` (Boolean) If set, enable support for the File Server Remote VSS Protocol. This allows clients to manage     snapshots for the specified SMB share.  Defaults to `false`.
 - `guestok` (Boolean) If set, guest access to the share is allowed. This should not be used in production environments.
 
 NOTE: If a user account does not exist, the SMB server maps access to the guest account.
 
-WARNING: Additional client-side configuration downgrading security settings may be required in order     to use this feature.
+WARNING: Additional client-side configuration downgrading security settings may be required in order     to use this feature.  Defaults to `false`.
 - `home` (Boolean) Use the `path` to store user home directories. Each user has a personal home directory and share.     Users cannot access other user directories when connecting to shares.
 
 NOTE: This parameter changes the share `name` to `homes`. It also creates a dynamic share that mirrors     the username of the user. Both shares use the same `path`. You can hide the homes share by turning off     `browsable`. The dynamic user home share cannot be hidden.
 
-WARNING: This parameter changes the global server configuration. The SMB server will not authenticate     users without a valid home directory or shell.
+WARNING: This parameter changes the global server configuration. The SMB server will not authenticate     users without a valid home directory or shell. Defaults to `false`.
 - `hostsallow` (List of String) A list of IP addresses or subnets that are allowed to access the SMB share. The EXCEPT keyword     may be used to limit a wildcard list.
 
-NOTE: Hostname lookups are disabled on the SMB server for performance reasons.
-- `hostsdeny` (List of String) A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.
+NOTE: Hostname lookups are disabled on the SMB server for performance reasons.  Defaults to `[]`.
+- `hostsdeny` (List of String) A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.  Defaults to `[]`.
 - `path_suffix` (String) Path suffix template for dynamic path generation. Uses SMB variable substitution patterns like `%D` (domain)     and `%U` (username).
 - `recyclebin` (Boolean) If set, deleted files are moved to per-user subdirectories in the `.recycle` directory. The     SMB server creates the `.recycle` directory at the root of the SMB share if the file is in the same     ZFS dataset as the share `path`. If the file is in a child ZFS dataset, the server uses the     `mountpoint` of that dataset to create the `.recycle` directory.
 
 NOTE: This feature does not work with recycle bin features in client operating systems.
 
-WARNING: Do not use this feature instead of backups or ZFS snapshots.
-- `shadowcopy` (Boolean) If set, previous versions of files contained in ZFS snapshots are accessible through standard SMB protocol     operations on previous versions of files.
+WARNING: Do not use this feature instead of backups or ZFS snapshots.  Defaults to `false`.
+- `shadowcopy` (Boolean) If set, previous versions of files contained in ZFS snapshots are accessible through standard SMB protocol     operations on previous versions of files.  Defaults to `true`.
 - `streams` (Boolean) If set, support for SMB alternate data streams is enabled.
 
-WARNING: This value should not be changed once data is written to the SMB share.
-- `timemachine` (Boolean) If set, MacOS clients can use the share as a time machine target.
+WARNING: This value should not be changed once data is written to the SMB share.  Defaults to `true`.
+- `timemachine` (Boolean) If set, MacOS clients can use the share as a time machine target.  Defaults to `false`.
 - `timemachine_quota` (Number) If set, it defines the maximum size of a single time machine sparsebundle volume by limiting the     reported disk size to the SMB client. A value of zero means no quota is applied to the share.
 
-NOTE: Modern MacOS versions you set Time Machine quotas client-side. This gives more predictable     server and client behavior.
+NOTE: Modern MacOS versions you set Time Machine quotas client-side. This gives more predictable     server and client behavior. Defaults to `0`.
 - `vuid` (String) This value is the Time Machine volume UUID for the SMB share. The TrueNAS server uses this value in the mDNS     advertisement for the Time Machine share. MacOS clients may use it to identify the volume. When you create or     update a share, setting this value to null makes the TrueNAS server generate a new UUID for the share.
 
 
@@ -204,11 +204,11 @@ Read-Only:
 
 NOTE: Files with illegal NTFS characters in their names may not be accessible to non-MacOS SMB clients.
 
-WARNING: This value should not be changed once data is written to the SMB share.
+WARNING: This value should not be changed once data is written to the SMB share.  Defaults to `false`.
 - `hostsallow` (List of String) A list of IP addresses or subnets that are allowed to access the SMB share. The EXCEPT keyword     may be used to limit a wildcard list.
 
-NOTE: Hostname lookups are disabled on the SMB server for performance reasons.
-- `hostsdeny` (List of String) A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.
+NOTE: Hostname lookups are disabled on the SMB server for performance reasons.  Defaults to `[]`.
+- `hostsdeny` (List of String) A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.  Defaults to `[]`.
 
 
 <a id="nestedatt--options--private_datasets_share"></a>
@@ -220,15 +220,15 @@ Read-Only:
 
 NOTE: Files with illegal NTFS characters in their names may not be accessible to non-MacOS SMB clients.
 
-WARNING: This value should not be changed once data is written to the SMB share.
-- `auto_quota` (Number) Set the specified ZFS quota (in gibibytes) on new datasets. If the value is zero, TrueNAS disables     automatic quotas for the share.
+WARNING: This value should not be changed once data is written to the SMB share.  Defaults to `false`.
+- `auto_quota` (Number) Set the specified ZFS quota (in gibibytes) on new datasets. If the value is zero, TrueNAS disables     automatic quotas for the share. Defaults to `0`.
 - `dataset_naming_schema` (String) The naming schema to use. If you do not set a schema, the server uses `%U` (username) if it is not joined to     Active Directory. If the server is joined to Active Directory it uses `%D/%U` (domain/username).
 
 WARNING: ZFS dataset naming rules are more restrictive than normal path rules.
 - `hostsallow` (List of String) A list of IP addresses or subnets that are allowed to access the SMB share. The EXCEPT keyword     may be used to limit a wildcard list.
 
-NOTE: Hostname lookups are disabled on the SMB server for performance reasons.
-- `hostsdeny` (List of String) A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.
+NOTE: Hostname lookups are disabled on the SMB server for performance reasons.  Defaults to `[]`.
+- `hostsdeny` (List of String) A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.  Defaults to `[]`.
 
 
 <a id="nestedatt--options--time_locked_share"></a>
@@ -240,12 +240,12 @@ Read-Only:
 
 NOTE: Files with illegal NTFS characters in their names may not be accessible to non-MacOS SMB clients.
 
-WARNING: This value should not be changed once data is written to the SMB share.
-- `grace_period` (Number) Time in seconds when write access to the file or directory is allowed.
+WARNING: This value should not be changed once data is written to the SMB share.  Defaults to `false`.
+- `grace_period` (Number) Time in seconds when write access to the file or directory is allowed.  Defaults to `900`.
 - `hostsallow` (List of String) A list of IP addresses or subnets that are allowed to access the SMB share. The EXCEPT keyword     may be used to limit a wildcard list.
 
-NOTE: Hostname lookups are disabled on the SMB server for performance reasons.
-- `hostsdeny` (List of String) A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.
+NOTE: Hostname lookups are disabled on the SMB server for performance reasons.  Defaults to `[]`.
+- `hostsdeny` (List of String) A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.  Defaults to `[]`.
 
 
 <a id="nestedatt--options--timemachine_share"></a>
@@ -255,18 +255,18 @@ Read-Only:
 
 - `auto_dataset_creation` (Boolean) If set, the server uses the `dataset_naming_schema` to make a new ZFS dataset when the client connects.     The server uses this dataset as the share path during the SMB session.
 
-NOTE: this setting requires the share path to be a dataset mountpoint.
-- `auto_snapshot` (Boolean) If set, the server makes a ZFS snapshot of the share dataset when the client makes a new     Time Machine backup.
+NOTE: this setting requires the share path to be a dataset mountpoint. Defaults to `false`.
+- `auto_snapshot` (Boolean) If set, the server makes a ZFS snapshot of the share dataset when the client makes a new     Time Machine backup.  Defaults to `false`.
 - `dataset_naming_schema` (String) The naming schema to use when `auto_dataset_creation` is specified. If you do not set a schema,     the server uses `%U` (username) if it is not joined to Active Directory. If the server is joined to     Active Directory it uses `%D/%U` (domain/username). See the `VARIABLE SUBSTITUTIONS` section in the smb.conf     manpage for valid strings.
 
 WARNING: ZFS dataset naming rules are more restrictive than normal path rules. For example, if `%u` is specified     then the character `\` may be inserted in the username (which is not supported in ZFS).
 - `hostsallow` (List of String) A list of IP addresses or subnets that are allowed to access the SMB share. The EXCEPT keyword     may be used to limit a wildcard list.
 
-NOTE: Hostname lookups are disabled on the SMB server for performance reasons.
-- `hostsdeny` (List of String) A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.
+NOTE: Hostname lookups are disabled on the SMB server for performance reasons.  Defaults to `[]`.
+- `hostsdeny` (List of String) A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.  Defaults to `[]`.
 - `timemachine_quota` (Number) If set, it defines the maximum size in bytes of a single time machine sparsebundle volume by limiting the     reported disk size to the SMB client. A value of zero means no quota is set.
 
-NOTE: Modern MacOS versions you set Time Machine quotas client-side. This gives more predictable     server and client behavior.
+NOTE: Modern MacOS versions you set Time Machine quotas client-side. This gives more predictable     server and client behavior. Defaults to `0`.
 - `vuid` (String) This value is the Time Machine volume UUID for the SMB share. The TrueNAS server uses this value in the mDNS     advertisement for the Time Machine share. MacOS clients may use it to identify the volume. When you create or     update a share, setting this value to null makes the TrueNAS server generate a new UUID for the share.
 
 
@@ -277,5 +277,5 @@ Read-Only:
 
 - `hostsallow` (List of String) A list of IP addresses or subnets that are allowed to access the SMB share. The EXCEPT keyword     may be used to limit a wildcard list.
 
-NOTE: Hostname lookups are disabled on the SMB server for performance reasons.
-- `hostsdeny` (List of String) A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.
+NOTE: Hostname lookups are disabled on the SMB server for performance reasons.  Defaults to `[]`.
+- `hostsdeny` (List of String) A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.  Defaults to `[]`.

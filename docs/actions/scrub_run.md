@@ -21,4 +21,4 @@ Starts a scrub of a pool when the last one is older than `threshold` days.
 
 ### Optional
 
-- `threshold` (Number) Days before a scrub is due when the scrub should start.
+- `threshold` (Number) Days before a scrub is due when the scrub should start. TrueNAS does not report this value, so changes made outside Terraform are not detected.

@@ -10,13 +10,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/numberdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
-	"math/big"
 )
 
 var modelInitScript = &model{
@@ -24,10 +20,10 @@ var modelInitScript = &model{
 	namespace:    "initshutdownscript",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	deleteMethod: "initshutdownscript.delete",
-	createMethod: "initshutdownscript.create",
 	updateMethod: "initshutdownscript.update",
 	getMethod:    "initshutdownscript.get_instance",
+	deleteMethod: "initshutdownscript.delete",
+	createMethod: "initshutdownscript.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -121,12 +117,10 @@ func (r *initScriptResource) Schema(_ context.Context, _ resource.SchemaRequest,
 			"command": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Must be given if `type=\"COMMAND\"`. Defaults to `\"\"`.",
-				Default:             stringdefault.StaticString(""),
 			},
 			"script": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Must be given if `type=\"SCRIPT\"`. Defaults to `\"\"`.",
-				Default:             stringdefault.StaticString(""),
 			},
 			"when": schema.StringAttribute{
 				Required: true,
@@ -138,19 +132,16 @@ func (r *initScriptResource) Schema(_ context.Context, _ resource.SchemaRequest,
 			"enabled": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether the init/shutdown script is enabled to execute. Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"timeout": schema.NumberAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "An integer time in seconds that the system should wait for the execution of the script/command.\n\nA hard limit for a timeout is configured by the base OS, so when a script/command is set to execute on SHUTDOWN,     the hard limit configured by the base OS is changed adding the timeout specified by script/command so it can be     ensured that it executes as desired and is not interrupted by the base OS's limit. Defaults to `10`.",
 				Validators:          []validator.Number{numberIsInteger{}},
-				Default:             numberdefault.StaticBigFloat(big.NewFloat(10)),
 			},
 			"comment": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Optional comment describing the purpose of this script. Defaults to `\"\"`.",
 				Validators:          []validator.String{stringvalidator.LengthAtMost(255)},
-				Default:             stringdefault.StaticString(""),
 			},
 		},
 	}

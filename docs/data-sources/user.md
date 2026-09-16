@@ -30,31 +30,31 @@ Looks up exactly one existing `user` object by `id` or `query_filters`. Secrets 
 - `groups` (List of Number) Array of additional groups to which the user belongs. NOTE: Groups are identified by their group entry `id`,     not their Unix group ID (`gid`).
 - `home` (String) The local file system path for the user account's home directory.
 Typically, this is required only if the account has shell access (local or SSH) to TrueNAS.
-This is not required for accounts used only for SMB share access.
+This is not required for accounts used only for SMB share access.  Defaults to `"/var/empty"`.
 - `immutable` (Boolean) If `true`, the account is system-provided and most fields related to it may not be changed.
 - `last_password_change` (String) The date of the last password change for local user accounts.
 - `local` (Boolean) If `true`, the account is local to the TrueNAS server. If `false`, the account is provided by a directory     service.
-- `locked` (Boolean) If set to `true` the account is locked. The account cannot be used to authenticate to the TrueNAS server.
+- `locked` (Boolean) If set to `true` the account is locked. The account cannot be used to authenticate to the TrueNAS server.  Defaults to `false`.
 - `password_age` (Number) The age in days of the password for local user accounts.
 - `password_change_required` (Boolean) Password change for local user account is required on next login.
 - `password_disabled` (Boolean) If set to `true` password authentication for the user account is disabled.
 
 NOTE: Users with password authentication disabled may still authenticate to the TrueNAS server by other methods,     such as SSH key-based authentication.
 
-NOTE: Password authentication is required for `smb` users.
+NOTE: Password authentication is required for `smb` users. Defaults to `false`.
 - `password_history` (List of String) This contains hashes of the ten most recent passwords used by local user accounts, and is     for enforcing password history requirements as defined in system.security.
 - `roles` (List of String) Array of roles assigned to this user's groups. Roles control administrative access to TrueNAS through     the web UI and API.
-- `shell` (String) Available choices can be retrieved with `user.shell_choices`.
+- `shell` (String) Available choices can be retrieved with `user.shell_choices`. Defaults to `"/usr/bin/zsh"`.
 - `sid` (String) The Security Identifier (SID) of the user if the account an `smb` account. The SMB server uses     this value to check share access and for other purposes.
-- `smb` (Boolean) The user account may be used to access SMB shares. If set to `true` then TrueNAS stores an NT hash of the     user account's password for local accounts. This feature is unavailable for local accounts when General Purpose OS     STIG compatibility mode is enabled. If set to `true` the user is automatically added to the `builtin_users`     group.
+- `smb` (Boolean) The user account may be used to access SMB shares. If set to `true` then TrueNAS stores an NT hash of the     user account's password for local accounts. This feature is unavailable for local accounts when General Purpose OS     STIG compatibility mode is enabled. If set to `true` the user is automatically added to the `builtin_users`     group. Defaults to `true`.
 - `ssh_password_enabled` (Boolean) Allow the user to authenticate to the TrueNAS SSH server using a password.
 
-WARNING: The established best practice is to use only key-based authentication for SSH servers.
+WARNING: The established best practice is to use only key-based authentication for SSH servers.  Defaults to `false`.
 - `sshpubkey` (String) SSH public keys corresponding to private keys that authenticate this user to the TrueNAS SSH server.
 - `sudo_commands` (List of String) An array of commands the user may execute with elevated privileges. User is prompted for password     when executing any command from the array.
 - `sudo_commands_nopasswd` (List of String) An array of commands the user may execute with elevated privileges. User is *not* prompted for password     when executing any command from the array.
 - `twofactor_auth_configured` (Boolean) If `true`, the account has been configured for two-factor authentication. Users are prompted for a     second factor when authenticating to the TrueNAS web UI and API. They may also be prompted when signing     in to the TrueNAS SSH server using a password (depending on global two-factor authentication settings).
-- `uid` (Number) UNIX UID. If not provided, it is automatically filled with the next one available.
+- `uid` (Number) UNIX UID. If not provided, it is automatically filled with the next one available. Changing this forces a new resource.
 - `username` (String) String used to uniquely identify the user on the server. In order to be portable across     systems, local user names must be composed of characters from the POSIX portable filename     character set (IEEE Std 1003.1-2024 section 3.265). This means alphanumeric characters,     hyphens, underscores, and periods. Usernames also may not begin with a hyphen or a period.
 - `userns_idmap` (String) Specifies the subuid mapping for this user. If DIRECT then the UID will be     directly mapped to all containers. Alternatively, the target UID may be     explicitly specified. If `null`, then the UID will not be mapped.
 

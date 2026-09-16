@@ -17,7 +17,7 @@ Manages a DNS provider for ACME DNS-01 challenges. Set exactly one provider unde
 
 ### Required
 
-- `authenticator` (Attributes) Authentication credentials and configuration for the DNS provider. Set exactly one of the nested attributes. (see [below for nested schema](#nestedatt--authenticator))
+- `authenticator` (Attributes) Authentication credentials and configuration for the DNS provider. (see [below for nested schema](#nestedatt--authenticator))
 - `name` (String) Human-readable name for the DNS authenticator.
 
 ### Optional

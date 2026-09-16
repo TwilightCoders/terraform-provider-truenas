@@ -10,14 +10,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/numberdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"math/big"
 )
 
 var modelReplication = &model{
@@ -25,10 +22,10 @@ var modelReplication = &model{
 	namespace:    "replication",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	deleteMethod: "replication.delete",
-	createMethod: "replication.create",
 	updateMethod: "replication.update",
 	getMethod:    "replication.get_instance",
+	deleteMethod: "replication.delete",
+	createMethod: "replication.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -615,7 +612,6 @@ func (r *replicationResource) Schema(_ context.Context, _ resource.SchemaRequest
 			"sudo": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "`SSH` and `SSH+NETCAT` transports should use sudo (which is expected to be passwordless) to run `zfs`     command on the remote machine. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"source_datasets": schema.ListAttribute{
 				Required:            true,
@@ -638,7 +634,6 @@ func (r *replicationResource) Schema(_ context.Context, _ resource.SchemaRequest
 			"properties": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Send dataset properties along with snapshots. Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"properties_exclude": schema.ListAttribute{
 				Optional: true, Computed: true,
@@ -653,12 +648,10 @@ func (r *replicationResource) Schema(_ context.Context, _ resource.SchemaRequest
 			"replicate": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to use full ZFS replication. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"encryption": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to enable encryption for the replicated datasets. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"encryption_inherit": schema.BoolAttribute{
 				Optional:            true,
@@ -786,23 +779,19 @@ func (r *replicationResource) Schema(_ context.Context, _ resource.SchemaRequest
 			"only_matching_schedule": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Will only replicate snapshots that match `schedule` or `restrict_schedule`. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"allow_from_scratch": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Will destroy all snapshots on target side and replicate everything from scratch if none of the snapshots on     target side matches source snapshots. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"readonly": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Controls destination datasets readonly property.\n\n* `SET`: Set all destination datasets to readonly=on after finishing the replication.\n* `REQUIRE`: Require all existing destination datasets to have readonly=on property.\n* `IGNORE`: Avoid this kind of behavior. Defaults to `\"SET\"`.",
 				Validators:          []validator.String{stringvalidator.OneOf("SET", "REQUIRE", "IGNORE")},
-				Default:             stringdefault.StaticString("SET"),
 			},
 			"hold_pending_snapshots": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Prevent source snapshots from being deleted by retention of replication fails for some reason. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"retention_policy": schema.StringAttribute{
 				Required:            true,
@@ -876,23 +865,19 @@ func (r *replicationResource) Schema(_ context.Context, _ resource.SchemaRequest
 			"large_block": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Enable large block support for ZFS send streams. Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"embed": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Enable embedded block support for ZFS send streams. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"compressed": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Enable compressed ZFS send streams. Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"retries": schema.NumberAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Number of retries before considering replication failed. Defaults to `5`.",
 				Validators:          []validator.Number{numberIsInteger{}, numberAtLeast{min: 1}},
-				Default:             numberdefault.StaticBigFloat(big.NewFloat(5)),
 			},
 			"logging_level": schema.StringAttribute{
 				Optional:            true,
@@ -902,7 +887,6 @@ func (r *replicationResource) Schema(_ context.Context, _ resource.SchemaRequest
 			"enabled": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether this replication task is enabled. Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"has_encrypted_dataset_keys": schema.BoolAttribute{
 				Computed:            true,

@@ -22,12 +22,12 @@ Looks up exactly one existing `tunable` object by `id` or `query_filters`. Secre
 
 ### Read-Only
 
-- `comment` (String) Optional descriptive comment explaining the purpose of this tunable.
-- `enabled` (Boolean) Whether this tunable is active and should be applied.
+- `comment` (String) Optional descriptive comment explaining the purpose of this tunable. Defaults to `""`.
+- `enabled` (Boolean) Whether this tunable is active and should be applied. Defaults to `true`.
 - `orig_value` (String) Original system value of the parameter before this tunable was applied.
 - `type` (String) * `SYSCTL`: `var` is a sysctl name (e.g. `kernel.watchdog`) and `value` is its corresponding value (e.g. `0`).
 * `UDEV`: `var` is a udev rules file name (e.g. `10-disable-usb`, `.rules` suffix will be appended automatically)     and `value` is its contents (e.g. `BUS=="usb", OPTIONS+="ignore_device"`).
-* `ZFS`: `var` is a ZFS kernel module parameter name (e.g. `zfs_dirty_data_max_max`) and `value` is its value     (e.g. `783091712`).
-- `update_initramfs` (Boolean) If `false`, then initramfs will not be updated after creating a ZFS tunable and you will need to run     `system boot update_initramfs` manually.
+* `ZFS`: `var` is a ZFS kernel module parameter name (e.g. `zfs_dirty_data_max_max`) and `value` is its value     (e.g. `783091712`). Changing this forces a new resource.
+- `update_initramfs` (Boolean) If `false`, then initramfs will not be updated after creating a ZFS tunable and you will need to run     `system boot update_initramfs` manually. Defaults to `true`.
 - `value` (String) Value to assign to the tunable parameter.
-- `var` (String) Name or identifier of the system parameter to tune.
+- `var` (String) Name or identifier of the system parameter to tune. Changing this forces a new resource.

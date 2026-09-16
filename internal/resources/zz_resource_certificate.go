@@ -10,16 +10,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/numberdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/numberplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"math/big"
 )
 
 var modelCertificate = &model{
@@ -27,10 +24,10 @@ var modelCertificate = &model{
 	namespace:    "certificate",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	createMethod: "certificate.create",
 	updateMethod: "certificate.update",
 	getMethod:    "certificate.get_instance",
 	deleteMethod: "certificate.delete",
-	createMethod: "certificate.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -517,7 +514,6 @@ func (r *certificateResource) Schema(_ context.Context, _ resource.SchemaRequest
 			"add_to_trusted_store": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to add this certificate to the trusted certificate store. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"certificate": schema.StringAttribute{
 				Optional: true, Computed: true,
@@ -732,7 +728,6 @@ func (r *certificateResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Optional: true, Computed: true,
 				MarkdownDescription: "Number of days before the certificate expiration date to attempt certificate renewal. If certificate renewal     fails, renewal will be reattempted every day until expiration. Defaults to `10`.",
 				Validators:          []validator.Number{numberIsInteger{}, numberAtLeast{min: 1}, numberAtMost{max: 30}},
-				Default:             numberdefault.StaticBigFloat(big.NewFloat(10)),
 			},
 			"type": schema.NumberAttribute{
 				Computed:            true,

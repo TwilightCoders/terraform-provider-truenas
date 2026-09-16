@@ -11,7 +11,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 )
@@ -460,13 +459,11 @@ func (r *datasetResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 			"comments": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Comments or description for the dataset. Defaults to `\"INHERIT\"`.",
-				Default:             stringdefault.StaticString("INHERIT"),
 			},
 			"sync": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Synchronous write behavior for the dataset. Defaults to `\"INHERIT\"`.",
 				Validators:          []validator.String{stringvalidator.OneOf("STANDARD", "ALWAYS", "DISABLED", "INHERIT")},
-				Default:             stringdefault.StaticString("INHERIT"),
 			},
 			"snapdev": schema.StringAttribute{
 				Optional: true, Computed: true,
@@ -477,39 +474,32 @@ func (r *datasetResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				Optional: true, Computed: true,
 				MarkdownDescription: "Compression algorithm to use for the dataset. Higher numbered variants provide better compression     but use more CPU. 'INHERIT' uses the parent dataset's setting. Defaults to `\"INHERIT\"`.",
 				Validators:          []validator.String{stringvalidator.OneOf("ON", "OFF", "LZ4", "GZIP", "GZIP-1", "GZIP-9", "ZSTD", "ZSTD-FAST", "ZLE", "LZJB", "ZSTD-1", "ZSTD-2", "ZSTD-3", "ZSTD-4", "ZSTD-5", "ZSTD-6", "ZSTD-7", "ZSTD-8", "ZSTD-9", "ZSTD-10", "ZSTD-11", "ZSTD-12", "ZSTD-13", "ZSTD-14", "ZSTD-15", "ZSTD-16", "ZSTD-17", "ZSTD-18", "ZSTD-19", "ZSTD-FAST-1", "ZSTD-FAST-2", "ZSTD-FAST-3", "ZSTD-FAST-4", "ZSTD-FAST-5", "ZSTD-FAST-6", "ZSTD-FAST-7", "ZSTD-FAST-8", "ZSTD-FAST-9", "ZSTD-FAST-10", "ZSTD-FAST-20", "ZSTD-FAST-30", "ZSTD-FAST-40", "ZSTD-FAST-50", "ZSTD-FAST-60", "ZSTD-FAST-70", "ZSTD-FAST-80", "ZSTD-FAST-90", "ZSTD-FAST-100", "ZSTD-FAST-500", "ZSTD-FAST-1000", "INHERIT")},
-				Default:             stringdefault.StaticString("INHERIT"),
 			},
 			"exec": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether files in this dataset can be executed. Defaults to `\"INHERIT\"`.",
 				Validators:          []validator.String{stringvalidator.OneOf("ON", "OFF", "INHERIT")},
-				Default:             stringdefault.StaticString("INHERIT"),
 			},
 			"managedby": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Identifies which service or system manages this dataset. Defaults to `\"INHERIT\"`.",
 				Validators:          []validator.String{stringvalidator.LengthAtLeast(1)},
-				Default:             stringdefault.StaticString("INHERIT"),
 			},
 			"quota_warning": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Percentage of dataset quota at which to issue a warning. 0-100 or 'INHERIT'. Defaults to `\"INHERIT\"`.",
-				Default:             stringdefault.StaticString("INHERIT"),
 			},
 			"quota_critical": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Percentage of dataset quota at which to issue a critical alert. 0-100 or 'INHERIT'. Defaults to `\"INHERIT\"`.",
-				Default:             stringdefault.StaticString("INHERIT"),
 			},
 			"refquota_warning": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Percentage of reference quota at which to issue a warning. 0-100 or 'INHERIT'. Defaults to `\"INHERIT\"`.",
-				Default:             stringdefault.StaticString("INHERIT"),
 			},
 			"refquota_critical": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Percentage of reference quota at which to issue a critical alert. 0-100 or 'INHERIT'. Defaults to `\"INHERIT\"`.",
-				Default:             stringdefault.StaticString("INHERIT"),
 			},
 			"reservation": schema.NumberAttribute{
 				Optional: true, Computed: true,
@@ -528,31 +518,26 @@ func (r *datasetResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 			"copies": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Number of copies of data blocks to maintain for redundancy. Defaults to `\"INHERIT\"`.",
-				Default:             stringdefault.StaticString("INHERIT"),
 			},
 			"snapdir": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Controls visibility of the `.zfs/snapshot` directory. 'DISABLED' hides snapshots, 'VISIBLE' shows them,     'HIDDEN' makes them accessible but not listed. Defaults to `\"INHERIT\"`.",
 				Validators:          []validator.String{stringvalidator.OneOf("DISABLED", "VISIBLE", "HIDDEN", "INHERIT")},
-				Default:             stringdefault.StaticString("INHERIT"),
 			},
 			"deduplication": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Deduplication setting. 'ON' enables dedup, 'VERIFY' enables with checksum verification, 'OFF' disables. Defaults to `\"INHERIT\"`.",
 				Validators:          []validator.String{stringvalidator.OneOf("ON", "VERIFY", "OFF", "INHERIT")},
-				Default:             stringdefault.StaticString("INHERIT"),
 			},
 			"checksum": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Checksum algorithm to verify data integrity. Higher security algorithms like SHA256 provide better     protection but use more CPU. Defaults to `\"INHERIT\"`.",
 				Validators:          []validator.String{stringvalidator.OneOf("ON", "OFF", "FLETCHER2", "FLETCHER4", "SHA256", "SHA512", "SKEIN", "EDONR", "BLAKE3", "INHERIT")},
-				Default:             stringdefault.StaticString("INHERIT"),
 			},
 			"readonly": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether the dataset is read-only. Defaults to `\"INHERIT\"`.",
 				Validators:          []validator.String{stringvalidator.OneOf("ON", "OFF", "INHERIT")},
-				Default:             stringdefault.StaticString("INHERIT"),
 			},
 			"share_type": schema.StringAttribute{
 				Optional:            true,

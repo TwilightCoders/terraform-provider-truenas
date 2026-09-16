@@ -22,7 +22,7 @@ Looks up exactly one existing `iscsi.portal` object by `id` or `query_filters`. 
 
 ### Read-Only
 
-- `comment` (String) Optional comment describing the portal.
+- `comment` (String) Optional comment describing the portal. Defaults to `""`.
 - `listen` (Attributes List) Array of IP addresses for the portal to listen on. (see [below for nested schema](#nestedatt--listen))
 - `tag` (Number) Numeric tag used to associate this portal with iSCSI targets.
 

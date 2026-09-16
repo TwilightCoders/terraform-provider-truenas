@@ -22,5 +22,5 @@ Looks up exactly one existing `iscsi.initiator` object by `id` or `query_filters
 
 ### Read-Only
 
-- `comment` (String) Optional comment describing the authorized initiator group.
-- `initiators` (List of String) Array of iSCSI Qualified Names (IQNs) or IP addresses of authorized initiators.
+- `comment` (String) Optional comment describing the authorized initiator group. Defaults to `""`.
+- `initiators` (List of String) Array of iSCSI Qualified Names (IQNs) or IP addresses of authorized initiators. Defaults to `[]`.

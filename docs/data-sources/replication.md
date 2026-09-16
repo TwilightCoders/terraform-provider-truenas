@@ -23,15 +23,15 @@ Looks up exactly one existing `replication` object by `id`, `name` or `query_fil
 
 ### Read-Only
 
-- `allow_from_scratch` (Boolean) Will destroy all snapshots on target side and replicate everything from scratch if none of the snapshots on     target side matches source snapshots.
-- `also_include_naming_schema` (List of String) List of naming schemas for push replication.
+- `allow_from_scratch` (Boolean) Will destroy all snapshots on target side and replicate everything from scratch if none of the snapshots on     target side matches source snapshots. Defaults to `false`.
+- `also_include_naming_schema` (List of String) List of naming schemas for push replication. Defaults to `[]`.
 - `auto` (Boolean) Allow replication to run automatically on schedule or after bound periodic snapshot task.
-- `compressed` (Boolean) Enable compressed ZFS send streams.
+- `compressed` (Boolean) Enable compressed ZFS send streams. Defaults to `true`.
 - `compression` (String) Compresses SSH stream. Available only for SSH transport.
 - `direction` (String) Whether task will `PUSH` or `PULL` snapshots.
-- `embed` (Boolean) Enable embedded block support for ZFS send streams.
-- `enabled` (Boolean) Whether this replication task is enabled.
-- `encryption` (Boolean) Whether to enable encryption for the replicated datasets.
+- `embed` (Boolean) Enable embedded block support for ZFS send streams. Defaults to `false`.
+- `enabled` (Boolean) Whether this replication task is enabled. Defaults to `true`.
+- `encryption` (Boolean) Whether to enable encryption for the replicated datasets. Defaults to `false`.
 - `encryption_inherit` (Boolean) Whether replicated datasets should inherit encryption from parent. `null` if encryption is disabled.
 - `encryption_key_format` (String) Format of the encryption key.
 
@@ -39,16 +39,16 @@ Looks up exactly one existing `replication` object by `id`, `name` or `query_fil
 * `PASSPHRASE`: Text passphrase
 * `null`: Not applicable when encryption is disabled
 - `encryption_key_location` (String) Filesystem path where encryption key is stored. `null` if not using key file.
-- `exclude` (List of String) Array of dataset patterns to exclude from replication.
+- `exclude` (List of String) Array of dataset patterns to exclude from replication. Defaults to `[]`.
 - `has_encrypted_dataset_keys` (Boolean) Whether this replication task has encrypted dataset keys available.
-- `hold_pending_snapshots` (Boolean) Prevent source snapshots from being deleted by retention of replication fails for some reason.
-- `large_block` (Boolean) Enable large block support for ZFS send streams.
+- `hold_pending_snapshots` (Boolean) Prevent source snapshots from being deleted by retention of replication fails for some reason. Defaults to `false`.
+- `large_block` (Boolean) Enable large block support for ZFS send streams. Defaults to `true`.
 - `lifetime_unit` (String) Time unit for snapshot retention for custom retention policy. Only applies when `retention_policy` is CUSTOM.
 - `lifetime_value` (Number) Number of time units to retain snapshots for custom retention policy. Only applies when `retention_policy` is     CUSTOM.
-- `lifetimes` (Attributes List) Array of different retention schedules with their own cron schedules and lifetime settings. (see [below for nested schema](#nestedatt--lifetimes))
+- `lifetimes` (Attributes List) Array of different retention schedules with their own cron schedules and lifetime settings. Defaults to `[]`. (see [below for nested schema](#nestedatt--lifetimes))
 - `logging_level` (String) Log level for replication task execution. Controls verbosity of replication logs.
 - `name_regex` (String) Replicate all snapshots which names match specified regular expression.
-- `naming_schema` (List of String) List of naming schemas for pull replication.
+- `naming_schema` (List of String) List of naming schemas for pull replication. Defaults to `[]`.
 - `netcat_active_side` (String) Which side actively establishes the netcat connection for `SSH+NETCAT` transport.
 
 * `LOCAL`: Local system initiates the connection
@@ -58,30 +58,30 @@ Looks up exactly one existing `replication` object by `id`, `name` or `query_fil
 - `netcat_active_side_port_max` (Number) Maximum port number in the range for netcat connections. `null` if not applicable.
 - `netcat_active_side_port_min` (Number) Minimum port number in the range for netcat connections. `null` if not applicable.
 - `netcat_passive_side_connect_address` (String) IP address for the passive side to connect to for `SSH+NETCAT` transport. `null` if not applicable.
-- `only_matching_schedule` (Boolean) Will only replicate snapshots that match `schedule` or `restrict_schedule`.
-- `periodic_snapshot_tasks` (List of Number) List of periodic snapshot task IDs that are sources of snapshots for this replication task. Only push     replication tasks can be bound to periodic snapshot tasks.
-- `properties` (Boolean) Send dataset properties along with snapshots.
-- `properties_exclude` (List of String) Array of dataset property names to exclude from replication.
-- `properties_override` (Map of String) Object mapping dataset property names to override values during replication.
+- `only_matching_schedule` (Boolean) Will only replicate snapshots that match `schedule` or `restrict_schedule`. Defaults to `false`.
+- `periodic_snapshot_tasks` (List of Number) List of periodic snapshot task IDs that are sources of snapshots for this replication task. Only push     replication tasks can be bound to periodic snapshot tasks. Defaults to `[]`.
+- `properties` (Boolean) Send dataset properties along with snapshots. Defaults to `true`.
+- `properties_exclude` (List of String) Array of dataset property names to exclude from replication. Defaults to `[]`.
+- `properties_override` (Map of String) Object mapping dataset property names to override values during replication. Defaults to `{}`.
 - `readonly` (String) Controls destination datasets readonly property.
 
 * `SET`: Set all destination datasets to readonly=on after finishing the replication.
 * `REQUIRE`: Require all existing destination datasets to have readonly=on property.
-* `IGNORE`: Avoid this kind of behavior.
+* `IGNORE`: Avoid this kind of behavior. Defaults to `"SET"`.
 - `recursive` (Boolean) Whether to recursively replicate child datasets.
-- `replicate` (Boolean) Whether to use full ZFS replication.
+- `replicate` (Boolean) Whether to use full ZFS replication. Defaults to `false`.
 - `restrict_schedule` (Attributes) Restricts when replication task with bound periodic snapshot tasks runs. For example, you can have periodic     snapshot tasks that run every 15 minutes, but only run replication task every hour. (see [below for nested schema](#nestedatt--restrict_schedule))
 - `retention_policy` (String) How to delete old snapshots on target side:
 
 * `SOURCE`: Delete snapshots that are absent on source side.
 * `CUSTOM`: Delete snapshots that are older than `lifetime_value` and `lifetime_unit`.
 * `NONE`: Do not delete any snapshots.
-- `retries` (Number) Number of retries before considering replication failed.
+- `retries` (Number) Number of retries before considering replication failed. Defaults to `5`.
 - `schedule` (Attributes) Schedule to run replication task. Only `auto` replication tasks without bound periodic snapshot tasks can have     a schedule. (see [below for nested schema](#nestedatt--schedule))
 - `source_datasets` (List of String) List of datasets to replicate snapshots from.
 - `speed_limit` (Number) Limits speed of SSH stream. Available only for SSH transport.
 - `ssh_credentials` (Number) Keychain Credential ID of type `SSH_CREDENTIALS`.
-- `sudo` (Boolean) `SSH` and `SSH+NETCAT` transports should use sudo (which is expected to be passwordless) to run `zfs`     command on the remote machine.
+- `sudo` (Boolean) `SSH` and `SSH+NETCAT` transports should use sudo (which is expected to be passwordless) to run `zfs`     command on the remote machine. Defaults to `false`.
 - `target_dataset` (String) Dataset to put snapshots into.
 - `transport` (String) Method of snapshots transfer.
 
@@ -116,13 +116,13 @@ Read-Only:
 
 Read-Only:
 
-- `begin` (String) Start time for the time window in HH:MM format.
-- `dom` (String) "1" - "31"
-- `dow` (String) "1" (Monday) - "7" (Sunday)
-- `end` (String) End time for the time window in HH:MM format.
-- `hour` (String) "00" - "23"
-- `minute` (String) "00" - "59"
-- `month` (String) "1" (January) - "12" (December)
+- `begin` (String) Start time for the time window in HH:MM format. Defaults to `"00:00"`.
+- `dom` (String) "1" - "31" Defaults to `"*"`.
+- `dow` (String) "1" (Monday) - "7" (Sunday) Defaults to `"*"`.
+- `end` (String) End time for the time window in HH:MM format. Defaults to `"23:59"`.
+- `hour` (String) "00" - "23" Defaults to `"*"`.
+- `minute` (String) "00" - "59" Defaults to `"00"`.
+- `month` (String) "1" (January) - "12" (December) Defaults to `"*"`.
 
 
 <a id="nestedatt--schedule"></a>
@@ -130,10 +130,10 @@ Read-Only:
 
 Read-Only:
 
-- `begin` (String) Start time for the time window in HH:MM format.
-- `dom` (String) "1" - "31"
-- `dow` (String) "1" (Monday) - "7" (Sunday)
-- `end` (String) End time for the time window in HH:MM format.
-- `hour` (String) "00" - "23"
-- `minute` (String) "00" - "59"
-- `month` (String) "1" (January) - "12" (December)
+- `begin` (String) Start time for the time window in HH:MM format. Defaults to `"00:00"`.
+- `dom` (String) "1" - "31" Defaults to `"*"`.
+- `dow` (String) "1" (Monday) - "7" (Sunday) Defaults to `"*"`.
+- `end` (String) End time for the time window in HH:MM format. Defaults to `"23:59"`.
+- `hour` (String) "00" - "23" Defaults to `"*"`.
+- `minute` (String) "00" - "59" Defaults to `"00"`.
+- `month` (String) "1" (January) - "12" (December) Defaults to `"*"`.

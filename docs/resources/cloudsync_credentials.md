@@ -18,7 +18,7 @@ Manages credentials for cloud sync tasks. Set exactly one storage type under `st
 ### Required
 
 - `name` (String) Human-readable name for the cloud credential.
-- `storage` (Attributes) Cloud provider configuration including type and authentication details. Set exactly one of the nested attributes. (see [below for nested schema](#nestedatt--storage))
+- `storage` (Attributes) Cloud provider configuration including type and authentication details. (see [below for nested schema](#nestedatt--storage))
 
 ### Optional
 

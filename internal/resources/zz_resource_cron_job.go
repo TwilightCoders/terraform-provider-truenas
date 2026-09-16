@@ -5,17 +5,13 @@ package resources
 import (
 	"context"
 
-	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var modelCronJob = &model{
@@ -150,17 +146,14 @@ func (r *cronJobResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 			"enabled": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether the cron job is active and will be executed. Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"ignore_stderr": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to IGNORE standard error (if `false`, it will be added to email). Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"ignore_stdout": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to IGNORE standard output (if `false`, it will be added to email). Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"schedule": schema.SingleNestedAttribute{
 				Optional: true, Computed: true,
@@ -192,7 +185,6 @@ func (r *cronJobResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 						Default:             stringdefault.StaticString("*"),
 					},
 				},
-				Default: objectdefault.StaticValue(types.ObjectValueMust(map[string]attr.Type{"minute": types.StringType, "hour": types.StringType, "dom": types.StringType, "month": types.StringType, "dow": types.StringType}, map[string]attr.Value{"minute": types.StringValue("00"), "hour": types.StringValue("*"), "dom": types.StringValue("*"), "month": types.StringValue("*"), "dow": types.StringValue("*")})),
 			},
 			"command": schema.StringAttribute{
 				Required:            true,
@@ -201,7 +193,6 @@ func (r *cronJobResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 			"description": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Human-readable description of what this cron job does. Defaults to `\"\"`.",
-				Default:             stringdefault.StaticString(""),
 			},
 			"user": schema.StringAttribute{
 				Required:            true,

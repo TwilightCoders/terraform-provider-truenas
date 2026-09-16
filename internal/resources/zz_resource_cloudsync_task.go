@@ -6,14 +6,11 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -350,7 +347,6 @@ func (r *cloudsyncTaskResource) Schema(_ context.Context, _ resource.SchemaReque
 			"description": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "The name of the task to display in the UI. Defaults to `\"\"`.",
-				Default:             stringdefault.StaticString(""),
 			},
 			"path": schema.StringAttribute{
 				Required:            true,
@@ -437,22 +433,18 @@ func (r *cloudsyncTaskResource) Schema(_ context.Context, _ resource.SchemaReque
 						Default:             stringdefault.StaticString("*"),
 					},
 				},
-				Default: objectdefault.StaticValue(types.ObjectValueMust(map[string]attr.Type{"minute": types.StringType, "hour": types.StringType, "dom": types.StringType, "month": types.StringType, "dow": types.StringType}, map[string]attr.Value{"minute": types.StringValue("00"), "hour": types.StringValue("*"), "dom": types.StringValue("*"), "month": types.StringValue("*"), "dow": types.StringValue("*")})),
 			},
 			"pre_script": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "A Bash script to run immediately before every backup. Defaults to `\"\"`.",
-				Default:             stringdefault.StaticString(""),
 			},
 			"post_script": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "A Bash script to run immediately after every backup if it succeeds. Defaults to `\"\"`.",
-				Default:             stringdefault.StaticString(""),
 			},
 			"snapshot": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to create a temporary snapshot of the dataset before every backup. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"include": schema.ListAttribute{
 				Optional: true, Computed: true,
@@ -467,12 +459,10 @@ func (r *cloudsyncTaskResource) Schema(_ context.Context, _ resource.SchemaReque
 			"args": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "(Slated for removal). Defaults to `\"\"`.",
-				Default:             stringdefault.StaticString(""),
 			},
 			"enabled": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Can enable/disable the task. Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"bwlimit": schema.ListNestedAttribute{
 				Optional: true, Computed: true,
@@ -509,12 +499,10 @@ func (r *cloudsyncTaskResource) Schema(_ context.Context, _ resource.SchemaReque
 			"encryption": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to encrypt files before uploading to cloud storage. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"filename_encryption": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to encrypt filenames in addition to file contents. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"encryption_password": schema.StringAttribute{
 				Optional: true, Sensitive: true, WriteOnly: true,
@@ -527,12 +515,10 @@ func (r *cloudsyncTaskResource) Schema(_ context.Context, _ resource.SchemaReque
 			"create_empty_src_dirs": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to create empty directories in the destination that exist in the source. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"follow_symlinks": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to follow symbolic links and sync the files they point to. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"locked": schema.BoolAttribute{
 				Computed:            true,

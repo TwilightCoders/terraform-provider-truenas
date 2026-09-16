@@ -24,17 +24,17 @@ Looks up exactly one existing `group` object by `id`, `name` or `query_filters`.
 ### Read-Only
 
 - `builtin` (Boolean) If `True`, the group is an internal system account for the TrueNAS server. Typically, one should     create dedicated groups for access to the TrueNAS server webui and shares.
-- `gid` (Number) If `null`, it is automatically filled with the next one available.
+- `gid` (Number) If `null`, it is automatically filled with the next one available. Changing this forces a new resource.
 - `immutable` (Boolean) This is a read-only field showing if the group entry can be changed. If `True`, the group is immutable and     cannot be changed. If `False`, the group can be changed.
 - `local` (Boolean) If `True`, the group is local to the TrueNAS server. If `False`, the group is provided by a directory service.
 - `roles` (List of String) List of roles assigned to this groups. Roles control administrative access to TrueNAS through the web UI and     API. You can change group roles by using `privilege.create`, `privilege.update`, and `privilege.delete`.
 - `sid` (String) The Security Identifier (SID) of the user if the account an `smb` account. The SMB server uses this value to     check share access and for other purposes.
-- `smb` (Boolean) If set to `True`, the group can be used for SMB share ACL entries. The group is mapped to an NT group account     on the TrueNAS SMB server and has a `sid` value.
-- `sudo_commands` (List of String) A list of commands that group members may execute with elevated privileges. User is prompted for password     when executing any command from the list.
-- `sudo_commands_nopasswd` (List of String) A list of commands that group members may execute with elevated privileges. User is not prompted for password     when executing any command from the list.
+- `smb` (Boolean) If set to `True`, the group can be used for SMB share ACL entries. The group is mapped to an NT group account     on the TrueNAS SMB server and has a `sid` value.  Defaults to `true`.
+- `sudo_commands` (List of String) A list of commands that group members may execute with elevated privileges. User is prompted for password     when executing any command from the list.  Defaults to `[]`.
+- `sudo_commands_nopasswd` (List of String) A list of commands that group members may execute with elevated privileges. User is not prompted for password     when executing any command from the list.  Defaults to `[]`.
 - `userns_idmap` (String) Specifies the subgid mapping for this group. If DIRECT then the GID will be     directly mapped to all containers. Alternatively, the target GID may be     explicitly specified. If null, then the GID will not be mapped.
 
 **NOTE: This field will be ignored for groups that have been assigned TrueNAS roles.**
 - `users` (List of Number) A list a API user identifiers for local users who are members of this group. These IDs match the `id` field     from `user.query`.
 
-NOTE: This field is empty for groups that come from directory services (`local` is `False`).
+NOTE: This field is empty for groups that come from directory services (`local` is `False`).  Defaults to `[]`.

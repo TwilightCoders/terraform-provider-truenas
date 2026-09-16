@@ -12,7 +12,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 )
 
@@ -21,10 +20,10 @@ var modelISCSIPortal = &model{
 	namespace:    "iscsi.portal",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	createMethod: "iscsi.portal.create",
-	updateMethod: "iscsi.portal.update",
 	getMethod:    "iscsi.portal.get_instance",
 	deleteMethod: "iscsi.portal.delete",
+	createMethod: "iscsi.portal.create",
+	updateMethod: "iscsi.portal.update",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -120,7 +119,6 @@ func (r *iSCSIPortalResource) Schema(_ context.Context, _ resource.SchemaRequest
 			"comment": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Optional comment describing the portal. Defaults to `\"\"`.",
-				Default:             stringdefault.StaticString(""),
 			},
 			"tag": schema.NumberAttribute{
 				Computed:            true,

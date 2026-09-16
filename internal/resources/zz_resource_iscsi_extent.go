@@ -10,13 +10,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/numberdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
-	"math/big"
 )
 
 var modelISCSIExtent = &model{
@@ -24,10 +20,10 @@ var modelISCSIExtent = &model{
 	namespace:    "iscsi.extent",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	updateMethod: "iscsi.extent.update",
 	getMethod:    "iscsi.extent.get_instance",
 	deleteMethod: "iscsi.extent.delete",
 	createMethod: "iscsi.extent.create",
-	updateMethod: "iscsi.extent.update",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -197,7 +193,6 @@ func (r *iSCSIExtentResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Optional: true, Computed: true,
 				MarkdownDescription: "Type of the extent storage backend. Defaults to `\"DISK\"`.",
 				Validators:          []validator.String{stringvalidator.OneOf("DISK", "FILE")},
-				Default:             stringdefault.StaticString("DISK"),
 			},
 			"disk": schema.StringAttribute{
 				Optional:            true,
@@ -219,12 +214,10 @@ func (r *iSCSIExtentResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Optional: true, Computed: true,
 				MarkdownDescription: "Block size for the extent in bytes. Defaults to `512`.",
 				Validators:          []validator.Number{numberIsInteger{}},
-				Default:             numberdefault.StaticBigFloat(big.NewFloat(512)),
 			},
 			"pblocksize": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to use physical block size reporting. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"avail_threshold": schema.NumberAttribute{
 				Optional:            true,
@@ -234,33 +227,27 @@ func (r *iSCSIExtentResource) Schema(_ context.Context, _ resource.SchemaRequest
 			"comment": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Optional comment describing the extent. Defaults to `\"\"`.",
-				Default:             stringdefault.StaticString(""),
 			},
 			"insecure_tpc": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to enable insecure Third Party Copy (TPC) operations. Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"xen": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to enable Xen compatibility mode. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"rpm": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Reported RPM type for the extent. Defaults to `\"SSD\"`.",
 				Validators:          []validator.String{stringvalidator.OneOf("UNKNOWN", "SSD", "5400", "7200", "10000", "15000")},
-				Default:             stringdefault.StaticString("SSD"),
 			},
 			"ro": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether the extent is read-only. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"enabled": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether the extent is enabled and available for use. Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"product_id": schema.StringAttribute{
 				Optional:            true,

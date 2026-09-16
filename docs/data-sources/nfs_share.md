@@ -22,14 +22,14 @@ Looks up exactly one existing `sharing.nfs` object by `id` or `query_filters`. S
 
 ### Read-Only
 
-- `aliases` (List of String) IGNORED for now.
-- `comment` (String) User comment associated with share.
-- `enabled` (Boolean) Enable or disable the share.
+- `aliases` (List of String) IGNORED for now.  Defaults to `[]`.
+- `comment` (String) User comment associated with share.  Defaults to `""`.
+- `enabled` (Boolean) Enable or disable the share.  Defaults to `true`.
 - `expose_snapshots` (Boolean) Enterprise feature to enable access to the ZFS snapshot directory for the export.
-Export path must be the root directory of a ZFS dataset.
+Export path must be the root directory of a ZFS dataset. Defaults to `false`.
 - `hosts` (List of String) List of IP's/hostnames which are allowed to access the share. No quotes or spaces are allowed.
 Each entry must be unique. If empty, all IP's/hostnames are allowed.
-Excessively long lists should be avoided.
+Excessively long lists should be avoided. Defaults to `[]`.
 - `locked` (Boolean) Read-only value indicating whether the share is located on a locked dataset.
 
 Returns:
@@ -41,7 +41,7 @@ Returns:
 - `maproot_group` (String) Map root group client to a specified group.
 - `maproot_user` (String) Map root user client to a specified user.
 - `networks` (List of String) List of authorized networks that are allowed to access the share having format     "network/mask" CIDR notation. Each entry must be unique. If empty, all networks are allowed.
-Excessively long lists should be avoided.
+Excessively long lists should be avoided. Defaults to `[]`.
 - `path` (String) Local path to be exported.
-- `ro` (Boolean) Export the share as read only.
-- `security` (List of String) Specify the security schema.
+- `ro` (Boolean) Export the share as read only.  Defaults to `false`.
+- `security` (List of String) Specify the security schema.  Defaults to `[]`.

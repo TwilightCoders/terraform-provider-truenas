@@ -6,20 +6,15 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/numberdefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"math/big"
 )
 
 var modelSnapshotTask = &model{
@@ -27,10 +22,10 @@ var modelSnapshotTask = &model{
 	namespace:    "pool.snapshottask",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	createMethod: "pool.snapshottask.create",
 	updateMethod: "pool.snapshottask.update",
 	getMethod:    "pool.snapshottask.get_instance",
 	deleteMethod: "pool.snapshottask.delete",
-	createMethod: "pool.snapshottask.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -198,24 +193,20 @@ func (r *snapshotTaskResource) Schema(_ context.Context, _ resource.SchemaReques
 			"recursive": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to recursively snapshot child datasets. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"lifetime_value": schema.NumberAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Number of time units to retain snapshots. `lifetime_unit` gives the time unit. Defaults to `2`.",
 				Validators:          []validator.Number{numberIsInteger{}},
-				Default:             numberdefault.StaticBigFloat(big.NewFloat(2)),
 			},
 			"lifetime_unit": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Unit of time for snapshot retention. Defaults to `\"WEEK\"`.",
 				Validators:          []validator.String{stringvalidator.OneOf("HOUR", "DAY", "WEEK", "MONTH", "YEAR")},
-				Default:             stringdefault.StaticString("WEEK"),
 			},
 			"enabled": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether this periodic snapshot task is enabled. Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"exclude": schema.ListAttribute{
 				Optional: true, Computed: true,
@@ -225,12 +216,10 @@ func (r *snapshotTaskResource) Schema(_ context.Context, _ resource.SchemaReques
 			"naming_schema": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Naming pattern for generated snapshots using strftime format. Defaults to `\"auto-%Y-%m-%d_%H-%M\"`.",
-				Default:             stringdefault.StaticString("auto-%Y-%m-%d_%H-%M"),
 			},
 			"allow_empty": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to take snapshots even if no data has changed. Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"schedule": schema.SingleNestedAttribute{
 				Optional: true, Computed: true,
@@ -272,7 +261,6 @@ func (r *snapshotTaskResource) Schema(_ context.Context, _ resource.SchemaReques
 						Default:             stringdefault.StaticString("23:59"),
 					},
 				},
-				Default: objectdefault.StaticValue(types.ObjectValueMust(map[string]attr.Type{"minute": types.StringType, "hour": types.StringType, "dom": types.StringType, "month": types.StringType, "dow": types.StringType, "begin": types.StringType, "end": types.StringType}, map[string]attr.Value{"minute": types.StringValue("00"), "hour": types.StringValue("*"), "dom": types.StringValue("*"), "month": types.StringValue("*"), "dow": types.StringValue("*"), "begin": types.StringValue("00:00"), "end": types.StringValue("23:59")})),
 			},
 			"vmware_sync": schema.BoolAttribute{
 				Computed:            true,

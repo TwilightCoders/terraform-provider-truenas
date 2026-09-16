@@ -10,15 +10,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/numberdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
-	"math/big"
 )
 
 var modelVM = &model{
@@ -286,13 +282,11 @@ func (r *vMResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *r
 			"command_line_args": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Additional command line arguments passed to the VM hypervisor. Defaults to `\"\"`.",
-				Default:             stringdefault.StaticString(""),
 			},
 			"cpu_mode": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "CPU virtualization mode.\n\n* `CUSTOM`: Use specified model.\n* `HOST-MODEL`: Mirror host CPU.\n* `HOST-PASSTHROUGH`: Provide direct access to host CPU features. Defaults to `\"CUSTOM\"`.",
 				Validators:          []validator.String{stringvalidator.OneOf("CUSTOM", "HOST-MODEL", "HOST-PASSTHROUGH")},
-				Default:             stringdefault.StaticString("CUSTOM"),
 			},
 			"cpu_model": schema.StringAttribute{
 				Optional:            true,
@@ -306,25 +300,21 @@ func (r *vMResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *r
 			"description": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Optional description or notes about the virtual machine. Defaults to `\"\"`.",
-				Default:             stringdefault.StaticString(""),
 			},
 			"vcpus": schema.NumberAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Number of virtual CPUs allocated to the VM. Defaults to `1`.",
 				Validators:          []validator.Number{numberIsInteger{}, numberAtLeast{min: 1}},
-				Default:             numberdefault.StaticBigFloat(big.NewFloat(1)),
 			},
 			"cores": schema.NumberAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Number of CPU cores per socket. Defaults to `1`.",
 				Validators:          []validator.Number{numberIsInteger{}, numberAtLeast{min: 1}},
-				Default:             numberdefault.StaticBigFloat(big.NewFloat(1)),
 			},
 			"threads": schema.NumberAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Number of threads per CPU core. Defaults to `1`.",
 				Validators:          []validator.Number{numberIsInteger{}, numberAtLeast{min: 1}},
-				Default:             numberdefault.StaticBigFloat(big.NewFloat(1)),
 			},
 			"cpuset": schema.StringAttribute{
 				Optional:            true,
@@ -337,22 +327,18 @@ func (r *vMResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *r
 			"enable_cpu_topology_extension": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to expose detailed CPU topology information to the guest OS. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"pin_vcpus": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to pin virtual CPUs to specific host CPU cores. Improves performance but reduces host flexibility. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"suspend_on_snapshot": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to suspend the VM when taking snapshots. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"trusted_platform_module": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to enable virtual Trusted Platform Module (TPM) for the VM. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"memory": schema.NumberAttribute{
 				Required:            true,
@@ -367,13 +353,11 @@ func (r *vMResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *r
 			"hyperv_enlightenments": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to enable Hyper-V enlightenments for improved Windows guest performance. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"bootloader": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Boot firmware type. `UEFI` for modern UEFI, `UEFI_CSM` for legacy BIOS compatibility. Defaults to `\"UEFI\"`.",
 				Validators:          []validator.String{stringvalidator.OneOf("UEFI_CSM", "UEFI")},
-				Default:             stringdefault.StaticString("UEFI"),
 			},
 			"bootloader_ovmf": schema.StringAttribute{
 				Optional: true, Computed: true,
@@ -383,29 +367,24 @@ func (r *vMResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *r
 			"autostart": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to automatically start the VM when the host system boots. Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"hide_from_msr": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to hide hypervisor signatures from guest OS MSR access. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"ensure_display_device": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether to ensure at least one display device is configured for the VM. Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"time": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Guest OS time zone reference. `LOCAL` uses host timezone, `UTC` uses coordinated universal time. Defaults to `\"LOCAL\"`.",
 				Validators:          []validator.String{stringvalidator.OneOf("LOCAL", "UTC")},
-				Default:             stringdefault.StaticString("LOCAL"),
 			},
 			"shutdown_timeout": schema.NumberAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Maximum time in seconds to wait for graceful shutdown before forcing power off. Default 90s balances     allowing sufficient time for clean shutdown while avoiding indefinite hangs. Defaults to `90`.",
 				Validators:          []validator.Number{numberIsInteger{}, numberAtLeast{min: 5}, numberAtMost{max: 300}},
-				Default:             numberdefault.StaticBigFloat(big.NewFloat(90)),
 			},
 			"arch_type": schema.StringAttribute{
 				Optional: true, Computed: true,

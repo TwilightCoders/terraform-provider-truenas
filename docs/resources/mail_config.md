@@ -24,7 +24,7 @@ This resource manages existing settings: creating it applies the configured attr
 
 - `fromemail` (String) The sending address that the mail server will use for sending emails.
 - `fromname` (String) Display name that will appear as the sender name in outgoing emails.
-- `oauth` (String) OAuth configuration for email providers that support it or `null` for basic authentication. JSON-encoded; use `jsonencode()`.
+- `oauth` (String) OAuth configuration for email providers that support it or `null` for basic authentication.
 - `outgoingserver` (String) Hostname or IP address of the SMTP server used for sending emails.
 - `pass` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) SMTP password.
 - `pass_wo_version` (Number) Change this value to send `pass` again. Terraform never stores `pass`.

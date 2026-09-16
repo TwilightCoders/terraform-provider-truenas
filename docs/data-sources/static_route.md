@@ -22,6 +22,6 @@ Looks up exactly one existing `staticroute` object by `id` or `query_filters`. S
 
 ### Read-Only
 
-- `description` (String) Optional description for this static route.
+- `description` (String) Optional description for this static route. Defaults to `""`.
 - `destination` (String) Destination network or host for this static route.
 - `gateway` (String) Gateway IP address for this static route.

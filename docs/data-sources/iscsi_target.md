@@ -24,8 +24,8 @@ Looks up exactly one existing `iscsi.target` object by `id`, `name` or `query_fi
 ### Read-Only
 
 - `alias` (String) Optional alias name for the iSCSI target.
-- `auth_networks` (List of String) Array of network addresses allowed to access this target.
-- `groups` (Attributes List) Array of portal-initiator group associations for this target. (see [below for nested schema](#nestedatt--groups))
+- `auth_networks` (List of String) Array of network addresses allowed to access this target. Defaults to `[]`.
+- `groups` (Attributes List) Array of portal-initiator group associations for this target. Defaults to `[]`. (see [below for nested schema](#nestedatt--groups))
 - `iscsi_parameters` (Attributes) Optional iSCSI-specific parameters for this target. (see [below for nested schema](#nestedatt--iscsi_parameters))
 - `mode` (String) Protocol mode for the target.
 
@@ -33,7 +33,7 @@ Looks up exactly one existing `iscsi.target` object by `id`, `name` or `query_fi
 * `FC`: Fibre Channel protocol only
 * `BOTH`: Both iSCSI and Fibre Channel protocols
 
-Fibre Channel may only be selected on TrueNAS Enterprise-licensed systems with a suitable Fibre Channel HBA.
+Fibre Channel may only be selected on TrueNAS Enterprise-licensed systems with a suitable Fibre Channel HBA. Defaults to `"ISCSI"`.
 - `rel_tgt_id` (Number) Relative target ID number assigned by the system.
 
 <a id="nestedatt--groups"></a>

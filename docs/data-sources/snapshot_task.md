@@ -22,15 +22,15 @@ Looks up exactly one existing `pool.snapshottask` object by `id` or `query_filte
 
 ### Read-Only
 
-- `allow_empty` (Boolean) Whether to take snapshots even if no data has changed.
+- `allow_empty` (Boolean) Whether to take snapshots even if no data has changed. Defaults to `true`.
 - `dataset` (String) The dataset to take snapshots of.
-- `enabled` (Boolean) Whether this periodic snapshot task is enabled.
-- `exclude` (List of String) Array of dataset patterns to exclude from recursive snapshots.
-- `lifetime_unit` (String) Unit of time for snapshot retention.
-- `lifetime_value` (Number) Number of time units to retain snapshots. `lifetime_unit` gives the time unit.
-- `naming_schema` (String) Naming pattern for generated snapshots using strftime format.
-- `recursive` (Boolean) Whether to recursively snapshot child datasets.
-- `schedule` (Attributes) Cron schedule for when snapshots should be taken. (see [below for nested schema](#nestedatt--schedule))
+- `enabled` (Boolean) Whether this periodic snapshot task is enabled. Defaults to `true`.
+- `exclude` (List of String) Array of dataset patterns to exclude from recursive snapshots. Defaults to `[]`.
+- `lifetime_unit` (String) Unit of time for snapshot retention. Defaults to `"WEEK"`.
+- `lifetime_value` (Number) Number of time units to retain snapshots. `lifetime_unit` gives the time unit. Defaults to `2`.
+- `naming_schema` (String) Naming pattern for generated snapshots using strftime format. Defaults to `"auto-%Y-%m-%d_%H-%M"`.
+- `recursive` (Boolean) Whether to recursively snapshot child datasets. Defaults to `false`.
+- `schedule` (Attributes) Cron schedule for when snapshots should be taken. Defaults to `{"begin":"00:00","dom":"*","dow":"*","end":"23:59","hour":"*","minute":"00","month":"*"}`. (see [below for nested schema](#nestedatt--schedule))
 - `vmware_sync` (Boolean) Whether VMware VMs are synced before taking snapshots.
 
 <a id="nestedatt--schedule"></a>
@@ -38,10 +38,10 @@ Looks up exactly one existing `pool.snapshottask` object by `id` or `query_filte
 
 Read-Only:
 
-- `begin` (String) Start time of the window when snapshots can be taken.
-- `dom` (String) "1" - "31"
-- `dow` (String) "1" (Monday) - "7" (Sunday)
-- `end` (String) End time of the window when snapshots can be taken.
-- `hour` (String) "00" - "23"
-- `minute` (String) Minute when snapshots should be taken (cron format).
-- `month` (String) "1" (January) - "12" (December)
+- `begin` (String) Start time of the window when snapshots can be taken. Defaults to `"00:00"`.
+- `dom` (String) "1" - "31" Defaults to `"*"`.
+- `dow` (String) "1" (Monday) - "7" (Sunday) Defaults to `"*"`.
+- `end` (String) End time of the window when snapshots can be taken. Defaults to `"23:59"`.
+- `hour` (String) "00" - "23" Defaults to `"*"`.
+- `minute` (String) Minute when snapshots should be taken (cron format). Defaults to `"00"`.
+- `month` (String) "1" (January) - "12" (December) Defaults to `"*"`.

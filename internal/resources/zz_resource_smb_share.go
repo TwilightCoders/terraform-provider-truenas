@@ -648,7 +648,6 @@ func (r *sMBShareResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 				Optional: true, Computed: true,
 				MarkdownDescription: "This parameter sets the purpose of the SMB share. It controls how the SMB share behaves and what features are     available through options. The DEFAULT_SHARE setting is best for most applications, and should be used, unless     there is a specific reason to change it.\n\n* `DEFAULT_SHARE`: Set the SMB share for best compatibility with common SMB clients.\n\n* `LEGACY_SHARE`: Set the SMB share for compatibility with older TrueNAS versions. Automated backend migrations       use this to help the administrator move to better-supported share settings. It should not be used for new SMB       shares.\n\n* `TIMEMACHINE_SHARE`: The SMB share is presented to MacOS clients as a time machine target.\n  NOTE: `aapl_extensions` must be set in the global `smb.config`.\n\n* `MULTIPROTOCOL_SHARE`: The SMB share is configured for multi-protocol access. Set this if the `path` is shared       through NFS, FTP, or used by containers or apps.\n  NOTE: This setting can reduce SMB share performance because it turns off some SMB features for safer       interoperability with external processes.\n\n* `TIME_LOCKED_SHARE`: The SMB share makes files read-only through the SMB protocol after the set grace_period       ends.\n  WARNING: This setting does not work if the `path` is accessed locally or if another SMB share without the       `TIME_LOCKED_SHARE` purpose uses the same path.\n  WARNING: This setting might not meet regulatory requirements for write-once storage.\n\n* `PRIVATE_DATASETS_SHARE`: The server uses the specified `dataset_naming_schema` in `options` to make a new ZFS       dataset when the client connects. The server uses this dataset as the share path during the SMB session.\n\n* `EXTERNAL_SHARE`: The SMB share is a DFS proxy to a share hosted on an external SMB server.\n\n* `VEEAM_REPOSITORY_SHARE`: The SMB share is a repository for Veeam Backup & Replication and supports Fast Clone.\n  NOTE: This feature is available only for TrueNAS Enterprise customers.\n\n* `FCP_SHARE`: The SMB share is a used for Final Cut Pro storage. This feature automatically configures the share       to provide storage according to Apple support guidelines described in https://support.apple.com/en-ca/101919.       NOTE: `aapl_extensions` must be set in the global `smb.config`.       WARNING: This feature forcibly enables `aapl_name_mangling` on the SMB share which may cause unexpected behavior       for data that was written without this feature enabled. Defaults to `\"DEFAULT_SHARE\"`.",
 				Validators:          []validator.String{stringvalidator.OneOf("DEFAULT_SHARE", "LEGACY_SHARE", "TIMEMACHINE_SHARE", "MULTIPROTOCOL_SHARE", "TIME_LOCKED_SHARE", "PRIVATE_DATASETS_SHARE", "EXTERNAL_SHARE", "VEEAM_REPOSITORY_SHARE", "FCP_SHARE")},
-				Default:             stringdefault.StaticString("DEFAULT_SHARE"),
 			},
 			"name": schema.StringAttribute{
 				Required:            true,
@@ -661,27 +660,22 @@ func (r *sMBShareResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 			"enabled": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "If unset, the SMB share is not available over the SMB protocol.  Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"comment": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Text field that is seen next to a share when an SMB client requests a list of SMB shares on the TrueNAS     server.  Defaults to `\"\"`.",
-				Default:             stringdefault.StaticString(""),
 			},
 			"readonly": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "If set, SMB clients cannot create or change files and directories in the SMB share.\n\nNOTE: If set, the share path is still writeable by local processes or other file sharing protocols.  Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"browsable": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "If set, the share is included when an SMB client requests a list of SMB shares on the TrueNAS server.  Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"access_based_share_enumeration": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "If set, the share is only included when an SMB client requests a list of shares on the SMB server if     the share (not filesystem) access control list (see `sharing.smb.getacl`) grants access to the user.  Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"audit": schema.SingleNestedAttribute{
 				Optional: true, Computed: true,

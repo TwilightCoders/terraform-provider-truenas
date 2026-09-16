@@ -10,11 +10,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/numberplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -309,13 +307,11 @@ func (r *userResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 				Optional: true, Computed: true,
 				MarkdownDescription: "The local file system path for the user account's home directory.\nTypically, this is required only if the account has shell access (local or SSH) to TrueNAS.\nThis is not required for accounts used only for SMB share access.  Defaults to `\"/var/empty\"`.",
 				Validators:          []validator.String{stringvalidator.LengthAtLeast(1)},
-				Default:             stringdefault.StaticString("/var/empty"),
 			},
 			"shell": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Available choices can be retrieved with `user.shell_choices`. Defaults to `\"/usr/bin/zsh\"`.",
 				Validators:          []validator.String{stringvalidator.LengthAtLeast(1)},
-				Default:             stringdefault.StaticString("/usr/bin/zsh"),
 			},
 			"full_name": schema.StringAttribute{
 				Required:            true,
@@ -325,7 +321,6 @@ func (r *userResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 			"smb": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "The user account may be used to access SMB shares. If set to `true` then TrueNAS stores an NT hash of the     user account's password for local accounts. This feature is unavailable for local accounts when General Purpose OS     STIG compatibility mode is enabled. If set to `true` the user is automatically added to the `builtin_users`     group. Defaults to `true`.",
-				Default:             booldefault.StaticBool(true),
 			},
 			"userns_idmap": schema.StringAttribute{
 				Optional:            true,
@@ -344,12 +339,10 @@ func (r *userResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 			"password_disabled": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "If set to `true` password authentication for the user account is disabled.\n\nNOTE: Users with password authentication disabled may still authenticate to the TrueNAS server by other methods,     such as SSH key-based authentication.\n\nNOTE: Password authentication is required for `smb` users. Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"ssh_password_enabled": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Allow the user to authenticate to the TrueNAS SSH server using a password.\n\nWARNING: The established best practice is to use only key-based authentication for SSH servers.  Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"sshpubkey": schema.StringAttribute{
 				Optional:            true,
@@ -358,7 +351,6 @@ func (r *userResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 			"locked": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "If set to `true` the account is locked. The account cannot be used to authenticate to the TrueNAS server.  Defaults to `false`.",
-				Default:             booldefault.StaticBool(false),
 			},
 			"sudo_commands": schema.ListAttribute{
 				Optional: true, Computed: true,
