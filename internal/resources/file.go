@@ -344,12 +344,16 @@ func (r *fileResource) write(ctx context.Context, m fileModel, content string, d
 		diags.AddError("Cannot transfer files", err.Error())
 		return false
 	}
-	mode, err := parseMode(m.Mode)
+	mode, hasMode, err := parseMode(m.Mode)
 	if err != nil {
 		diags.AddAttributeError(path.Root("mode"), "Invalid mode", err.Error())
 		return false
 	}
-	if err := fc.PutFile(ctx, m.Path.ValueString(), mode, strings.NewReader(content)); err != nil {
+	var modePtr *int64
+	if hasMode {
+		modePtr = &mode
+	}
+	if err := fc.PutFile(ctx, m.Path.ValueString(), modePtr, strings.NewReader(content)); err != nil {
 		diags.AddError("Cannot write file", err.Error())
 		return false
 	}
@@ -437,15 +441,17 @@ func mtimeSeconds(v any) int64 {
 	return 0
 }
 
-func parseMode(m types.String) (*int64, error) {
+// parseMode reads octal permission bits. An unset mode reports ok false, which leaves the file's
+// permissions to TrueNAS rather than sending a value.
+func parseMode(m types.String) (mode int64, ok bool, err error) {
 	if m.IsNull() || m.IsUnknown() {
-		return nil, nil
+		return 0, false, nil
 	}
 	v, err := strconv.ParseInt(m.ValueString(), 8, 32)
 	if err != nil {
-		return nil, fmt.Errorf("%q is not octal permission bits", m.ValueString())
+		return 0, false, fmt.Errorf("%q is not octal permission bits", m.ValueString())
 	}
-	return &v, nil
+	return v, true, nil
 }
 
 func hashString(s string) string {

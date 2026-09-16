@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"regexp"
-	"sync"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -23,8 +22,7 @@ import (
 
 // serveStat answers filesystem.stat from the fake server's in-memory files. Middleware reports
 // mtime as a {"$date": milliseconds} wrapper, so the fake does too.
-func serveStat(srv *middlewaretest.Server) *sync.Map {
-	mtimes := &sync.Map{}
+func serveStat(srv *middlewaretest.Server) {
 	srv.Handle("filesystem.stat", func(_ context.Context, params []json.RawMessage) (any, error) {
 		var p string
 		_ = json.Unmarshal(params[0], &p)
@@ -32,16 +30,11 @@ func serveStat(srv *middlewaretest.Server) *sync.Map {
 		if !ok {
 			return nil, &middleware.Error{Errno: 2, Errname: "ENOENT", Reason: p + " does not exist"}
 		}
-		mtime := int64(1700000000000)
-		if v, found := mtimes.Load(p); found {
-			mtime = v.(int64)
-		}
 		return map[string]any{
 			"size": len(content), "mode": 0o100644,
-			"mtime": map[string]any{"$date": mtime},
+			"mtime": map[string]any{"$date": int64(1700000000000)},
 		}, nil
 	})
-	return mtimes
 }
 
 func fileConfig(srv *middlewaretest.Server, content, extra string) string {
