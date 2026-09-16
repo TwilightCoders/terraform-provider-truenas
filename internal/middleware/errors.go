@@ -21,6 +21,10 @@ const (
 
 const errnameNotFound = "ENOENT"
 
+// errnameBusy is middleware's "come back shortly": rate limits and contended resources both use
+// it. It is a pacing signal, not a failure, so a caller should back off rather than give up.
+const errnameBusy = "EBUSY"
+
 // Error is an error reported by the middleware for a single call.
 type Error struct {
 	// Method is the API method that failed.
@@ -190,4 +194,14 @@ func parseFieldErrors(extra []json.RawMessage) []FieldError {
 		fields = append(fields, f)
 	}
 	return fields
+}
+
+// IsBusy reports whether err means the server is asking the caller to slow down: a rate limit, or
+// a resource briefly in use. Such a call is worth retrying after a wait.
+func IsBusy(err error) bool {
+	var e *Error
+	if !errors.As(err, &e) {
+		return false
+	}
+	return e.Errname == errnameBusy || e.Errno == int(syscall.EBUSY) || e.Code == CodeTooManyConcurrentCalls
 }

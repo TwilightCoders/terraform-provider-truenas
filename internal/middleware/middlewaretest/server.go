@@ -48,6 +48,7 @@ type Server struct {
 	calls         []Call
 	conns         map[*websocket.Conn]struct{}
 	loginResponse string
+	loginHook     func() error
 	serverHeader  string
 
 	// Files backs the /_download and /_upload endpoints.
@@ -109,6 +110,14 @@ func (s *Server) SetLoginResponse(responseType string) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.loginResponse = responseType
+}
+
+// SetLoginHook runs before every auth.login_ex and, when it returns an error, fails that attempt.
+// Tests use it to make the server rate limit a login the way middleware does.
+func (s *Server) SetLoginHook(fn func() error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.loginHook = fn
 }
 
 // Handle registers h for method, replacing any previous handler.
@@ -281,6 +290,14 @@ func (ss *serverSession) login(params []json.RawMessage) (any, error) {
 		return nil, &middleware.Error{Code: middleware.CodeInvalidParams, Errname: "EINVAL", Reason: "invalid login_data"}
 	}
 	s := ss.server
+	s.mu.Lock()
+	hook := s.loginHook
+	s.mu.Unlock()
+	if hook != nil {
+		if err := hook(); err != nil {
+			return nil, err
+		}
+	}
 	s.mu.Lock()
 	responseType := s.loginResponse
 	s.mu.Unlock()

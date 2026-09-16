@@ -182,8 +182,7 @@ func (c *Client) callWithBusyRetry(ctx context.Context, method string, params []
 			return nil, &ConnectionError{Method: method, Err: err}
 		}
 		result, err := s.call(ctx, c.nextID.Add(1), method, params)
-		var e *Error
-		if attempt < defaultBusyRetries && errors.As(err, &e) && e.Code == CodeTooManyConcurrentCalls {
+		if attempt < defaultBusyRetries && IsBusy(err) {
 			if werr := sleep(ctx, backoff); werr != nil {
 				return nil, werr
 			}
@@ -232,11 +231,26 @@ func (c *Client) connect(ctx context.Context) (*session, error) {
 	var login struct {
 		ResponseType string `json:"response_type"`
 	}
-	raw, err := s.call(ctx, c.nextID.Add(1), "auth.login_ex", []any{map[string]any{
-		"mechanism": "API_KEY_PLAIN",
-		"username":  c.cfg.Username,
-		"api_key":   c.cfg.APIKey,
-	}})
+	// Logging in is rate limited like any other call, and a provider authenticates once per
+	// Terraform invocation — a scripted loop can trip the limit without anything being wrong.
+	// "Rate Limit Exceeded" is a pacing signal, so wait rather than fail the whole run.
+	var raw json.RawMessage
+	backoff := defaultBusyBackoff
+	for attempt := 0; ; attempt++ {
+		raw, err = s.call(ctx, c.nextID.Add(1), "auth.login_ex", []any{map[string]any{
+			"mechanism": "API_KEY_PLAIN",
+			"username":  c.cfg.Username,
+			"api_key":   c.cfg.APIKey,
+		}})
+		if attempt >= defaultBusyRetries || !IsBusy(err) {
+			break
+		}
+		if werr := sleep(ctx, backoff); werr != nil {
+			_ = s.close()
+			return nil, werr
+		}
+		backoff *= 2
+	}
 	if err == nil {
 		err = json.Unmarshal(raw, &login)
 	}

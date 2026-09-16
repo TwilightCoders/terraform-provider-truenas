@@ -23,7 +23,8 @@ func (c engineClient) IsNotFound(err error) bool { return middleware.IsNotFound(
 // idempotent are retried on it.
 func (c engineClient) IsRetryable(err error) bool {
 	var ce *middleware.ConnectionError
-	return errors.As(err, &ce)
+	// A rate limit is the server asking for a pause, not a refusal.
+	return errors.As(err, &ce) || middleware.IsBusy(err)
 }
 
 // ValidationFields returns the per-attribute validation failures err carries, if any.

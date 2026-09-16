@@ -621,3 +621,44 @@ func TestCheckServerIsExact(t *testing.T) {
 		}
 	}
 }
+
+// TestLoginRetriesRateLimit covers the failure that aborted a real import run: middleware rate
+// limits auth.login_ex like any other call, and a provider logs in once per Terraform invocation,
+// so a scripted loop trips the limit with nothing actually wrong. EBUSY is a pacing signal.
+func TestLoginRetriesRateLimit(t *testing.T) {
+	srv := middlewaretest.NewServer(t)
+	var attempts atomic.Int32
+	srv.SetLoginHook(func() error {
+		if attempts.Add(1) < 3 {
+			return &middleware.Error{Code: middleware.CodeCallError, Errno: 16, Errname: "EBUSY", Reason: "Rate Limit Exceeded"}
+		}
+		return nil
+	})
+
+	c := dial(t, srv)
+	if c.APIVersion() == "" {
+		t.Fatal("did not authenticate after backing off")
+	}
+	if got := attempts.Load(); got != 3 {
+		t.Errorf("login attempts = %d, want 3", got)
+	}
+}
+
+// TestIsBusy pins what counts as "slow down" rather than "failed".
+func TestIsBusy(t *testing.T) {
+	for _, tc := range []struct {
+		err  error
+		want bool
+	}{
+		{&middleware.Error{Errname: "EBUSY"}, true},
+		{&middleware.Error{Errno: 16}, true},
+		{&middleware.Error{Code: middleware.CodeTooManyConcurrentCalls}, true},
+		{&middleware.Error{Errname: "ENOENT"}, false},
+		{errors.New("boom"), false},
+		{nil, false},
+	} {
+		if got := middleware.IsBusy(tc.err); got != tc.want {
+			t.Errorf("IsBusy(%v) = %v, want %v", tc.err, got, tc.want)
+		}
+	}
+}
