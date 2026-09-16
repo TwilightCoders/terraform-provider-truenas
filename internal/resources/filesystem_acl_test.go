@@ -1,16 +1,11 @@
 package resources
 
 import (
-	"context"
 	"encoding/json"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/TwilightCoders/terraform-provider-truenas/api"
-	"github.com/TwilightCoders/terraform-provider-truenas/internal/apischema"
-	"github.com/TwilightCoders/terraform-provider-truenas/internal/engine"
 )
 
 // sample_media_acl.json is filesystem.getacl output for a real NFS4 dataset.
@@ -74,15 +69,5 @@ func TestPOSIXEntries(t *testing.T) {
 	e.Read = types.BoolNull()
 	if _, err := entryToAPI(e, "POSIX1E"); err == nil {
 		t.Error("incomplete POSIX entry accepted")
-	}
-}
-
-func TestAllSpecsResolve(t *testing.T) {
-	eng := engine.New(apischema.MustLoad(api.Latest), Dialect)
-	if err := eng.Validate(context.Background(), All...); err != nil {
-		t.Fatal(err)
-	}
-	if err := eng.ValidateActions(context.Background(), Actions...); err != nil {
-		t.Fatal(err)
 	}
 }

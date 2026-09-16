@@ -22,7 +22,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
-	"github.com/TwilightCoders/terraform-provider-truenas/internal/engine"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware"
 )
 
@@ -49,7 +48,7 @@ const (
 func NewFile() resource.Resource { return &fileResource{} }
 
 type fileResource struct {
-	data *engine.ProviderData
+	data *ProviderData
 }
 
 type fileModel struct {
@@ -155,17 +154,17 @@ func (r *fileResource) Configure(_ context.Context, req resource.ConfigureReques
 	if req.ProviderData == nil {
 		return
 	}
-	data, ok := req.ProviderData.(*engine.ProviderData)
+	data, ok := req.ProviderData.(*ProviderData)
 	if !ok {
-		resp.Diagnostics.AddError("Unexpected provider data", fmt.Sprintf("expected *engine.ProviderData, got %T", req.ProviderData))
+		resp.Diagnostics.AddError("Unexpected provider data", fmt.Sprintf("expected *ProviderData, got %T", req.ProviderData))
 		return
 	}
 	r.data = data
 }
 
 // files returns the client, which must be able to transfer file contents.
-func (r *fileResource) files() (engine.FileClient, error) {
-	fc, ok := r.data.Client.(engine.FileClient)
+func (r *fileResource) files() (FileClient, error) {
+	fc, ok := r.data.Client.(FileClient)
 	if !ok {
 		return nil, fmt.Errorf("the configured client cannot transfer files")
 	}

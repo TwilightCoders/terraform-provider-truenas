@@ -3,8 +3,8 @@ package provider
 import (
 	"errors"
 
-	"github.com/TwilightCoders/terraform-provider-truenas/internal/engine"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware"
+	"github.com/TwilightCoders/terraform-provider-truenas/internal/resources"
 )
 
 // engineClient adapts the middleware client to what the engine asks of a transport.
@@ -14,7 +14,7 @@ import (
 // neither the engine nor the middleware package depends on the other.
 type engineClient struct{ *middleware.Client }
 
-var _ engine.FileClient = engineClient{}
+var _ resources.FileClient = engineClient{}
 
 // IsNotFound reports whether err means the object does not exist.
 func (c engineClient) IsNotFound(err error) bool { return middleware.IsNotFound(err) }
@@ -27,14 +27,14 @@ func (c engineClient) IsRetryable(err error) bool {
 }
 
 // ValidationFields returns the per-attribute validation failures err carries, if any.
-func (c engineClient) ValidationFields(err error) []engine.FieldError {
+func (c engineClient) ValidationFields(err error) []resources.FieldError {
 	var e *middleware.Error
 	if !errors.As(err, &e) || len(e.Fields) == 0 {
 		return nil
 	}
-	out := make([]engine.FieldError, 0, len(e.Fields))
+	out := make([]resources.FieldError, 0, len(e.Fields))
 	for _, f := range e.Fields {
-		out = append(out, engine.FieldError{Attribute: f.Attribute, Message: f.Message})
+		out = append(out, resources.FieldError{Attribute: f.Attribute, Message: f.Message})
 	}
 	return out
 }

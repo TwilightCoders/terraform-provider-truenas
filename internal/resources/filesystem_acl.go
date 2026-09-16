@@ -20,7 +20,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
-	"github.com/TwilightCoders/terraform-provider-truenas/internal/engine"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware"
 )
 
@@ -53,7 +52,7 @@ var (
 func NewFilesystemACL() resource.Resource { return &filesystemACL{} }
 
 type filesystemACL struct {
-	data *engine.ProviderData
+	data *ProviderData
 }
 
 type aclModel struct {
@@ -159,9 +158,9 @@ func (r *filesystemACL) Configure(_ context.Context, req resource.ConfigureReque
 	if req.ProviderData == nil {
 		return
 	}
-	data, ok := req.ProviderData.(*engine.ProviderData)
+	data, ok := req.ProviderData.(*ProviderData)
 	if !ok {
-		resp.Diagnostics.AddError("Unexpected provider data", fmt.Sprintf("expected *engine.ProviderData, got %T", req.ProviderData))
+		resp.Diagnostics.AddError("Unexpected provider data", fmt.Sprintf("expected *ProviderData, got %T", req.ProviderData))
 		return
 	}
 	r.data = data

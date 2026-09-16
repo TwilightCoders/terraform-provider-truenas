@@ -16,9 +16,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	"github.com/TwilightCoders/terraform-provider-truenas/api"
-	"github.com/TwilightCoders/terraform-provider-truenas/internal/apischema"
-	"github.com/TwilightCoders/terraform-provider-truenas/internal/engine"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/functions"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/resources"
@@ -44,13 +41,12 @@ var (
 // Provider is the TrueNAS provider.
 type Provider struct {
 	version string
-	engine  *engine.Engine
 }
 
 // New returns a constructor for the provider at the given version.
 func New(version string) func() provider.Provider {
 	return func() provider.Provider {
-		return &Provider{version: version, engine: engine.New(apischema.MustLoad(api.Latest), resources.Dialect)}
+		return &Provider{version: version}
 	}
 }
 
@@ -173,7 +169,7 @@ func (p *Provider) Configure(ctx context.Context, req provider.ConfigureRequest,
 
 	mwCfg := middleware.Config{
 		Host:       host,
-		APIVersion: p.engine.Snapshot().Version,
+		APIVersion: resources.APIVersion,
 		Username:   username,
 		APIKey:     apiKey,
 		Logger:     tflogAdapter{},
@@ -197,7 +193,7 @@ func (p *Provider) Configure(ctx context.Context, req provider.ConfigureRequest,
 	}
 	tflog.Info(ctx, "connected to TrueNAS", map[string]any{"host": host, "api_version": client.APIVersion()})
 
-	data := &engine.ProviderData{Client: engineClient{client}, ReadOnly: cfg.ReadOnly.ValueBool()}
+	data := &resources.ProviderData{Client: engineClient{client}, ReadOnly: cfg.ReadOnly.ValueBool()}
 	resp.ResourceData = data
 	resp.DataSourceData = data
 	resp.ListResourceData = data
@@ -205,19 +201,13 @@ func (p *Provider) Configure(ctx context.Context, req provider.ConfigureRequest,
 }
 
 func (p *Provider) Resources(_ context.Context) []func() resource.Resource {
-	out := make([]func() resource.Resource, 0, len(resources.All)+len(resources.Custom))
-	for _, spec := range resources.All {
-		out = append(out, p.engine.Resource(spec))
-	}
+	out := make([]func() resource.Resource, 0, len(resources.Resources)+len(resources.Custom))
+	out = append(out, resources.Resources...)
 	return append(out, resources.Custom...)
 }
 
 func (p *Provider) Actions(_ context.Context) []func() action.Action {
-	out := make([]func() action.Action, 0, len(resources.Actions))
-	for _, spec := range resources.Actions {
-		out = append(out, p.engine.Action(spec))
-	}
-	return out
+	return resources.Actions
 }
 
 func (p *Provider) Functions(_ context.Context) []func() function.Function {
@@ -225,21 +215,11 @@ func (p *Provider) Functions(_ context.Context) []func() function.Function {
 }
 
 func (p *Provider) ListResources(_ context.Context) []func() list.ListResource {
-	var out []func() list.ListResource
-	for _, spec := range resources.All {
-		if p.engine.Listable(spec) {
-			out = append(out, p.engine.ListResource(spec))
-		}
-	}
-	return out
+	return resources.ListResources
 }
 
 func (p *Provider) DataSources(_ context.Context) []func() datasource.DataSource {
-	out := make([]func() datasource.DataSource, 0, len(resources.All))
-	for _, spec := range resources.All {
-		out = append(out, p.engine.DataSource(spec))
-	}
-	return out
+	return resources.DataSources
 }
 
 func stringOrEnv(v types.String, env string) string {

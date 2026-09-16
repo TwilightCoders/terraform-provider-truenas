@@ -28,7 +28,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"gopkg.in/yaml.v3"
 
-	"github.com/TwilightCoders/terraform-provider-truenas/internal/engine"
 	"github.com/TwilightCoders/terraform-provider-truenas/internal/middleware"
 )
 
@@ -45,7 +44,7 @@ var appNamePattern = regexp.MustCompile(`^[a-z]([-a-z0-9]*[a-z0-9])?$`)
 func NewApp() resource.Resource { return &app{} }
 
 type app struct {
-	data *engine.ProviderData
+	data *ProviderData
 }
 
 type appModel struct {
@@ -144,9 +143,9 @@ func (r *app) Configure(_ context.Context, req resource.ConfigureRequest, resp *
 	if req.ProviderData == nil {
 		return
 	}
-	data, ok := req.ProviderData.(*engine.ProviderData)
+	data, ok := req.ProviderData.(*ProviderData)
 	if !ok {
-		resp.Diagnostics.AddError("Unexpected provider data", fmt.Sprintf("expected *engine.ProviderData, got %T", req.ProviderData))
+		resp.Diagnostics.AddError("Unexpected provider data", fmt.Sprintf("expected *ProviderData, got %T", req.ProviderData))
 		return
 	}
 	r.data = data
