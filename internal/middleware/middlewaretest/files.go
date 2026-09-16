@@ -48,6 +48,13 @@ func (f *Files) Put(path string, content []byte) {
 	f.content[path] = append([]byte(nil), content...)
 }
 
+// Delete removes a file, simulating one removed outside Terraform.
+func (f *Files) Delete(path string) {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	delete(f.content, path)
+}
+
 // Get returns a file's contents and whether it exists.
 func (f *Files) Get(path string) ([]byte, bool) {
 	f.mu.Lock()

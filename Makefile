@@ -50,8 +50,10 @@ testacc: ## Run acceptance tests against TRUENAS_HOST (RUN=regex TIMEOUT=30m)
 	TF_ACC=1 go test ./... -run '$(RUN)' -v -timeout '$(TIMEOUT)'
 
 .PHONY: coverage
-coverage: ## Write coverage.out and coverage.html
-	go test -race -coverpkg=./... -coverprofile=coverage.out ./...
+coverage: ## Write coverage.out and coverage.html, counting coverage wherever it happens
+	# -coverpkg matters here: the generated resources are exercised by the provider tests, so a
+	# per-package figure reports them as untested and invites the wrong fix.
+	go test -race -count=1 -coverpkg=./... -coverprofile=coverage.out -timeout 30m ./...
 	go tool cover -func=coverage.out | tail -1
 	go tool cover -html=coverage.out -o coverage.html
 
