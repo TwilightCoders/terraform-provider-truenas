@@ -27,10 +27,10 @@ var modelSnapshotTask = &model{
 	namespace:    "pool.snapshottask",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	getMethod:    "pool.snapshottask.get_instance",
-	deleteMethod: "pool.snapshottask.delete",
 	createMethod: "pool.snapshottask.create",
 	updateMethod: "pool.snapshottask.update",
+	getMethod:    "pool.snapshottask.get_instance",
+	deleteMethod: "pool.snapshottask.delete",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

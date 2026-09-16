@@ -21,10 +21,10 @@ var modelISCSIPortal = &model{
 	namespace:    "iscsi.portal",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	updateMethod: "iscsi.portal.update",
-	getMethod:    "iscsi.portal.get_instance",
 	deleteMethod: "iscsi.portal.delete",
 	createMethod: "iscsi.portal.create",
+	updateMethod: "iscsi.portal.update",
+	getMethod:    "iscsi.portal.get_instance",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

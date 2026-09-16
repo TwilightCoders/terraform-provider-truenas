@@ -21,10 +21,10 @@ var modelStaticRoute = &model{
 	namespace:    "staticroute",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	deleteMethod: "staticroute.delete",
 	createMethod: "staticroute.create",
 	updateMethod: "staticroute.update",
 	getMethod:    "staticroute.get_instance",
-	deleteMethod: "staticroute.delete",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

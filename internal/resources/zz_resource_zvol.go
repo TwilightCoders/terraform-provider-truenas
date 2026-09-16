@@ -24,10 +24,10 @@ var modelZvol = &model{
 	idKind:        kindString,
 	discriminator: "type",
 	variant:       "VOLUME",
-	deleteMethod:  "pool.dataset.delete",
-	createMethod:  "pool.dataset.create",
 	updateMethod:  "pool.dataset.update",
 	getMethod:     "pool.dataset.get_instance",
+	deleteMethod:  "pool.dataset.delete",
+	createMethod:  "pool.dataset.create",
 	listFilters:   [][]interface{}(nil),
 	listOptions:   map[string]interface{}{"extra": map[string]interface{}{"flat": true}},
 	attrs: []*node{

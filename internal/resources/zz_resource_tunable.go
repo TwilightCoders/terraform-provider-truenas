@@ -23,10 +23,10 @@ var modelTunable = &model{
 	namespace:    "tunable",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	createMethod: "tunable.create",
 	updateMethod: "tunable.update",
 	getMethod:    "tunable.get_instance",
 	deleteMethod: "tunable.delete",
-	createMethod: "tunable.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

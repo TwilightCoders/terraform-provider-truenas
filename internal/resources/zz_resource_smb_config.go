@@ -21,8 +21,8 @@ var modelSMBConfig = &model{
 	primaryKey:   "id",
 	idKind:       kindInt,
 	singleton:    true,
-	getMethod:    "smb.config",
 	updateMethod: "smb.update",
+	getMethod:    "smb.config",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

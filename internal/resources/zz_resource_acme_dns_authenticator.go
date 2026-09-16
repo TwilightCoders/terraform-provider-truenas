@@ -23,10 +23,10 @@ var modelAcmeDnsAuthenticator = &model{
 	namespace:    "acme.dns.authenticator",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	getMethod:    "acme.dns.authenticator.get_instance",
-	deleteMethod: "acme.dns.authenticator.delete",
 	createMethod: "acme.dns.authenticator.create",
 	updateMethod: "acme.dns.authenticator.update",
+	getMethod:    "acme.dns.authenticator.get_instance",
+	deleteMethod: "acme.dns.authenticator.delete",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

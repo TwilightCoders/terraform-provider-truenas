@@ -20,10 +20,10 @@ var modelISCSIInitiator = &model{
 	namespace:    "iscsi.initiator",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	getMethod:    "iscsi.initiator.get_instance",
-	deleteMethod: "iscsi.initiator.delete",
 	createMethod: "iscsi.initiator.create",
 	updateMethod: "iscsi.initiator.update",
+	getMethod:    "iscsi.initiator.get_instance",
+	deleteMethod: "iscsi.initiator.delete",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

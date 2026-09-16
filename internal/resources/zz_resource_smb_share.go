@@ -25,10 +25,10 @@ var modelSMBShare = &model{
 	namespace:    "sharing.smb",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	deleteMethod: "sharing.smb.delete",
 	createMethod: "sharing.smb.create",
 	updateMethod: "sharing.smb.update",
 	getMethod:    "sharing.smb.get_instance",
+	deleteMethod: "sharing.smb.delete",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
