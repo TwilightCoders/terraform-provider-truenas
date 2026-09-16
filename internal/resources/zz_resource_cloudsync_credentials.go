@@ -24,10 +24,10 @@ var modelCloudsyncCredentials = &model{
 	namespace:    "cloudsync.credentials",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	updateMethod: "cloudsync.credentials.update",
 	getMethod:    "cloudsync.credentials.get_instance",
 	deleteMethod: "cloudsync.credentials.delete",
 	createMethod: "cloudsync.credentials.create",
+	updateMethod: "cloudsync.credentials.update",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -165,7 +165,7 @@ var modelCloudsyncCredentials = &model{
 							name: "port", api: "port", path: "provider.port",
 							kind: kindInt, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: "21",
+							hasDefault: true, def: 21,
 							description: "FTP server port number. Defaults to `21`.",
 						},
 						{
@@ -428,7 +428,7 @@ var modelCloudsyncCredentials = &model{
 							name: "max_upload_parts", api: "max_upload_parts", path: "provider.max_upload_parts",
 							kind: kindInt, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: "10000",
+							hasDefault: true, def: 10000,
 							description: "Maximum number of parts for multipart uploads. Defaults to `10000`.",
 						},
 					},
@@ -449,7 +449,7 @@ var modelCloudsyncCredentials = &model{
 							name: "port", api: "port", path: "provider.port",
 							kind: kindInt, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: "22",
+							hasDefault: true, def: 22,
 							description: "SFTP server port number. Defaults to `22`.",
 						},
 						{

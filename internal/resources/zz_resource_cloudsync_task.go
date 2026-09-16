@@ -122,7 +122,7 @@ var modelCloudsyncTask = &model{
 			name: "schedule", api: "schedule", path: "schedule",
 			kind: kindObject, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: map[string]interface{}{"dom": "*", "dow": "*", "hour": "*", "minute": "00", "month": "*"},
+			hasDefault: true, def: map[string]any{"dom": "*", "dow": "*", "hour": "*", "minute": "00", "month": "*"},
 			description: "Cron schedule dictating when the task should run. Defaults to `{\"dom\":\"*\",\"dow\":\"*\",\"hour\":\"*\",\"minute\":\"00\",\"month\":\"*\"}`.",
 			children: []*node{
 				{

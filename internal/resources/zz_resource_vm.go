@@ -26,10 +26,10 @@ var modelVM = &model{
 	namespace:    "vm",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	getMethod:    "vm.get_instance",
-	deleteMethod: "vm.delete",
 	createMethod: "vm.create",
 	updateMethod: "vm.update",
+	getMethod:    "vm.get_instance",
+	deleteMethod: "vm.delete",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -74,21 +74,21 @@ var modelVM = &model{
 			name: "vcpus", api: "vcpus", path: "vcpus",
 			kind: kindInt, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: "1",
+			hasDefault: true, def: 1,
 			description: "Number of virtual CPUs allocated to the VM. Defaults to `1`.",
 		},
 		{
 			name: "cores", api: "cores", path: "cores",
 			kind: kindInt, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: "1",
+			hasDefault: true, def: 1,
 			description: "Number of CPU cores per socket. Defaults to `1`.",
 		},
 		{
 			name: "threads", api: "threads", path: "threads",
 			kind: kindInt, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: "1",
+			hasDefault: true, def: 1,
 			description: "Number of threads per CPU core. Defaults to `1`.",
 		},
 		{
@@ -195,7 +195,7 @@ var modelVM = &model{
 			name: "shutdown_timeout", api: "shutdown_timeout", path: "shutdown_timeout",
 			kind: kindInt, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: "90",
+			hasDefault: true, def: 90,
 			description: "Maximum time in seconds to wait for graceful shutdown before forcing power off. Default 90s balances     allowing sufficient time for clean shutdown while avoiding indefinite hangs. Defaults to `90`.",
 		},
 		{

@@ -20,8 +20,8 @@ var modelISCSIGlobalConfig = &model{
 	primaryKey:   "id",
 	idKind:       kindInt,
 	singleton:    true,
-	updateMethod: "iscsi.global.update",
 	getMethod:    "iscsi.global.config",
+	updateMethod: "iscsi.global.update",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

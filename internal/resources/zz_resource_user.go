@@ -24,10 +24,10 @@ var modelUser = &model{
 	namespace:    "user",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	deleteMethod: "user.delete",
 	createMethod: "user.create",
 	updateMethod: "user.update",
 	getMethod:    "user.get_instance",
+	deleteMethod: "user.delete",
 	listFilters:  [][]interface{}{[]interface{}{"builtin", "=", false}},
 	listOptions:  map[string]interface{}(nil),
 	attrs: []*node{

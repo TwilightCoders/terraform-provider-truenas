@@ -24,10 +24,10 @@ var modelInitScript = &model{
 	namespace:    "initshutdownscript",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	deleteMethod: "initshutdownscript.delete",
 	createMethod: "initshutdownscript.create",
 	updateMethod: "initshutdownscript.update",
 	getMethod:    "initshutdownscript.get_instance",
-	deleteMethod: "initshutdownscript.delete",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -74,7 +74,7 @@ var modelInitScript = &model{
 			name: "timeout", api: "timeout", path: "timeout",
 			kind: kindInt, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: "10",
+			hasDefault: true, def: 10,
 			description: "An integer time in seconds that the system should wait for the execution of the script/command.\n\nA hard limit for a timeout is configured by the base OS, so when a script/command is set to execute on SHUTDOWN,     the hard limit configured by the base OS is changed adding the timeout specified by script/command so it can be     ensured that it executes as desired and is not interrupted by the base OS's limit. Defaults to `10`.",
 		},
 		{

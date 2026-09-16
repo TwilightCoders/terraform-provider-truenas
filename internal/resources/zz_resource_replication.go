@@ -25,10 +25,10 @@ var modelReplication = &model{
 	namespace:    "replication",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	updateMethod: "replication.update",
-	getMethod:    "replication.get_instance",
 	deleteMethod: "replication.delete",
 	createMethod: "replication.create",
+	updateMethod: "replication.update",
+	getMethod:    "replication.get_instance",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -125,7 +125,7 @@ var modelReplication = &model{
 			name: "exclude", api: "exclude", path: "exclude",
 			kind: kindList, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: []interface{}{},
+			hasDefault: true, def: []any{},
 			description: "Array of dataset patterns to exclude from replication. Defaults to `[]`.",
 			elem: &node{
 				name: "", api: "", path: "exclude",
@@ -144,7 +144,7 @@ var modelReplication = &model{
 			name: "properties_exclude", api: "properties_exclude", path: "properties_exclude",
 			kind: kindList, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: []interface{}{},
+			hasDefault: true, def: []any{},
 			description: "Array of dataset property names to exclude from replication. Defaults to `[]`.",
 			elem: &node{
 				name: "", api: "", path: "properties_exclude",
@@ -156,7 +156,7 @@ var modelReplication = &model{
 			name: "properties_override", api: "properties_override", path: "properties_override",
 			kind: kindMap, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: map[string]interface{}{},
+			hasDefault: true, def: map[string]any{},
 			description: "Object mapping dataset property names to override values during replication. Defaults to `{}`.",
 			elem: &node{
 				name: "", api: "", path: "properties_override",
@@ -206,7 +206,7 @@ var modelReplication = &model{
 			name: "periodic_snapshot_tasks", api: "periodic_snapshot_tasks", path: "periodic_snapshot_tasks",
 			kind: kindList, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: []interface{}{},
+			hasDefault: true, def: []any{},
 			description: "List of periodic snapshot task IDs that are sources of snapshots for this replication task. Only push     replication tasks can be bound to periodic snapshot tasks. Defaults to `[]`.",
 			ref:         "id",
 			elem: &node{
@@ -220,7 +220,7 @@ var modelReplication = &model{
 			name: "naming_schema", api: "naming_schema", path: "naming_schema",
 			kind: kindList, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: []interface{}{},
+			hasDefault: true, def: []any{},
 			description: "List of naming schemas for pull replication. Defaults to `[]`.",
 			elem: &node{
 				name: "", api: "", path: "naming_schema",
@@ -232,7 +232,7 @@ var modelReplication = &model{
 			name: "also_include_naming_schema", api: "also_include_naming_schema", path: "also_include_naming_schema",
 			kind: kindList, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: []interface{}{},
+			hasDefault: true, def: []any{},
 			description: "List of naming schemas for push replication. Defaults to `[]`.",
 			elem: &node{
 				name: "", api: "", path: "also_include_naming_schema",
@@ -416,7 +416,7 @@ var modelReplication = &model{
 			name: "lifetimes", api: "lifetimes", path: "lifetimes",
 			kind: kindList, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: []interface{}{},
+			hasDefault: true, def: []any{},
 			description: "Array of different retention schedules with their own cron schedules and lifetime settings. Defaults to `[]`.",
 			elem: &node{
 				name: "", api: "", path: "lifetimes",
@@ -513,7 +513,7 @@ var modelReplication = &model{
 			name: "retries", api: "retries", path: "retries",
 			kind: kindInt, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: "5",
+			hasDefault: true, def: 5,
 			description: "Number of retries before considering replication failed. Defaults to `5`.",
 		},
 		{

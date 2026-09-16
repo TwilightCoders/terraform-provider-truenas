@@ -27,10 +27,10 @@ var modelCertificate = &model{
 	namespace:    "certificate",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	createMethod: "certificate.create",
 	updateMethod: "certificate.update",
 	getMethod:    "certificate.get_instance",
 	deleteMethod: "certificate.delete",
+	createMethod: "certificate.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -318,7 +318,7 @@ var modelCertificate = &model{
 			name: "renew_days", api: "renew_days", path: "renew_days",
 			kind: kindInt, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: "10",
+			hasDefault: true, def: 10,
 			description: "Number of days before the certificate expiration date to attempt certificate renewal. If certificate renewal     fails, renewal will be reattempted every day until expiration. Defaults to `10`.",
 		},
 		{

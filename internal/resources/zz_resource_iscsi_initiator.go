@@ -20,10 +20,10 @@ var modelISCSIInitiator = &model{
 	namespace:    "iscsi.initiator",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	deleteMethod: "iscsi.initiator.delete",
 	createMethod: "iscsi.initiator.create",
 	updateMethod: "iscsi.initiator.update",
 	getMethod:    "iscsi.initiator.get_instance",
-	deleteMethod: "iscsi.initiator.delete",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -35,7 +35,7 @@ var modelISCSIInitiator = &model{
 			name: "initiators", api: "initiators", path: "initiators",
 			kind: kindList, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: []interface{}{},
+			hasDefault: true, def: []any{},
 			description: "Array of iSCSI Qualified Names (IQNs) or IP addresses of authorized initiators. Defaults to `[]`.",
 			elem: &node{
 				name: "", api: "", path: "initiators",

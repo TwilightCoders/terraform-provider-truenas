@@ -25,10 +25,10 @@ var modelSMBShare = &model{
 	namespace:    "sharing.smb",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	deleteMethod: "sharing.smb.delete",
 	createMethod: "sharing.smb.create",
 	updateMethod: "sharing.smb.update",
 	getMethod:    "sharing.smb.get_instance",
+	deleteMethod: "sharing.smb.delete",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -94,7 +94,7 @@ var modelSMBShare = &model{
 			name: "audit", api: "audit", path: "audit",
 			kind: kindObject, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: map[string]interface{}{"enable": false, "ignore_list": []interface{}{}, "watch_list": []interface{}{}},
+			hasDefault: true, def: map[string]any{"enable": false, "ignore_list": []any{}, "watch_list": []any{}},
 			description: "Audit configuration for monitoring SMB share access and operations. Defaults to `{\"enable\":false,\"ignore_list\":[],\"watch_list\":[]}`.",
 			children: []*node{
 				{
@@ -108,7 +108,7 @@ var modelSMBShare = &model{
 					name: "watch_list", api: "watch_list", path: "audit.watch_list",
 					kind: kindList, role: roleOptionalComputed,
 					readable: true, updatable: true,
-					hasDefault: true, def: []interface{}{},
+					hasDefault: true, def: []any{},
 					description: "Only audit the listed group accounts. If the list is empty, all groups will be audited.  Defaults to `[]`.",
 					elem: &node{
 						name: "", api: "", path: "audit.watch_list",
@@ -120,7 +120,7 @@ var modelSMBShare = &model{
 					name: "ignore_list", api: "ignore_list", path: "audit.ignore_list",
 					kind: kindList, role: roleOptionalComputed,
 					readable: true, updatable: true,
-					hasDefault: true, def: []interface{}{},
+					hasDefault: true, def: []any{},
 					description: "List of groups that will not be audited.  Defaults to `[]`.",
 					elem: &node{
 						name: "", api: "", path: "audit.ignore_list",
@@ -160,7 +160,7 @@ var modelSMBShare = &model{
 							name: "hostsallow", api: "hostsallow", path: "options.hostsallow",
 							kind: kindList, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: []interface{}{},
+							hasDefault: true, def: []any{},
 							description: "A list of IP addresses or subnets that are allowed to access the SMB share. The EXCEPT keyword     may be used to limit a wildcard list.\n\nNOTE: Hostname lookups are disabled on the SMB server for performance reasons.  Defaults to `[]`.",
 							elem: &node{
 								name: "", api: "", path: "options.hostsallow",
@@ -172,7 +172,7 @@ var modelSMBShare = &model{
 							name: "hostsdeny", api: "hostsdeny", path: "options.hostsdeny",
 							kind: kindList, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: []interface{}{},
+							hasDefault: true, def: []any{},
 							description: "A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.  Defaults to `[]`.",
 							elem: &node{
 								name: "", api: "", path: "options.hostsdeny",
@@ -247,7 +247,7 @@ var modelSMBShare = &model{
 							name: "timemachine_quota", api: "timemachine_quota", path: "options.timemachine_quota",
 							kind: kindInt, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: "0",
+							hasDefault: true, def: 0,
 							description: "If set, it defines the maximum size of a single time machine sparsebundle volume by limiting the     reported disk size to the SMB client. A value of zero means no quota is applied to the share.\n\nNOTE: Modern MacOS versions you set Time Machine quotas client-side. This gives more predictable     server and client behavior. Defaults to `0`.",
 						},
 						{
@@ -289,7 +289,7 @@ var modelSMBShare = &model{
 							name: "hostsallow", api: "hostsallow", path: "options.hostsallow",
 							kind: kindList, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: []interface{}{},
+							hasDefault: true, def: []any{},
 							description: "A list of IP addresses or subnets that are allowed to access the SMB share. The EXCEPT keyword     may be used to limit a wildcard list.\n\nNOTE: Hostname lookups are disabled on the SMB server for performance reasons.  Defaults to `[]`.",
 							elem: &node{
 								name: "", api: "", path: "options.hostsallow",
@@ -301,7 +301,7 @@ var modelSMBShare = &model{
 							name: "hostsdeny", api: "hostsdeny", path: "options.hostsdeny",
 							kind: kindList, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: []interface{}{},
+							hasDefault: true, def: []any{},
 							description: "A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.  Defaults to `[]`.",
 							elem: &node{
 								name: "", api: "", path: "options.hostsdeny",
@@ -321,7 +321,7 @@ var modelSMBShare = &model{
 							name: "timemachine_quota", api: "timemachine_quota", path: "options.timemachine_quota",
 							kind: kindInt, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: "0",
+							hasDefault: true, def: 0,
 							description: "If set, it defines the maximum size in bytes of a single time machine sparsebundle volume by limiting the     reported disk size to the SMB client. A value of zero means no quota is set.\n\nNOTE: Modern MacOS versions you set Time Machine quotas client-side. This gives more predictable     server and client behavior. Defaults to `0`.",
 						},
 						{
@@ -354,7 +354,7 @@ var modelSMBShare = &model{
 							name: "hostsallow", api: "hostsallow", path: "options.hostsallow",
 							kind: kindList, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: []interface{}{},
+							hasDefault: true, def: []any{},
 							description: "A list of IP addresses or subnets that are allowed to access the SMB share. The EXCEPT keyword     may be used to limit a wildcard list.\n\nNOTE: Hostname lookups are disabled on the SMB server for performance reasons.  Defaults to `[]`.",
 							elem: &node{
 								name: "", api: "", path: "options.hostsallow",
@@ -366,7 +366,7 @@ var modelSMBShare = &model{
 							name: "hostsdeny", api: "hostsdeny", path: "options.hostsdeny",
 							kind: kindList, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: []interface{}{},
+							hasDefault: true, def: []any{},
 							description: "A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.  Defaults to `[]`.",
 							elem: &node{
 								name: "", api: "", path: "options.hostsdeny",
@@ -393,7 +393,7 @@ var modelSMBShare = &model{
 							name: "hostsallow", api: "hostsallow", path: "options.hostsallow",
 							kind: kindList, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: []interface{}{},
+							hasDefault: true, def: []any{},
 							description: "A list of IP addresses or subnets that are allowed to access the SMB share. The EXCEPT keyword     may be used to limit a wildcard list.\n\nNOTE: Hostname lookups are disabled on the SMB server for performance reasons.  Defaults to `[]`.",
 							elem: &node{
 								name: "", api: "", path: "options.hostsallow",
@@ -405,7 +405,7 @@ var modelSMBShare = &model{
 							name: "hostsdeny", api: "hostsdeny", path: "options.hostsdeny",
 							kind: kindList, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: []interface{}{},
+							hasDefault: true, def: []any{},
 							description: "A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.  Defaults to `[]`.",
 							elem: &node{
 								name: "", api: "", path: "options.hostsdeny",
@@ -425,7 +425,7 @@ var modelSMBShare = &model{
 							name: "grace_period", api: "grace_period", path: "options.grace_period",
 							kind: kindInt, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: "900",
+							hasDefault: true, def: 900,
 							description: "Time in seconds when write access to the file or directory is allowed.  Defaults to `900`.",
 						},
 						{
@@ -439,7 +439,7 @@ var modelSMBShare = &model{
 							name: "hostsallow", api: "hostsallow", path: "options.hostsallow",
 							kind: kindList, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: []interface{}{},
+							hasDefault: true, def: []any{},
 							description: "A list of IP addresses or subnets that are allowed to access the SMB share. The EXCEPT keyword     may be used to limit a wildcard list.\n\nNOTE: Hostname lookups are disabled on the SMB server for performance reasons.  Defaults to `[]`.",
 							elem: &node{
 								name: "", api: "", path: "options.hostsallow",
@@ -451,7 +451,7 @@ var modelSMBShare = &model{
 							name: "hostsdeny", api: "hostsdeny", path: "options.hostsdeny",
 							kind: kindList, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: []interface{}{},
+							hasDefault: true, def: []any{},
 							description: "A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.  Defaults to `[]`.",
 							elem: &node{
 								name: "", api: "", path: "options.hostsdeny",
@@ -477,7 +477,7 @@ var modelSMBShare = &model{
 							name: "auto_quota", api: "auto_quota", path: "options.auto_quota",
 							kind: kindInt, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: "0",
+							hasDefault: true, def: 0,
 							description: "Set the specified ZFS quota (in gibibytes) on new datasets. If the value is zero, TrueNAS disables     automatic quotas for the share. Defaults to `0`.",
 						},
 						{
@@ -491,7 +491,7 @@ var modelSMBShare = &model{
 							name: "hostsallow", api: "hostsallow", path: "options.hostsallow",
 							kind: kindList, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: []interface{}{},
+							hasDefault: true, def: []any{},
 							description: "A list of IP addresses or subnets that are allowed to access the SMB share. The EXCEPT keyword     may be used to limit a wildcard list.\n\nNOTE: Hostname lookups are disabled on the SMB server for performance reasons.  Defaults to `[]`.",
 							elem: &node{
 								name: "", api: "", path: "options.hostsallow",
@@ -503,7 +503,7 @@ var modelSMBShare = &model{
 							name: "hostsdeny", api: "hostsdeny", path: "options.hostsdeny",
 							kind: kindList, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: []interface{}{},
+							hasDefault: true, def: []any{},
 							description: "A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.  Defaults to `[]`.",
 							elem: &node{
 								name: "", api: "", path: "options.hostsdeny",
@@ -542,7 +542,7 @@ var modelSMBShare = &model{
 							name: "hostsallow", api: "hostsallow", path: "options.hostsallow",
 							kind: kindList, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: []interface{}{},
+							hasDefault: true, def: []any{},
 							description: "A list of IP addresses or subnets that are allowed to access the SMB share. The EXCEPT keyword     may be used to limit a wildcard list.\n\nNOTE: Hostname lookups are disabled on the SMB server for performance reasons.  Defaults to `[]`.",
 							elem: &node{
 								name: "", api: "", path: "options.hostsallow",
@@ -554,7 +554,7 @@ var modelSMBShare = &model{
 							name: "hostsdeny", api: "hostsdeny", path: "options.hostsdeny",
 							kind: kindList, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: []interface{}{},
+							hasDefault: true, def: []any{},
 							description: "A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.  Defaults to `[]`.",
 							elem: &node{
 								name: "", api: "", path: "options.hostsdeny",
@@ -581,7 +581,7 @@ var modelSMBShare = &model{
 							name: "hostsallow", api: "hostsallow", path: "options.hostsallow",
 							kind: kindList, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: []interface{}{},
+							hasDefault: true, def: []any{},
 							description: "A list of IP addresses or subnets that are allowed to access the SMB share. The EXCEPT keyword     may be used to limit a wildcard list.\n\nNOTE: Hostname lookups are disabled on the SMB server for performance reasons.  Defaults to `[]`.",
 							elem: &node{
 								name: "", api: "", path: "options.hostsallow",
@@ -593,7 +593,7 @@ var modelSMBShare = &model{
 							name: "hostsdeny", api: "hostsdeny", path: "options.hostsdeny",
 							kind: kindList, role: roleOptionalComputed,
 							readable:   true,
-							hasDefault: true, def: []interface{}{},
+							hasDefault: true, def: []any{},
 							description: "A list of IP addresses or subnets that are not allowed to access the SMB share. The keyword     `ALL` or the netmask `0.0.0.0/0` may be used to deny all by default.  Defaults to `[]`.",
 							elem: &node{
 								name: "", api: "", path: "options.hostsdeny",

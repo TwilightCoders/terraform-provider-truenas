@@ -22,10 +22,10 @@ var modelGroup = &model{
 	namespace:    "group",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	deleteMethod: "group.delete",
 	createMethod: "group.create",
 	updateMethod: "group.update",
 	getMethod:    "group.get_instance",
-	deleteMethod: "group.delete",
 	listFilters:  [][]interface{}{[]interface{}{"builtin", "=", false}},
 	listOptions:  map[string]interface{}(nil),
 	attrs: []*node{
@@ -51,7 +51,7 @@ var modelGroup = &model{
 			name: "sudo_commands", api: "sudo_commands", path: "sudo_commands",
 			kind: kindList, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: []interface{}{},
+			hasDefault: true, def: []any{},
 			description: "A list of commands that group members may execute with elevated privileges. User is prompted for password     when executing any command from the list.  Defaults to `[]`.",
 			elem: &node{
 				name: "", api: "", path: "sudo_commands",
@@ -63,7 +63,7 @@ var modelGroup = &model{
 			name: "sudo_commands_nopasswd", api: "sudo_commands_nopasswd", path: "sudo_commands_nopasswd",
 			kind: kindList, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: []interface{}{},
+			hasDefault: true, def: []any{},
 			description: "A list of commands that group members may execute with elevated privileges. User is not prompted for password     when executing any command from the list.  Defaults to `[]`.",
 			elem: &node{
 				name: "", api: "", path: "sudo_commands_nopasswd",
@@ -91,7 +91,7 @@ var modelGroup = &model{
 			name: "users", api: "users", path: "users",
 			kind: kindList, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: []interface{}{},
+			hasDefault: true, def: []any{},
 			description: "A list a API user identifiers for local users who are members of this group. These IDs match the `id` field     from `user.query`.\n\nNOTE: This field is empty for groups that come from directory services (`local` is `False`).  Defaults to `[]`.",
 			elem: &node{
 				name: "", api: "", path: "users",

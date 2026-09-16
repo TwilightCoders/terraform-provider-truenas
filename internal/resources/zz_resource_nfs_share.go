@@ -23,10 +23,10 @@ var modelNFSShare = &model{
 	namespace:    "sharing.nfs",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	getMethod:    "sharing.nfs.get_instance",
 	deleteMethod: "sharing.nfs.delete",
 	createMethod: "sharing.nfs.create",
 	updateMethod: "sharing.nfs.update",
-	getMethod:    "sharing.nfs.get_instance",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -44,7 +44,7 @@ var modelNFSShare = &model{
 			name: "aliases", api: "aliases", path: "aliases",
 			kind: kindList, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: []interface{}{},
+			hasDefault: true, def: []any{},
 			description: "IGNORED for now.  Defaults to `[]`.",
 			elem: &node{
 				name: "", api: "", path: "aliases",
@@ -63,7 +63,7 @@ var modelNFSShare = &model{
 			name: "networks", api: "networks", path: "networks",
 			kind: kindList, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: []interface{}{},
+			hasDefault: true, def: []any{},
 			description: "List of authorized networks that are allowed to access the share having format     \"network/mask\" CIDR notation. Each entry must be unique. If empty, all networks are allowed.\nExcessively long lists should be avoided. Defaults to `[]`.",
 			elem: &node{
 				name: "", api: "", path: "networks",
@@ -75,7 +75,7 @@ var modelNFSShare = &model{
 			name: "hosts", api: "hosts", path: "hosts",
 			kind: kindList, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: []interface{}{},
+			hasDefault: true, def: []any{},
 			description: "List of IP's/hostnames which are allowed to access the share. No quotes or spaces are allowed.\nEach entry must be unique. If empty, all IP's/hostnames are allowed.\nExcessively long lists should be avoided. Defaults to `[]`.",
 			elem: &node{
 				name: "", api: "", path: "hosts",
@@ -118,7 +118,7 @@ var modelNFSShare = &model{
 			name: "security", api: "security", path: "security",
 			kind: kindList, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: []interface{}{},
+			hasDefault: true, def: []any{},
 			description: "Specify the security schema.  Defaults to `[]`.",
 			elem: &node{
 				name: "", api: "", path: "security",

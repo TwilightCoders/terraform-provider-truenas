@@ -24,10 +24,10 @@ var modelISCSIExtent = &model{
 	namespace:    "iscsi.extent",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	createMethod: "iscsi.extent.create",
-	updateMethod: "iscsi.extent.update",
 	getMethod:    "iscsi.extent.get_instance",
 	deleteMethod: "iscsi.extent.delete",
+	createMethod: "iscsi.extent.create",
+	updateMethod: "iscsi.extent.update",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -77,7 +77,7 @@ var modelISCSIExtent = &model{
 			name: "blocksize", api: "blocksize", path: "blocksize",
 			kind: kindInt, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: "512",
+			hasDefault: true, def: 512,
 			description: "Block size for the extent in bytes. Defaults to `512`.",
 		},
 		{

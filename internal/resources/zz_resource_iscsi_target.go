@@ -22,10 +22,10 @@ var modelISCSITarget = &model{
 	namespace:    "iscsi.target",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	getMethod:    "iscsi.target.get_instance",
-	deleteMethod: "iscsi.target.delete",
 	createMethod: "iscsi.target.create",
 	updateMethod: "iscsi.target.update",
+	getMethod:    "iscsi.target.get_instance",
+	deleteMethod: "iscsi.target.delete",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -56,7 +56,7 @@ var modelISCSITarget = &model{
 			name: "groups", api: "groups", path: "groups",
 			kind: kindList, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: []interface{}{},
+			hasDefault: true, def: []any{},
 			description: "Array of portal-initiator group associations for this target. Defaults to `[]`.",
 			elem: &node{
 				name: "", api: "", path: "groups",
@@ -94,7 +94,7 @@ var modelISCSITarget = &model{
 			name: "auth_networks", api: "auth_networks", path: "auth_networks",
 			kind: kindList, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: []interface{}{},
+			hasDefault: true, def: []any{},
 			description: "Array of network addresses allowed to access this target. Defaults to `[]`.",
 			elem: &node{
 				name: "", api: "", path: "auth_networks",

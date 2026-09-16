@@ -27,10 +27,10 @@ var modelSnapshotTask = &model{
 	namespace:    "pool.snapshottask",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	createMethod: "pool.snapshottask.create",
 	updateMethod: "pool.snapshottask.update",
 	getMethod:    "pool.snapshottask.get_instance",
 	deleteMethod: "pool.snapshottask.delete",
+	createMethod: "pool.snapshottask.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -55,7 +55,7 @@ var modelSnapshotTask = &model{
 			name: "lifetime_value", api: "lifetime_value", path: "lifetime_value",
 			kind: kindInt, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: "2",
+			hasDefault: true, def: 2,
 			description: "Number of time units to retain snapshots. `lifetime_unit` gives the time unit. Defaults to `2`.",
 		},
 		{
@@ -76,7 +76,7 @@ var modelSnapshotTask = &model{
 			name: "exclude", api: "exclude", path: "exclude",
 			kind: kindList, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: []interface{}{},
+			hasDefault: true, def: []any{},
 			description: "Array of dataset patterns to exclude from recursive snapshots. Defaults to `[]`.",
 			elem: &node{
 				name: "", api: "", path: "exclude",
@@ -102,7 +102,7 @@ var modelSnapshotTask = &model{
 			name: "schedule", api: "schedule", path: "schedule",
 			kind: kindObject, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: map[string]interface{}{"begin": "00:00", "dom": "*", "dow": "*", "end": "23:59", "hour": "*", "minute": "00", "month": "*"},
+			hasDefault: true, def: map[string]any{"begin": "00:00", "dom": "*", "dow": "*", "end": "23:59", "hour": "*", "minute": "00", "month": "*"},
 			description: "Cron schedule for when snapshots should be taken. Defaults to `{\"begin\":\"00:00\",\"dom\":\"*\",\"dow\":\"*\",\"end\":\"23:59\",\"hour\":\"*\",\"minute\":\"00\",\"month\":\"*\"}`.",
 			children: []*node{
 				{

@@ -23,10 +23,10 @@ var modelCronJob = &model{
 	namespace:    "cronjob",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	getMethod:    "cronjob.get_instance",
-	deleteMethod: "cronjob.delete",
 	createMethod: "cronjob.create",
 	updateMethod: "cronjob.update",
+	getMethod:    "cronjob.get_instance",
+	deleteMethod: "cronjob.delete",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -59,7 +59,7 @@ var modelCronJob = &model{
 			name: "schedule", api: "schedule", path: "schedule",
 			kind: kindObject, role: roleOptionalComputed,
 			readable: true, updatable: true,
-			hasDefault: true, def: map[string]interface{}{"dom": "*", "dow": "*", "hour": "*", "minute": "00", "month": "*"},
+			hasDefault: true, def: map[string]any{"dom": "*", "dow": "*", "hour": "*", "minute": "00", "month": "*"},
 			description: "Cron schedule configuration for when the job runs. Defaults to `{\"dom\":\"*\",\"dow\":\"*\",\"hour\":\"*\",\"minute\":\"00\",\"month\":\"*\"}`.",
 			children: []*node{
 				{
