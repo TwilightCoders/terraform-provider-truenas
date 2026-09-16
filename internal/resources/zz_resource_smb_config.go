@@ -160,6 +160,15 @@ var modelSMBConfig = &model{
 			readable: true, updatable: true,
 			description: "Set SMB log levels to debug. Use this setting only when troubleshooting a specific SMB issue. Do not use it     in production environments. ",
 		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
+		},
 	},
 }
 
@@ -268,6 +277,11 @@ func (r *sMBConfigResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 			"debug": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Set SMB log levels to debug. Use this setting only when troubleshooting a specific SMB issue. Do not use it     in production environments. ",
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

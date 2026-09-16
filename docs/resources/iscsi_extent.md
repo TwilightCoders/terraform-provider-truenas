@@ -54,6 +54,7 @@ target. This allows xcopy operations otherwise blocked by access control.
 - `rpm` (String) Reported RPM type for the extent. Defaults to `"SSD"`.
 - `serial` (String) Serial number for the extent or `null` to auto-generate.
 - `type` (String) Type of the extent storage backend. Defaults to `"DISK"`.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 - `xen` (Boolean) Whether to enable Xen compatibility mode. Defaults to `false`.
 
 ### Read-Only

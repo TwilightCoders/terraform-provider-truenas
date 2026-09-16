@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var modelISCSIExtent = &model{
@@ -20,10 +21,10 @@ var modelISCSIExtent = &model{
 	namespace:    "iscsi.extent",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	createMethod: "iscsi.extent.create",
 	updateMethod: "iscsi.extent.update",
 	getMethod:    "iscsi.extent.get_instance",
 	deleteMethod: "iscsi.extent.delete",
-	createMethod: "iscsi.extent.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -46,7 +47,7 @@ var modelISCSIExtent = &model{
 		},
 		{
 			name: "disk", api: "disk", path: "disk",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Disk device to use for the extent or `null` if using a file.",
 		},
@@ -58,7 +59,7 @@ var modelISCSIExtent = &model{
 		},
 		{
 			name: "path", api: "path", path: "path",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "File path for file-based extents or `null` if using a disk.",
 		},
@@ -85,7 +86,7 @@ var modelISCSIExtent = &model{
 		},
 		{
 			name: "avail_threshold", api: "avail_threshold", path: "avail_threshold",
-			kind: kindInt, role: roleOptional,
+			kind: kindInt, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Available space threshold percentage or `null` to disable.",
 		},
@@ -133,7 +134,7 @@ var modelISCSIExtent = &model{
 		},
 		{
 			name: "product_id", api: "product_id", path: "product_id",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Product ID string for the extent or `null` for default.",
 		},
@@ -154,6 +155,15 @@ var modelISCSIExtent = &model{
 			kind: kindBool, role: roleComputed,
 			nullable: true, readable: true,
 			description: "Read-only value indicating whether the iscsi extent is located on a locked dataset.\n\n- `true`: The extent is in a locked dataset.\n- `false`: The extent is not in a locked dataset.\n- `null`: Lock status is not available because path locking information was not requested.",
+		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
 		},
 	},
 }
@@ -195,7 +205,7 @@ func (r *iSCSIExtentResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Validators:          []validator.String{stringvalidator.OneOf("DISK", "FILE")},
 			},
 			"disk": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Disk device to use for the extent or `null` if using a file.",
 			},
 			"serial": schema.StringAttribute{
@@ -203,7 +213,7 @@ func (r *iSCSIExtentResource) Schema(_ context.Context, _ resource.SchemaRequest
 				MarkdownDescription: "Serial number for the extent or `null` to auto-generate.",
 			},
 			"path": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "File path for file-based extents or `null` if using a disk.",
 			},
 			"filesize": schema.StringAttribute{
@@ -220,7 +230,7 @@ func (r *iSCSIExtentResource) Schema(_ context.Context, _ resource.SchemaRequest
 				MarkdownDescription: "Whether to use physical block size reporting. Defaults to `false`.",
 			},
 			"avail_threshold": schema.NumberAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Available space threshold percentage or `null` to disable.",
 				Validators:          []validator.Number{numberIsInteger{}, numberAtLeast{min: 1}, numberAtMost{max: 99}},
 			},
@@ -250,7 +260,7 @@ func (r *iSCSIExtentResource) Schema(_ context.Context, _ resource.SchemaRequest
 				MarkdownDescription: "Whether the extent is enabled and available for use. Defaults to `true`.",
 			},
 			"product_id": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Product ID string for the extent or `null` for default.",
 				Validators:          []validator.String{stringvalidator.LengthAtLeast(1), stringvalidator.LengthAtMost(16)},
 			},
@@ -266,6 +276,11 @@ func (r *iSCSIExtentResource) Schema(_ context.Context, _ resource.SchemaRequest
 			"locked": schema.BoolAttribute{
 				Computed:            true,
 				MarkdownDescription: "Read-only value indicating whether the iscsi extent is located on a locked dataset.\n\n- `true`: The extent is in a locked dataset.\n- `false`: The extent is not in a locked dataset.\n- `null`: Lock status is not available because path locking information was not requested.",
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

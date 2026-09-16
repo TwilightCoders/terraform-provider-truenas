@@ -3,9 +3,12 @@
 package resources
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-go/tftypes"
 )
 
 // idAttr is the Terraform attribute carrying the resource identity.
@@ -67,4 +70,15 @@ func appendDesc(desc, extra string) string {
 		return extra
 	}
 	return desc + " " + extra
+}
+
+// nilOf is a typed null for an attribute, which is what setting a planned value to "nothing"
+// requires: the framework needs the type as well as the absence.
+func nilOf(a *node) attr.Value {
+	t := attrType(a)
+	v, err := t.ValueFromTerraform(context.Background(), tftypes.NewValue(t.TerraformType(context.Background()), nil))
+	if err != nil {
+		return nil
+	}
+	return v
 }

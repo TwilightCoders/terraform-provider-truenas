@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var modelUPSConfig = &model{
@@ -154,6 +155,15 @@ var modelUPSConfig = &model{
 			kind: kindInt, role: roleOptional,
 			description: "Change this value to send `monpwd` again. Terraform never stores `monpwd`.",
 		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
+		},
 	},
 }
 
@@ -271,6 +281,11 @@ func (r *uPSConfigResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 				Optional:            true,
 				MarkdownDescription: "Change this value to send `monpwd` again. Terraform never stores `monpwd`.",
 				Validators:          []validator.Number{numberIsInteger{}},
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

@@ -36,7 +36,7 @@ TrueNAS generates the private key for the CSR and ACME types and reports it on r
 - `country` (String) Country name for certificate subject or `null`. Changing this forces a new resource.
 - `csr` (String) PEM-encoded certificate signing request to import or `null`. Changing this forces a new resource.
 - `csr_id` (Number) CSR to be used for ACME certificate creation. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS.
-- `digest_algorithm` (String) Hash algorithm for certificate signing. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS.
+- `digest_algorithm` (String) Hash algorithm for certificate signing. Changing this forces a new resource.
 - `dns_mapping` (Map of Number) A mapping of domain to ACME DNS Authenticator ID for each domain listed in SAN or common name of the CSR. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS.
 - `ec_curve` (String) Elliptic curve to use for EC keys. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS.
 - `email` (String) Email address for certificate subject or `null`. Changing this forces a new resource.
@@ -51,6 +51,7 @@ TrueNAS generates the private key for the CSR and ACME types and reports it on r
 - `san` (List of String) Subject alternative names. Write them bare (`example.com`) or DNS-prefixed (`DNS:example.com`); both are accepted and mean the same name. Prefix an address with `IP:` to request an IP name. TrueNAS treats every other prefix, including `email:` and `URI:`, as part of a DNS name rather than as that name type. Changing this forces a new resource.
 - `state` (String) State or province name for certificate subject or `null`. Changing this forces a new resource.
 - `tos` (Boolean) Set this when creating an ACME certificate to accept terms of service of the ACME service. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 
 ### Read-Only
 

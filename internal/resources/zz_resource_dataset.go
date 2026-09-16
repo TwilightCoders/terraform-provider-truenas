@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var modelDataset = &model{
@@ -421,6 +422,15 @@ var modelDataset = &model{
 			kind: kindInt, role: roleOptional,
 			description: "Change this value to send `encryption_options` again. Terraform never stores `encryption_options`.",
 		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
+		},
 	},
 }
 
@@ -701,6 +711,11 @@ func (r *datasetResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				Optional:            true,
 				MarkdownDescription: "Change this value to send `encryption_options` again. Terraform never stores `encryption_options`.",
 				Validators:          []validator.Number{numberIsInteger{}},
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

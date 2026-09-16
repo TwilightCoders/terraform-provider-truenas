@@ -70,6 +70,15 @@ var modelISCSIGlobalConfig = &model{
 			readable: true, updatable: true,
 			description: "Whether iSCSI Extensions for RDMA (iSER) are enabled. Enabling is limited to TrueNAS Enterprise-licensed     systems and requires the system and network environment have Remote Direct Memory Access (RDMA)-capable hardware.",
 		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
+		},
 	},
 }
 
@@ -120,6 +129,11 @@ func (r *iSCSIGlobalConfigResource) Schema(_ context.Context, _ resource.SchemaR
 			"iser": schema.BoolAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Whether iSCSI Extensions for RDMA (iSER) are enabled. Enabling is limited to TrueNAS Enterprise-licensed     systems and requires the system and network environment have Remote Direct Memory Access (RDMA)-capable hardware.",
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

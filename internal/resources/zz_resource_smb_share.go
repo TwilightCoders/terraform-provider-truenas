@@ -152,7 +152,7 @@ var modelSMBShare = &model{
 						},
 						{
 							name: "path_suffix", api: "path_suffix", path: "options.path_suffix",
-							kind: kindString, role: roleOptional,
+							kind: kindString, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "Path suffix template for dynamic path generation. Uses SMB variable substitution patterns like `%D` (domain)     and `%U` (username).",
 						},
@@ -259,7 +259,7 @@ var modelSMBShare = &model{
 						},
 						{
 							name: "vuid", api: "vuid", path: "options.vuid",
-							kind: kindString, role: roleOptional,
+							kind: kindString, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "This value is the Time Machine volume UUID for the SMB share. The TrueNAS server uses this value in the mDNS     advertisement for the Time Machine share. MacOS clients may use it to identify the volume. When you create or     update a share, setting this value to null makes the TrueNAS server generate a new UUID for the share. ",
 						},
@@ -340,13 +340,13 @@ var modelSMBShare = &model{
 						},
 						{
 							name: "dataset_naming_schema", api: "dataset_naming_schema", path: "options.dataset_naming_schema",
-							kind: kindString, role: roleOptional,
+							kind: kindString, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "The naming schema to use when `auto_dataset_creation` is specified. If you do not set a schema,     the server uses `%U` (username) if it is not joined to Active Directory. If the server is joined to     Active Directory it uses `%D/%U` (domain/username). See the `VARIABLE SUBSTITUTIONS` section in the smb.conf     manpage for valid strings.\n\nWARNING: ZFS dataset naming rules are more restrictive than normal path rules. For example, if `%u` is specified     then the character `\\` may be inserted in the username (which is not supported in ZFS).",
 						},
 						{
 							name: "vuid", api: "vuid", path: "options.vuid",
-							kind: kindString, role: roleOptional,
+							kind: kindString, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "This value is the Time Machine volume UUID for the SMB share. The TrueNAS server uses this value in the mDNS     advertisement for the Time Machine share. MacOS clients may use it to identify the volume. When you create or     update a share, setting this value to null makes the TrueNAS server generate a new UUID for the share. ",
 						},
@@ -469,7 +469,7 @@ var modelSMBShare = &model{
 					children: []*node{
 						{
 							name: "dataset_naming_schema", api: "dataset_naming_schema", path: "options.dataset_naming_schema",
-							kind: kindString, role: roleOptional,
+							kind: kindString, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "The naming schema to use. If you do not set a schema, the server uses `%U` (username) if it is not joined to     Active Directory. If the server is joined to Active Directory it uses `%D/%U` (domain/username).\n\nWARNING: ZFS dataset naming rules are more restrictive than normal path rules.",
 						},
@@ -616,6 +616,15 @@ Returns:
     - False: The share is not in a locked dataset.
     - None: Lock status is not available because path locking information was not requested.`,
 		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
+		},
 	},
 }
 
@@ -712,7 +721,7 @@ func (r *sMBShareResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 								Default:             booldefault.StaticBool(false),
 							},
 							"path_suffix": schema.StringAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "Path suffix template for dynamic path generation. Uses SMB variable substitution patterns like `%D` (domain)     and `%U` (username).",
 								Validators:          []validator.String{stringvalidator.LengthAtLeast(1)},
 							},
@@ -783,7 +792,7 @@ func (r *sMBShareResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 								Default:             booldefault.StaticBool(false),
 							},
 							"vuid": schema.StringAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "This value is the Time Machine volume UUID for the SMB share. The TrueNAS server uses this value in the mDNS     advertisement for the Time Machine share. MacOS clients may use it to identify the volume. When you create or     update a share, setting this value to null makes the TrueNAS server generate a new UUID for the share. ",
 								Validators:          []validator.String{stringvalidator.LengthAtLeast(1)},
 							},
@@ -836,11 +845,11 @@ func (r *sMBShareResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 								Default:             booldefault.StaticBool(false),
 							},
 							"dataset_naming_schema": schema.StringAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "The naming schema to use when `auto_dataset_creation` is specified. If you do not set a schema,     the server uses `%U` (username) if it is not joined to Active Directory. If the server is joined to     Active Directory it uses `%D/%U` (domain/username). See the `VARIABLE SUBSTITUTIONS` section in the smb.conf     manpage for valid strings.\n\nWARNING: ZFS dataset naming rules are more restrictive than normal path rules. For example, if `%u` is specified     then the character `\\` may be inserted in the username (which is not supported in ZFS).",
 							},
 							"vuid": schema.StringAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "This value is the Time Machine volume UUID for the SMB share. The TrueNAS server uses this value in the mDNS     advertisement for the Time Machine share. MacOS clients may use it to identify the volume. When you create or     update a share, setting this value to null makes the TrueNAS server generate a new UUID for the share. ",
 								Validators:          []validator.String{stringvalidator.LengthAtLeast(1)},
 							},
@@ -909,7 +918,7 @@ func (r *sMBShareResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 						MarkdownDescription: "Settings when `purpose` is `PRIVATE_DATASETS_SHARE`.",
 						Attributes: map[string]schema.Attribute{
 							"dataset_naming_schema": schema.StringAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "The naming schema to use. If you do not set a schema, the server uses `%U` (username) if it is not joined to     Active Directory. If the server is joined to Active Directory it uses `%D/%U` (domain/username).\n\nWARNING: ZFS dataset naming rules are more restrictive than normal path rules.",
 							},
 							"auto_quota": schema.NumberAttribute{
@@ -993,6 +1002,11 @@ Returns:
     - True: The share is in a locked dataset.
     - False: The share is not in a locked dataset.
     - None: Lock status is not available because path locking information was not requested.`,
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

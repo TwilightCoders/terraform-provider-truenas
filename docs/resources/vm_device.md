@@ -24,6 +24,7 @@ Manages a virtual machine device. Set exactly one device type under `attributes`
 
 - `attributes_wo_version` (Number) Change this value to send `attributes` again. Terraform never stores `attributes`.
 - `order` (Number) Boot order priority for this device. `null` for automatic assignment.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 
 ### Read-Only
 

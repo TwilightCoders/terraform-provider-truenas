@@ -31,6 +31,7 @@ This resource manages existing settings: creating it applies the configured attr
 - `port` (Number) TCP port number for the SMTP server connection.
 - `security` (String) Type of encryption.
 - `smtp` (Boolean) Whether SMTP authentication is enabled and `user`, `pass` are required.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 - `user` (String) SMTP username.
 
 ### Read-Only

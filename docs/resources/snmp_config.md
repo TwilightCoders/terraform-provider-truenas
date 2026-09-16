@@ -50,6 +50,7 @@ This resource manages existing settings: creating it applies the configured attr
 - `loglevel` (Number) Logging level for SNMP daemon (0=emergency to 7=debug).
 - `options` (String) Additional SNMP daemon configuration options.     Manual settings should be used with caution as they may render the SNMP service non-functional.
 - `traps` (Boolean) Whether SNMP traps are enabled.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 - `v3` (Boolean) Whether SNMP version 3 is enabled.  Enabling version 3 also requires username, authtype and password.
 - `v3_authtype` (String) Authentication type for SNMP version 3 (empty string means no authentication).
 - `v3_password` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Password for SNMP version 3 authentication.

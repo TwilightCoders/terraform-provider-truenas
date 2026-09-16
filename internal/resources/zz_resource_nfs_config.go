@@ -136,6 +136,15 @@ var modelNFSConfig = &model{
 			description: `Report status of 'servers' field.
 If true, the number of nfsd is managed by the server (status only). `,
 		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
+		},
 	},
 }
 
@@ -230,6 +239,11 @@ func (r *nFSConfigResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 				Computed: true,
 				MarkdownDescription: `Report status of 'servers' field.
 If true, the number of nfsd is managed by the server (status only). `,
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

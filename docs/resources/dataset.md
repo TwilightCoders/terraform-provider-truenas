@@ -54,6 +54,7 @@ There is 1 case where ZFS encryption is not allowed for a dataset:
 - `snapdir` (String) Controls visibility of the `.zfs/snapshot` directory. 'DISABLED' hides snapshots, 'VISIBLE' shows them,     'HIDDEN' makes them accessible but not listed. Defaults to `"INHERIT"`.
 - `special_small_block_size` (String) Size threshold below which blocks are stored on special vdevs.
 - `sync` (String) Synchronous write behavior for the dataset. Defaults to `"INHERIT"`.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 
 ### Read-Only
 

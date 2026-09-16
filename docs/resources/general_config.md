@@ -51,6 +51,7 @@ This resource manages existing settings: creating it applies the configured attr
 - `ui_restart_delay` (Number) Seconds after the update to restart the web UI and apply UI settings. Without it, UI changes take effect at the next UI restart. The restart aborts every HTTP connection, including the provider's own; reads retry across it. TrueNAS does not report this value, so changes made outside Terraform are not detected.
 - `ui_v6address` (List of String) A list of valid IPv6 addresses which the system will listen on.
 - `ui_x_frame_options` (String) X-Frame-Options header policy for web UI security.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 - `usage_collection` (Boolean) Whether usage data collection is enabled. `null` if not set.
 
 ### Read-Only

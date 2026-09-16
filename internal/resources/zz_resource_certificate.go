@@ -140,9 +140,9 @@ var modelCertificate = &model{
 		},
 		{
 			name: "digest_algorithm", api: "digest_algorithm", path: "digest_algorithm",
-			kind: kindString, role: roleOptional,
-			createOnly:  true,
-			description: "Hash algorithm for certificate signing. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS.",
+			kind: kindString, role: roleOptionalComputed,
+			replace: true, stable: true, readable: true,
+			description: "Hash algorithm for certificate signing. Changing this forces a new resource.",
 		},
 		{
 			name: "san", api: "san", path: "san",
@@ -472,6 +472,15 @@ var modelCertificate = &model{
 			kind: kindInt, role: roleOptional,
 			description: "Change this value to send `passphrase` again. Terraform never stores `passphrase`.",
 		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
+		},
 	},
 }
 
@@ -597,9 +606,10 @@ func (r *certificateResource) Schema(_ context.Context, _ resource.SchemaRequest
 				PlanModifiers:       []planmodifier.String{stringplanmodifier.RequiresReplace(), stringplanmodifier.UseStateForUnknown()},
 			},
 			"digest_algorithm": schema.StringAttribute{
-				Optional:            true,
-				MarkdownDescription: "Hash algorithm for certificate signing. Used only when creating the resource; changing it forces a new resource. TrueNAS does not report it, so after an import the first plan records it without changing TrueNAS.",
+				Optional: true, Computed: true,
+				MarkdownDescription: "Hash algorithm for certificate signing. Changing this forces a new resource.",
 				Validators:          []validator.String{stringvalidator.OneOf("SHA224", "SHA256", "SHA384", "SHA512")},
+				PlanModifiers:       []planmodifier.String{stringplanmodifier.RequiresReplace(), stringplanmodifier.UseStateForUnknown()},
 			},
 			"san": schema.ListAttribute{
 				Optional: true, Computed: true,
@@ -839,6 +849,11 @@ func (r *certificateResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Optional:            true,
 				MarkdownDescription: "Change this value to send `passphrase` again. Terraform never stores `passphrase`.",
 				Validators:          []validator.Number{numberIsInteger{}},
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

@@ -24,10 +24,10 @@ var modelCloudsyncCredentials = &model{
 	namespace:    "cloudsync.credentials",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	createMethod: "cloudsync.credentials.create",
 	updateMethod: "cloudsync.credentials.update",
 	getMethod:    "cloudsync.credentials.get_instance",
 	deleteMethod: "cloudsync.credentials.delete",
-	createMethod: "cloudsync.credentials.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -466,7 +466,7 @@ var modelCloudsyncCredentials = &model{
 						},
 						{
 							name: "private_key", api: "private_key", path: "provider.private_key",
-							kind: kindInt, role: roleOptional,
+							kind: kindInt, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "SSH private key ID for authentication or `null` for password auth.",
 						},
@@ -1034,7 +1034,7 @@ func (r *cloudsyncCredentialsResource) Schema(_ context.Context, _ resource.Sche
 								MarkdownDescription: "SFTP password for authentication or `null` for key-based auth.",
 							},
 							"private_key": schema.NumberAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "SSH private key ID for authentication or `null` for password auth.",
 								Validators:          []validator.Number{numberIsInteger{}},
 							},

@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var modelFTPConfig = &model{
@@ -263,6 +264,15 @@ var modelFTPConfig = &model{
 			readable: true, updatable: true,
 			description: "Additional ProFTPD configuration directives to include in the server configuration.     Manual directives may render the FTP service non-functional and should be used with caution.",
 		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
+		},
 	},
 }
 
@@ -456,6 +466,11 @@ func (r *fTPConfigResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 			"options": schema.StringAttribute{
 				Optional: true, Computed: true,
 				MarkdownDescription: "Additional ProFTPD configuration directives to include in the server configuration.     Manual directives may render the FTP service non-functional and should be used with caution.",
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

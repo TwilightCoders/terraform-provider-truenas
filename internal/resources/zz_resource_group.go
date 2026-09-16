@@ -21,10 +21,10 @@ var modelGroup = &model{
 	namespace:    "group",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	getMethod:    "group.get_instance",
-	deleteMethod: "group.delete",
 	createMethod: "group.create",
 	updateMethod: "group.update",
+	getMethod:    "group.get_instance",
+	deleteMethod: "group.delete",
 	listFilters:  [][]interface{}{[]interface{}{"builtin", "=", false}},
 	listOptions:  map[string]interface{}(nil),
 	attrs: []*node{
@@ -79,7 +79,7 @@ var modelGroup = &model{
 		},
 		{
 			name: "userns_idmap", api: "userns_idmap", path: "userns_idmap",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true, inherit: true, intOrString: true,
 			description: `Specifies the subgid mapping for this group. If DIRECT then the GID will be     directly mapped to all containers. Alternatively, the target GID may be     explicitly specified. If null, then the GID will not be mapped.
 
@@ -132,6 +132,15 @@ var modelGroup = &model{
 			kind: kindBool, role: roleComputed,
 			readable:    true,
 			description: "This is a read-only field showing if the group entry can be changed. If `True`, the group is immutable and     cannot be changed. If `False`, the group can be changed. ",
+		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
 		},
 	},
 }
@@ -187,7 +196,7 @@ func (r *groupResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 				MarkdownDescription: "If set to `True`, the group can be used for SMB share ACL entries. The group is mapped to an NT group account     on the TrueNAS SMB server and has a `sid` value.  Defaults to `true`.",
 			},
 			"userns_idmap": schema.StringAttribute{
-				Optional: true,
+				Optional: true, Computed: true,
 				MarkdownDescription: `Specifies the subgid mapping for this group. If DIRECT then the GID will be     directly mapped to all containers. Alternatively, the target GID may be     explicitly specified. If null, then the GID will not be mapped.
 
 **NOTE: This field will be ignored for groups that have been assigned TrueNAS roles.**`,
@@ -217,6 +226,11 @@ func (r *groupResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 			"immutable": schema.BoolAttribute{
 				Computed:            true,
 				MarkdownDescription: "This is a read-only field showing if the group entry can be changed. If `True`, the group is immutable and     cannot be changed. If `False`, the group can be changed. ",
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

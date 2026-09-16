@@ -34,6 +34,7 @@ Runs a command or script at `PREINIT`, `POSTINIT` or `SHUTDOWN`. Set `command` w
 - `timeout` (Number) An integer time in seconds that the system should wait for the execution of the script/command.
 
 A hard limit for a timeout is configured by the base OS, so when a script/command is set to execute on SHUTDOWN,     the hard limit configured by the base OS is changed adding the timeout specified by script/command so it can be     ensured that it executes as desired and is not interrupted by the base OS's limit. Defaults to `10`.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 
 ### Read-Only
 

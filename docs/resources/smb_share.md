@@ -67,6 +67,7 @@ WARNING: The TrueNAS server does not check if external paths are reachable.
 - `readonly` (Boolean) If set, SMB clients cannot create or change files and directories in the SMB share.
 
 NOTE: If set, the share path is still writeable by local processes or other file sharing protocols.  Defaults to `false`.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 
 ### Read-Only
 

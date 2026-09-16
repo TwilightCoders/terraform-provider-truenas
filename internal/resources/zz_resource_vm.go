@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var modelVM = &model{
@@ -22,10 +23,10 @@ var modelVM = &model{
 	namespace:    "vm",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	createMethod: "vm.create",
 	updateMethod: "vm.update",
 	getMethod:    "vm.get_instance",
 	deleteMethod: "vm.delete",
+	createMethod: "vm.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -49,7 +50,7 @@ var modelVM = &model{
 		},
 		{
 			name: "cpu_model", api: "cpu_model", path: "cpu_model",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Specific CPU model to emulate. `null` to use hypervisor default.",
 		},
@@ -89,13 +90,13 @@ var modelVM = &model{
 		},
 		{
 			name: "cpuset", api: "cpuset", path: "cpuset",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Set of host CPU cores to pin VM CPUs to. `null` for no pinning.",
 		},
 		{
 			name: "nodeset", api: "nodeset", path: "nodeset",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Set of NUMA nodes to constrain VM memory allocation. `null` for no constraints.",
 		},
@@ -135,7 +136,7 @@ var modelVM = &model{
 		},
 		{
 			name: "min_memory", api: "min_memory", path: "min_memory",
-			kind: kindInt, role: roleOptional,
+			kind: kindInt, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Minimum memory allocation for dynamic memory ballooning in megabytes. Allows VM memory to shrink     during low usage but guarantees this minimum. `null` to disable ballooning.",
 		},
@@ -250,6 +251,15 @@ var modelVM = &model{
 				},
 			},
 		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
+		},
 	},
 }
 
@@ -289,7 +299,7 @@ func (r *vMResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *r
 				Validators:          []validator.String{stringvalidator.OneOf("CUSTOM", "HOST-MODEL", "HOST-PASSTHROUGH")},
 			},
 			"cpu_model": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Specific CPU model to emulate. `null` to use hypervisor default.",
 			},
 			"name": schema.StringAttribute{
@@ -317,11 +327,11 @@ func (r *vMResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *r
 				Validators:          []validator.Number{numberIsInteger{}, numberAtLeast{min: 1}},
 			},
 			"cpuset": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Set of host CPU cores to pin VM CPUs to. `null` for no pinning.",
 			},
 			"nodeset": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Set of NUMA nodes to constrain VM memory allocation. `null` for no constraints.",
 			},
 			"enable_cpu_topology_extension": schema.BoolAttribute{
@@ -346,7 +356,7 @@ func (r *vMResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *r
 				Validators:          []validator.Number{numberIsInteger{}, numberAtLeast{min: 20}},
 			},
 			"min_memory": schema.NumberAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Minimum memory allocation for dynamic memory ballooning in megabytes. Allows VM memory to shrink     during low usage but guarantees this minimum. `null` to disable ballooning.",
 				Validators:          []validator.Number{numberIsInteger{}, numberAtLeast{min: 20}},
 			},
@@ -427,6 +437,11 @@ func (r *vMResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *r
 						Validators:          []validator.String{stringvalidator.LengthAtLeast(1)},
 					},
 				},
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

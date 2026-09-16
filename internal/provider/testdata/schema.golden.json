@@ -81,6 +81,10 @@
         "mode": "computed",
         "type": "tftypes.String"
       },
+      "digest_algorithm": {
+        "mode": "computed",
+        "type": "tftypes.String"
+      },
       "dn": {
         "mode": "computed",
         "type": "tftypes.String"
@@ -3102,7 +3106,7 @@
                 "write_only": true
               },
               "cloudflare_email": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.String"
               }
             },
@@ -3431,7 +3435,7 @@
         "type": "tftypes.String"
       },
       "digest_algorithm": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "dn": {
@@ -3552,6 +3556,10 @@
       "type": {
         "mode": "computed",
         "type": "tftypes.Number"
+      },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
       },
       "until": {
         "mode": "computed",
@@ -3959,7 +3967,7 @@
                 "type": "tftypes.Number"
               },
               "private_key": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.Number"
               },
               "user": {
@@ -4226,8 +4234,12 @@
         "type": "tftypes.String"
       },
       "transfers": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.Number"
+      },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
       }
     },
     "identity": {
@@ -4506,6 +4518,10 @@
       "sync": {
         "mode": "optional+computed",
         "type": "tftypes.String"
+      },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
       },
       "used": {
         "mode": "computed",
@@ -4816,6 +4832,10 @@
       "tls_policy": {
         "mode": "optional+computed",
         "type": "tftypes.String"
+      },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
       }
     },
     "identity": {
@@ -4888,6 +4908,10 @@
         "mode": "optional+computed",
         "type": "tftypes.String"
       },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
+      },
       "usage_collection": {
         "mode": "optional+computed",
         "type": "tftypes.Bool"
@@ -4951,8 +4975,12 @@
         "mode": "optional+computed",
         "type": "tftypes.List[tftypes.String]"
       },
-      "userns_idmap": {
+      "unset": {
         "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "userns_idmap": {
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "users": {
@@ -4993,6 +5021,10 @@
       "type": {
         "mode": "required",
         "type": "tftypes.String"
+      },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
       },
       "when": {
         "mode": "required",
@@ -5053,7 +5085,7 @@
   "truenas_iscsi_extent": {
     "attributes": {
       "avail_threshold": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.Number"
       },
       "blocksize": {
@@ -5065,7 +5097,7 @@
         "type": "tftypes.String"
       },
       "disk": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "enabled": {
@@ -5097,7 +5129,7 @@
         "type": "tftypes.String"
       },
       "path": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "pblocksize": {
@@ -5105,7 +5137,7 @@
         "type": "tftypes.Bool"
       },
       "product_id": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "ro": {
@@ -5123,6 +5155,10 @@
       "type": {
         "mode": "optional+computed",
         "type": "tftypes.String"
+      },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
       },
       "vendor": {
         "mode": "computed",
@@ -5166,6 +5202,10 @@
       "pool_avail_threshold": {
         "mode": "optional+computed",
         "type": "tftypes.Number"
+      },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
       }
     },
     "identity": {
@@ -5227,7 +5267,7 @@
   "truenas_iscsi_target": {
     "attributes": {
       "alias": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "auth_networks": {
@@ -5237,7 +5277,7 @@
       "groups": {
         "attributes": {
           "auth": {
-            "mode": "optional",
+            "mode": "optional+computed",
             "type": "tftypes.Number"
           },
           "authmethod": {
@@ -5245,7 +5285,7 @@
             "type": "tftypes.String"
           },
           "initiator": {
-            "mode": "optional",
+            "mode": "optional+computed",
             "type": "tftypes.Number"
           },
           "portal": {
@@ -5263,11 +5303,11 @@
       "iscsi_parameters": {
         "attributes": {
           "queuedcommands": {
-            "mode": "optional",
+            "mode": "optional+computed",
             "type": "tftypes.Number"
           }
         },
-        "mode": "optional",
+        "mode": "optional+computed",
         "nesting": "SINGLE"
       },
       "mode": {
@@ -5281,6 +5321,10 @@
       "rel_tgt_id": {
         "mode": "computed",
         "type": "tftypes.Number"
+      },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
       }
     },
     "identity": {
@@ -5304,6 +5348,10 @@
       "target": {
         "mode": "required",
         "type": "tftypes.Number"
+      },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
       }
     },
     "identity": {
@@ -5353,6 +5401,10 @@
       "smtp": {
         "mode": "optional+computed",
         "type": "tftypes.Bool"
+      },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
       },
       "user": {
         "mode": "optional+computed",
@@ -5452,6 +5504,10 @@
         },
         "mode": "optional+computed",
         "nesting": "SINGLE"
+      },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
       }
     },
     "identity": {
@@ -5512,6 +5568,10 @@
         "mode": "optional+computed",
         "type": "tftypes.Bool"
       },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
+      },
       "userd_manage_gids": {
         "mode": "optional+computed",
         "type": "tftypes.Bool"
@@ -5564,19 +5624,19 @@
         "type": "tftypes.Bool"
       },
       "mapall_group": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "mapall_user": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "maproot_group": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "maproot_user": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "networks": {
@@ -5593,6 +5653,10 @@
       },
       "security": {
         "mode": "optional+computed",
+        "type": "tftypes.List[tftypes.String]"
+      },
+      "unset": {
+        "mode": "optional",
         "type": "tftypes.List[tftypes.String]"
       }
     },
@@ -5619,7 +5683,7 @@
         "type": "tftypes.Bool"
       },
       "compression": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "direction": {
@@ -5639,7 +5703,7 @@
         "type": "tftypes.Bool"
       },
       "encryption_inherit": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.Bool"
       },
       "encryption_key": {
@@ -5649,11 +5713,11 @@
         "write_only": true
       },
       "encryption_key_format": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "encryption_key_location": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "encryption_key_wo_version": {
@@ -5681,11 +5745,11 @@
         "type": "tftypes.Bool"
       },
       "lifetime_unit": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "lifetime_value": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.Number"
       },
       "lifetimes": {
@@ -5729,7 +5793,7 @@
         "nesting": "LIST"
       },
       "logging_level": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "name": {
@@ -5737,7 +5801,7 @@
         "type": "tftypes.String"
       },
       "name_regex": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "naming_schema": {
@@ -5745,23 +5809,23 @@
         "type": "tftypes.List[tftypes.String]"
       },
       "netcat_active_side": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "netcat_active_side_listen_address": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "netcat_active_side_port_max": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.Number"
       },
       "netcat_active_side_port_min": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.Number"
       },
       "netcat_passive_side_connect_address": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "only_matching_schedule": {
@@ -5827,7 +5891,7 @@
             "type": "tftypes.String"
           }
         },
-        "mode": "optional",
+        "mode": "optional+computed",
         "nesting": "SINGLE"
       },
       "retention_policy": {
@@ -5869,7 +5933,7 @@
             "type": "tftypes.String"
           }
         },
-        "mode": "optional",
+        "mode": "optional+computed",
         "nesting": "SINGLE"
       },
       "source_datasets": {
@@ -5877,11 +5941,11 @@
         "type": "tftypes.List[tftypes.String]"
       },
       "speed_limit": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.Number"
       },
       "ssh_credentials": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.Number"
       },
       "sudo": {
@@ -5895,6 +5959,10 @@
       "transport": {
         "mode": "required",
         "type": "tftypes.String"
+      },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
       }
     },
     "identity": {
@@ -6005,6 +6073,10 @@
       "unixcharset": {
         "mode": "optional+computed",
         "type": "tftypes.String"
+      },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
       },
       "workgroup": {
         "mode": "optional+computed",
@@ -6154,7 +6226,7 @@
                 "type": "tftypes.List[tftypes.String]"
               },
               "path_suffix": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.String"
               },
               "recyclebin": {
@@ -6178,7 +6250,7 @@
                 "type": "tftypes.Number"
               },
               "vuid": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.String"
               }
             },
@@ -6214,7 +6286,7 @@
                 "type": "tftypes.Number"
               },
               "dataset_naming_schema": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.String"
               },
               "hostsallow": {
@@ -6262,7 +6334,7 @@
                 "type": "tftypes.Bool"
               },
               "dataset_naming_schema": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.String"
               },
               "hostsallow": {
@@ -6278,7 +6350,7 @@
                 "type": "tftypes.Number"
               },
               "vuid": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.String"
               }
             },
@@ -6314,6 +6386,10 @@
       "readonly": {
         "mode": "optional+computed",
         "type": "tftypes.Bool"
+      },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
       }
     },
     "identity": {
@@ -6430,6 +6506,10 @@
       "traps": {
         "mode": "optional+computed",
         "type": "tftypes.Bool"
+      },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
       },
       "v3": {
         "mode": "optional+computed",
@@ -6720,6 +6800,10 @@
       "shutdowntimer": {
         "mode": "optional+computed",
         "type": "tftypes.Number"
+      },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
       }
     },
     "identity": {
@@ -6737,7 +6821,7 @@
         "type": "tftypes.Bool"
       },
       "email": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "full_name": {
@@ -6835,7 +6919,7 @@
         "type": "tftypes.Bool"
       },
       "sshpubkey": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "sudo_commands": {
@@ -6854,12 +6938,16 @@
         "mode": "optional+computed",
         "type": "tftypes.Number"
       },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
+      },
       "username": {
         "mode": "required",
         "type": "tftypes.String"
       },
       "userns_idmap": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       }
     },
@@ -6898,11 +6986,11 @@
         "type": "tftypes.String"
       },
       "cpu_model": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "cpuset": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "description": {
@@ -6946,7 +7034,7 @@
         "type": "tftypes.Number"
       },
       "min_memory": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.Number"
       },
       "name": {
@@ -6954,7 +7042,7 @@
         "type": "tftypes.String"
       },
       "nodeset": {
-        "mode": "optional",
+        "mode": "optional+computed",
         "type": "tftypes.String"
       },
       "pin_vcpus": {
@@ -6999,6 +7087,10 @@
         "mode": "optional+computed",
         "type": "tftypes.Bool"
       },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
+      },
       "uuid": {
         "mode": "optional+computed",
         "type": "tftypes.String"
@@ -7037,19 +7129,19 @@
                 "type": "tftypes.String"
               },
               "logical_sectorsize": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.Number"
               },
               "path": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.String"
               },
               "physical_sectorsize": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.Number"
               },
               "serial": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.String"
               },
               "type": {
@@ -7057,11 +7149,11 @@
                 "type": "tftypes.String"
               },
               "zvol_name": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.String"
               },
               "zvol_volsize": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.Number"
               }
             },
@@ -7081,7 +7173,7 @@
                 "write_only": true
               },
               "port": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.Number"
               },
               "resolution": {
@@ -7101,7 +7193,7 @@
                 "type": "tftypes.Bool"
               },
               "web_port": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.Number"
               }
             },
@@ -7111,11 +7203,11 @@
           "nic": {
             "attributes": {
               "mac": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.String"
               },
               "nic_attach": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.String"
               },
               "trust_guest_rx_filters": {
@@ -7155,7 +7247,7 @@
                 "type": "tftypes.String"
               },
               "logical_sectorsize": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.Number"
               },
               "path": {
@@ -7163,15 +7255,15 @@
                 "type": "tftypes.String"
               },
               "physical_sectorsize": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.Number"
               },
               "serial": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.String"
               },
               "size": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.Number"
               },
               "type": {
@@ -7189,7 +7281,7 @@
                 "type": "tftypes.String"
               },
               "device": {
-                "mode": "optional",
+                "mode": "optional+computed",
                 "type": "tftypes.String"
               },
               "usb": {
@@ -7203,7 +7295,7 @@
                     "type": "tftypes.String"
                   }
                 },
-                "mode": "optional",
+                "mode": "optional+computed",
                 "nesting": "SINGLE"
               }
             },
@@ -7225,6 +7317,10 @@
       "order": {
         "mode": "optional+computed",
         "type": "tftypes.Number"
+      },
+      "unset": {
+        "mode": "optional",
+        "type": "tftypes.List[tftypes.String]"
       },
       "vm": {
         "mode": "required",

@@ -169,6 +169,15 @@ var modelNetworkConfig = &model{
 			readable:    true,
 			description: "Local hostname for this system.",
 		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
+		},
 	},
 }
 
@@ -282,6 +291,11 @@ This resource manages existing settings: creating it applies the configured attr
 			"hostname_local": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "Local hostname for this system.",
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

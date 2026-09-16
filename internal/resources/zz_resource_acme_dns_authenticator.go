@@ -49,7 +49,7 @@ var modelAcmeDnsAuthenticator = &model{
 					children: []*node{
 						{
 							name: "cloudflare_email", api: "cloudflare_email", path: "attributes.cloudflare_email",
-							kind: kindString, role: roleOptional,
+							kind: kindString, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "Cloudflare Email.",
 						},
@@ -219,7 +219,7 @@ func (r *acmeDnsAuthenticatorResource) Schema(_ context.Context, _ resource.Sche
 						MarkdownDescription: "Settings when `authenticator` is `cloudflare`.",
 						Attributes: map[string]schema.Attribute{
 							"cloudflare_email": schema.StringAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "Cloudflare Email.",
 								Validators:          []validator.String{stringvalidator.LengthAtLeast(1)},
 							},

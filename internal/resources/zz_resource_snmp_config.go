@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var modelSnmpConfig = &model{
@@ -20,8 +21,8 @@ var modelSnmpConfig = &model{
 	primaryKey:   "id",
 	idKind:       kindInt,
 	singleton:    true,
-	updateMethod: "snmp.update",
 	getMethod:    "snmp.config",
+	updateMethod: "snmp.update",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -116,6 +117,15 @@ var modelSnmpConfig = &model{
 			name: "v3_privpassphrase_wo_version", api: "", path: "",
 			kind: kindInt, role: roleOptional,
 			description: "Change this value to send `v3_privpassphrase` again. Terraform never stores `v3_privpassphrase`.",
+		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
 		},
 	},
 }
@@ -220,6 +230,11 @@ This resource manages existing settings: creating it applies the configured attr
 				Optional:            true,
 				MarkdownDescription: "Change this value to send `v3_privpassphrase` again. Terraform never stores `v3_privpassphrase`.",
 				Validators:          []validator.Number{numberIsInteger{}},
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

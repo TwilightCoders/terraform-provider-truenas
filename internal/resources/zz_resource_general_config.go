@@ -159,6 +159,15 @@ var modelGeneralConfig = &model{
 			readable:    true,
 			description: "Whether the usage collection preference has been explicitly set.",
 		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
+		},
 	},
 }
 
@@ -265,6 +274,11 @@ func (r *generalConfigResource) Schema(_ context.Context, _ resource.SchemaReque
 			"usage_collection_is_set": schema.BoolAttribute{
 				Computed:            true,
 				MarkdownDescription: "Whether the usage collection preference has been explicitly set.",
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

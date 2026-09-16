@@ -22,8 +22,8 @@ var modelService = &model{
 	adopt:        true,
 	adoptBy:      "service",
 	adoptByAttr:  "service",
-	updateMethod: "service.update",
 	getMethod:    "service.get_instance",
+	updateMethod: "service.update",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",

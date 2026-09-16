@@ -171,38 +171,43 @@ resource "truenas_certificate" "lan" {
 	})
 }
 
-// TestCertificateUnreportedFieldIsStable covers a field TrueNAS accepts and applies but never
-// reports: digest_algorithm is honoured — the generated CSR really is signed sha256WithRSAEncryption
-// — yet certificate.query returns null for it forever. Setting it explicitly must not leave the
-// configuration permanently different from state, because the attribute also forces replacement and
-// the certificate would be reissued on every apply.
-func TestCertificateUnreportedFieldIsStable(t *testing.T) {
-	srv := middlewaretest.NewServer(t)
-	store := srv.ServeCRUD("certificate")
-	store.OnWrite = func(row map[string]any) {
-		row["privatekey"] = "-----BEGIN PRIVATE KEY-----generated"
-		row["digest_algorithm"] = nil // middlewared never reports it back
-	}
+// TestCertificateDigestAlgorithmIsStableBothWays covers a field whose behaviour depends on how the
+// certificate was created. TrueNAS reports digest_algorithm as SHA256 for an ACME certificate and
+// as null for a generated CSR, and a configuration that mentions neither must plan no change to
+// either. Treating the field as never reported — which is true of the CSR alone — planned null
+// against a live certificate and forced it to be replaced.
+func TestCertificateDigestAlgorithmIsStableBothWays(t *testing.T) {
+	for name, reported := range map[string]any{
+		"acme certificate reports it": "SHA256",
+		"generated CSR does not":      nil,
+	} {
+		t.Run(name, func(t *testing.T) {
+			srv := middlewaretest.NewServer(t)
+			store := srv.ServeCRUD("certificate")
+			store.OnWrite = func(row map[string]any) {
+				row["privatekey"] = "-----BEGIN PRIVATE KEY-----generated"
+				row["digest_algorithm"] = reported
+			}
 
-	cfg := providerConfig(srv, "") + `
+			cfg := providerConfig(srv, "") + `
 resource "truenas_certificate" "lan" {
-  name             = "truenas-lan"
-  create_type      = "CERTIFICATE_CREATE_CSR"
-  common           = "nas.example.com"
-  san              = ["nas.example.com"]
-  digest_algorithm = "SHA256"
+  name        = "truenas-lan"
+  create_type = "CERTIFICATE_CREATE_CSR"
+  common      = "nas.example.com"
+  san         = ["nas.example.com"]
 }`
-
-	resource.UnitTest(t, resource.TestCase{
-		ProtoV6ProviderFactories: factories,
-		Steps: []resource.TestStep{
-			{Config: cfg},
-			{
-				Config: cfg,
-				ConfigPlanChecks: resource.ConfigPlanChecks{
-					PreApply: []plancheck.PlanCheck{plancheck.ExpectEmptyPlan()},
+			resource.UnitTest(t, resource.TestCase{
+				ProtoV6ProviderFactories: factories,
+				Steps: []resource.TestStep{
+					{Config: cfg},
+					{
+						Config: cfg,
+						ConfigPlanChecks: resource.ConfigPlanChecks{
+							PreApply: []plancheck.PlanCheck{plancheck.ExpectEmptyPlan()},
+						},
+					},
 				},
-			},
-		},
-	})
+			})
+		})
+	}
 }

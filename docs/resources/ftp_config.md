@@ -156,6 +156,7 @@ This resource manages existing settings: creating it applies the configured attr
 - `tls_opt_no_session_reuse_required` (Boolean) Whether to disable the requirement for TLS session reuse.
 - `tls_opt_stdenvvars` (Boolean) Whether to export standard TLS environment variables for use by external programs.
 - `tls_policy` (String) TLS policy for connections. Values include: `"on"` (required), `"off"` (disabled), `"data"` (data only),     `"auth"` (authentication only), `"ctrl"` (control only), or combinations with `+` and `!` modifiers.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 
 ### Read-Only
 

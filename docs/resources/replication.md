@@ -89,6 +89,7 @@ Create a Replication Task that will push or pull ZFS snapshots to or from remote
 - `speed_limit` (Number) Limits speed of SSH stream. Available only for SSH transport.
 - `ssh_credentials` (Number) Keychain Credential ID of type `SSH_CREDENTIALS`.
 - `sudo` (Boolean) `SSH` and `SSH+NETCAT` transports should use sudo (which is expected to be passwordless) to run `zfs`     command on the remote machine. Defaults to `false`.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 
 ### Read-Only
 

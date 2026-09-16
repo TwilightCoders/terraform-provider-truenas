@@ -50,6 +50,7 @@ WARNING: The established best practice is to use only key-based authentication f
 - `sudo_commands` (List of String) An array of commands the user may execute with elevated privileges. User is prompted for password     when executing any command from the array.
 - `sudo_commands_nopasswd` (List of String) An array of commands the user may execute with elevated privileges. User is *not* prompted for password     when executing any command from the array.
 - `uid` (Number) UNIX UID. If not provided, it is automatically filled with the next one available. Changing this forces a new resource.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 - `userns_idmap` (String) Specifies the subuid mapping for this user. If DIRECT then the UID will be     directly mapped to all containers. Alternatively, the target UID may be     explicitly specified. If `null`, then the UID will not be mapped.
 
 NOTE: This field will be ignored for users that have been assigned TrueNAS roles.

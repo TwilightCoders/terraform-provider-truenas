@@ -89,7 +89,13 @@ func (r *crudResource) Configure(_ context.Context, req resource.ConfigureReques
 	r.data = data
 }
 
-func (r *crudResource) ModifyPlan(_ context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+func (r *crudResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if r.model != nil && !req.Plan.Raw.IsNull() {
+		r.model.applyUnset(ctx, req, resp)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+	}
 	if r.model != nil && !req.State.Raw.IsNull() && !req.Plan.Raw.IsNull() {
 		resp.RequiresReplace.Append(r.model.createOnlyChanges(req.Plan.Raw, req.State.Raw)...)
 	}
@@ -111,6 +117,47 @@ func (r *crudResource) ModifyPlan(_ context.Context, req resource.ModifyPlanRequ
 			resp.Diagnostics.AddError("Provider is read-only", fmt.Sprintf("This plan would update a %s, but the provider has read_only = true.", r.model.typeName))
 		}
 	}
+}
+
+const unsetAttr = "unset"
+
+// applyUnset plans null for every attribute named in the unset argument.
+//
+// An attribute a configuration does not mention is left alone, which is what adopting existing
+// infrastructure needs. That leaves no way to say "remove this", because Terraform cannot tell an
+// omitted attribute from one explicitly set to null. Naming it here is that statement, and it reads
+// as one: the plan shows the value going to null.
+func (m *model) applyUnset(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	var names []string
+	if diags := req.Config.GetAttribute(ctx, path.Root(unsetAttr), &names); diags.HasError() {
+		return
+	}
+	for _, name := range names {
+		a := findByName(m.attrs, name)
+		switch {
+		case a == nil:
+			resp.Diagnostics.AddAttributeError(path.Root(unsetAttr), "Unknown attribute",
+				fmt.Sprintf("%s has no attribute %q to unset.", m.typeName, name))
+		case !a.nullable:
+			resp.Diagnostics.AddAttributeError(path.Root(unsetAttr), "Attribute cannot be unset",
+				fmt.Sprintf("%s.%s does not accept an empty value.", m.typeName, name))
+		case a.role == roleRequired || a.role == roleComputed:
+			resp.Diagnostics.AddAttributeError(path.Root(unsetAttr), "Attribute cannot be unset",
+				fmt.Sprintf("%s.%s is not configurable.", m.typeName, name))
+		default:
+			resp.Diagnostics.Append(resp.Plan.SetAttribute(ctx, path.Root(name), nilOf(a))...)
+		}
+	}
+}
+
+// findByName returns the attribute with the given Terraform name.
+func findByName(attrs []*node, name string) *node {
+	for _, a := range attrs {
+		if a.name == name {
+			return a
+		}
+	}
+	return nil
 }
 
 func (r *crudResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

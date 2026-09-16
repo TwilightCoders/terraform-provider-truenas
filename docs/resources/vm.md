@@ -50,6 +50,7 @@ Manages a virtual machine. Attach disks, NICs and displays with `truenas_vm_devi
 - `threads` (Number) Number of threads per CPU core. Defaults to `1`.
 - `time` (String) Guest OS time zone reference. `LOCAL` uses host timezone, `UTC` uses coordinated universal time. Defaults to `"LOCAL"`.
 - `trusted_platform_module` (Boolean) Whether to enable virtual Trusted Platform Module (TPM) for the VM. Defaults to `false`.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 - `uuid` (String) Unique UUID for the VM. `null` to auto-generate.
 - `vcpus` (Number) Number of virtual CPUs allocated to the VM. Defaults to `1`.
 

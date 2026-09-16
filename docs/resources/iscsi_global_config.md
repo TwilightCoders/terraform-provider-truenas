@@ -26,6 +26,7 @@ This resource manages existing settings: creating it applies the configured attr
 - `isns_servers` (List of String) Array of iSNS (Internet Storage Name Service) server addresses.
 - `listen_port` (Number) TCP port number for iSCSI connections.
 - `pool_avail_threshold` (Number) Pool available space threshold percentage or `null` to disable.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 
 ### Read-Only
 

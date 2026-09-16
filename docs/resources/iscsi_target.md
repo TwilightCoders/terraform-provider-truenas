@@ -44,6 +44,7 @@ to be allowed, this field should be left empty.
 * `BOTH`: Both iSCSI and Fibre Channel protocols
 
 Fibre Channel may only be selected on TrueNAS Enterprise-licensed systems with a suitable Fibre Channel HBA. Defaults to `"ISCSI"`.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 
 ### Read-Only
 

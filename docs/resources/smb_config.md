@@ -108,6 +108,7 @@ NOTE: This parameter has no effect if the NetBIOS name server is disabled.
 WARNING: Using `smb_options` may produce unexpected server behavior.
 - `syslog` (Boolean) Send log messages to syslog. Enable this option if you want SMB server error logs to be included in     information sent to a remote syslog server. NOTE: This requires that remote syslog is globally configured on     TrueNAS.
 - `unixcharset` (String) Select character set for file names on local filesystem. Use this option only if you know the names are not     UTF-8.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 - `workgroup` (String) Workgroup name. When TrueNAS joins active directory, it automatically changes this value to match the NetBIOS     domain of the Active Directory domain.
 
 ### Read-Only

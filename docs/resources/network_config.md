@@ -34,6 +34,7 @@ This resource manages existing settings: creating it applies the configured attr
 - `nameserver2` (String) Secondary DNS server.
 - `nameserver3` (String) Tertiary DNS server.
 - `service_announcement` (Attributes) Determines the broadcast protocols that will be used to advertise the server. (see [below for nested schema](#nestedatt--service_announcement))
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 
 ### Read-Only
 

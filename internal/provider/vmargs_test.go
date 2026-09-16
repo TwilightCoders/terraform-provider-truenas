@@ -12,12 +12,10 @@ import (
 )
 
 // TestVMOmittedArgsSurvive covers what an imported VM does with hypervisor settings a
-// configuration never mentions. command_line_args is reported by the server, so the provider
-// imposes no default on it and an unmentioned value is left alone.
+// configuration never mentions: it leaves them alone. A hand-tuned command line and CPU pinning
+// are exactly what a partial configuration must not quietly erase.
 //
-// cpuset is the other half, and it is not fixed: a plain optional field plans as null when the
-// configuration omits it, so pinning is erased. Adopting a hand-tuned machine means writing every
-// field that matters, and this test says which half of that is the provider's doing.
+// Removing one deliberately is what unset is for, which the second step exercises.
 func TestVMOmittedArgsSurvive(t *testing.T) {
 	srv := middlewaretest.NewServer(t)
 	store := srv.ServeCRUD("vm")
@@ -48,8 +46,22 @@ resource "truenas_vm" "tuned" {
 				// Reported by the server, so no default is imposed and it survives being unmentioned.
 				statecheck.ExpectKnownValue("truenas_vm.tuned", tfjsonpath.New("command_line_args"),
 					knownvalue.StringExact("-smbios 'type=0,vendor=X,, LLC.'")),
-				// Plain optional: omitting it still means null, and the pinning is lost.
+				// Also reported by the server, so pinning survives being unmentioned.
+				statecheck.ExpectKnownValue("truenas_vm.tuned", tfjsonpath.New("cpuset"),
+					knownvalue.StringExact("0,16,1,17")),
+			},
+		}, {
+			// Clearing is possible, and has to be said out loud.
+			Config: providerConfig(srv, "") + `
+resource "truenas_vm" "tuned" {
+  name   = "tuned"
+  memory = 8192
+  unset  = ["cpuset"]
+}`,
+			ConfigStateChecks: []statecheck.StateCheck{
 				statecheck.ExpectKnownValue("truenas_vm.tuned", tfjsonpath.New("cpuset"), knownvalue.Null()),
+				statecheck.ExpectKnownValue("truenas_vm.tuned", tfjsonpath.New("command_line_args"),
+					knownvalue.StringExact("-smbios 'type=0,vendor=X,, LLC.'")),
 			},
 		}},
 	})

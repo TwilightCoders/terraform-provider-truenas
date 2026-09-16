@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var modelVMDevice = &model{
@@ -22,10 +23,10 @@ var modelVMDevice = &model{
 	namespace:    "vm.device",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	deleteMethod: "vm.device.delete",
 	createMethod: "vm.device.create",
 	updateMethod: "vm.device.update",
 	getMethod:    "vm.device.get_instance",
+	deleteMethod: "vm.device.delete",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -69,13 +70,13 @@ var modelVMDevice = &model{
 						},
 						{
 							name: "port", api: "port", path: "attributes.port",
-							kind: kindInt, role: roleOptional,
+							kind: kindInt, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "VNC/SPICE port number for remote display access. `null` for auto-assignment.",
 						},
 						{
 							name: "web_port", api: "web_port", path: "attributes.web_port",
-							kind: kindInt, role: roleOptional,
+							kind: kindInt, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "Web-based display access port number. `null` for auto-assignment.",
 						},
@@ -137,13 +138,13 @@ var modelVMDevice = &model{
 						},
 						{
 							name: "nic_attach", api: "nic_attach", path: "attributes.nic_attach",
-							kind: kindString, role: roleOptional,
+							kind: kindString, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "Host network interface or bridge to attach to. `null` for no attachment.",
 						},
 						{
 							name: "mac", api: "mac", path: "attributes.mac",
-							kind: kindString, role: roleOptional,
+							kind: kindString, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "MAC address for the virtual network interface. `null` for auto-generation.",
 						},
@@ -198,19 +199,19 @@ var modelVMDevice = &model{
 						},
 						{
 							name: "size", api: "size", path: "attributes.size",
-							kind: kindInt, role: roleOptional,
+							kind: kindInt, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "Size of the disk in bytes. Required if creating a new disk file.",
 						},
 						{
 							name: "logical_sectorsize", api: "logical_sectorsize", path: "attributes.logical_sectorsize",
-							kind: kindInt, role: roleOptional,
+							kind: kindInt, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "Logical sector size for the disk. `null` for default.",
 						},
 						{
 							name: "physical_sectorsize", api: "physical_sectorsize", path: "attributes.physical_sectorsize",
-							kind: kindInt, role: roleOptional,
+							kind: kindInt, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "Physical sector size for the disk. `null` for default.",
 						},
@@ -223,7 +224,7 @@ var modelVMDevice = &model{
 						},
 						{
 							name: "serial", api: "serial", path: "attributes.serial",
-							kind: kindString, role: roleOptional,
+							kind: kindString, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "Serial number to assign to the virtual disk. `null` for auto-generated.",
 						},
@@ -237,7 +238,7 @@ var modelVMDevice = &model{
 					children: []*node{
 						{
 							name: "path", api: "path", path: "attributes.path",
-							kind: kindString, role: roleOptional,
+							kind: kindString, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "Path to existing disk file or ZFS volume. `null` if creating a new ZFS volume.",
 						},
@@ -257,25 +258,25 @@ var modelVMDevice = &model{
 						},
 						{
 							name: "zvol_name", api: "zvol_name", path: "attributes.zvol_name",
-							kind: kindString, role: roleOptional,
+							kind: kindString, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "Name for the new ZFS volume. Required if `create_zvol` is true.",
 						},
 						{
 							name: "zvol_volsize", api: "zvol_volsize", path: "attributes.zvol_volsize",
-							kind: kindInt, role: roleOptional,
+							kind: kindInt, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "Size of the new ZFS volume in bytes. Required if `create_zvol` is true.",
 						},
 						{
 							name: "logical_sectorsize", api: "logical_sectorsize", path: "attributes.logical_sectorsize",
-							kind: kindInt, role: roleOptional,
+							kind: kindInt, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "Logical sector size for the disk. `null` for default.",
 						},
 						{
 							name: "physical_sectorsize", api: "physical_sectorsize", path: "attributes.physical_sectorsize",
-							kind: kindInt, role: roleOptional,
+							kind: kindInt, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "Physical sector size for the disk. `null` for default.",
 						},
@@ -288,7 +289,7 @@ var modelVMDevice = &model{
 						},
 						{
 							name: "serial", api: "serial", path: "attributes.serial",
-							kind: kindString, role: roleOptional,
+							kind: kindString, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "Serial number to assign to the virtual disk. `null` for auto-generated.",
 						},
@@ -302,7 +303,7 @@ var modelVMDevice = &model{
 					children: []*node{
 						{
 							name: "usb", api: "usb", path: "attributes.usb",
-							kind: kindObject, role: roleOptional,
+							kind: kindObject, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "USB device attributes for identification. `null` for USB host controller only.",
 							children: []*node{
@@ -329,7 +330,7 @@ var modelVMDevice = &model{
 						},
 						{
 							name: "device", api: "device", path: "attributes.device",
-							kind: kindString, role: roleOptional,
+							kind: kindString, role: roleOptionalComputed,
 							nullable: true, readable: true,
 							description: "Host USB device path to pass through. `null` for controller only.",
 						},
@@ -353,6 +354,15 @@ var modelVMDevice = &model{
 			name: "attributes_wo_version", api: "", path: "",
 			kind: kindInt, role: roleOptional,
 			description: "Change this value to send `attributes` again. Terraform never stores `attributes`.",
+		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
 		},
 	},
 }
@@ -409,12 +419,12 @@ func (r *vMDeviceResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 								Default:             stringdefault.StaticString("1024x768"),
 							},
 							"port": schema.NumberAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "VNC/SPICE port number for remote display access. `null` for auto-assignment.",
 								Validators:          []validator.Number{numberIsInteger{}, numberAtLeast{min: 5900}, numberAtMost{max: 65535}},
 							},
 							"web_port": schema.NumberAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "Web-based display access port number. `null` for auto-assignment.",
 								Validators:          []validator.Number{numberIsInteger{}},
 							},
@@ -462,11 +472,11 @@ func (r *vMDeviceResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 								Default:             stringdefault.StaticString("E1000"),
 							},
 							"nic_attach": schema.StringAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "Host network interface or bridge to attach to. `null` for no attachment.",
 							},
 							"mac": schema.StringAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "MAC address for the virtual network interface. `null` for auto-generation.",
 							},
 						},
@@ -508,17 +518,17 @@ func (r *vMDeviceResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 								Default:             booldefault.StaticBool(false),
 							},
 							"size": schema.NumberAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "Size of the disk in bytes. Required if creating a new disk file.",
 								Validators:          []validator.Number{numberIsInteger{}},
 							},
 							"logical_sectorsize": schema.NumberAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "Logical sector size for the disk. `null` for default.",
 								Validators:          []validator.Number{numberIsInteger{}},
 							},
 							"physical_sectorsize": schema.NumberAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "Physical sector size for the disk. `null` for default.",
 								Validators:          []validator.Number{numberIsInteger{}},
 							},
@@ -529,7 +539,7 @@ func (r *vMDeviceResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 								Default:             stringdefault.StaticString("THREADS"),
 							},
 							"serial": schema.StringAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "Serial number to assign to the virtual disk. `null` for auto-generated.",
 								Validators:          []validator.String{stringvalidator.LengthAtLeast(1)},
 							},
@@ -540,7 +550,7 @@ func (r *vMDeviceResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 						MarkdownDescription: "Settings when `dtype` is `DISK`.",
 						Attributes: map[string]schema.Attribute{
 							"path": schema.StringAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "Path to existing disk file or ZFS volume. `null` if creating a new ZFS volume.",
 								Validators:          []validator.String{stringvalidator.LengthAtLeast(1)},
 							},
@@ -556,21 +566,21 @@ func (r *vMDeviceResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 								Default:             booldefault.StaticBool(false),
 							},
 							"zvol_name": schema.StringAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "Name for the new ZFS volume. Required if `create_zvol` is true.",
 							},
 							"zvol_volsize": schema.NumberAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "Size of the new ZFS volume in bytes. Required if `create_zvol` is true.",
 								Validators:          []validator.Number{numberIsInteger{}},
 							},
 							"logical_sectorsize": schema.NumberAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "Logical sector size for the disk. `null` for default.",
 								Validators:          []validator.Number{numberIsInteger{}},
 							},
 							"physical_sectorsize": schema.NumberAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "Physical sector size for the disk. `null` for default.",
 								Validators:          []validator.Number{numberIsInteger{}},
 							},
@@ -581,7 +591,7 @@ func (r *vMDeviceResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 								Default:             stringdefault.StaticString("THREADS"),
 							},
 							"serial": schema.StringAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "Serial number to assign to the virtual disk. `null` for auto-generated.",
 								Validators:          []validator.String{stringvalidator.LengthAtLeast(1)},
 							},
@@ -592,7 +602,7 @@ func (r *vMDeviceResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 						MarkdownDescription: "Settings when `dtype` is `USB`.",
 						Attributes: map[string]schema.Attribute{
 							"usb": schema.SingleNestedAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "USB device attributes for identification. `null` for USB host controller only.",
 								Attributes: map[string]schema.Attribute{
 									"vendor_id": schema.StringAttribute{
@@ -614,7 +624,7 @@ func (r *vMDeviceResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 								Default:             stringdefault.StaticString("nec-xhci"),
 							},
 							"device": schema.StringAttribute{
-								Optional:            true,
+								Optional: true, Computed: true,
 								MarkdownDescription: "Host USB device path to pass through. `null` for controller only.",
 								Validators:          []validator.String{stringvalidator.LengthAtLeast(1)},
 							},
@@ -636,6 +646,11 @@ func (r *vMDeviceResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 				Optional:            true,
 				MarkdownDescription: "Change this value to send `attributes` again. Terraform never stores `attributes`.",
 				Validators:          []validator.Number{numberIsInteger{}},
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

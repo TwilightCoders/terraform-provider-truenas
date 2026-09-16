@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var modelISCSITargetExtent = &model{
@@ -47,6 +48,15 @@ var modelISCSITargetExtent = &model{
 			kind: kindInt, role: roleRequired,
 			readable: true, updatable: true,
 			description: "ID of the iSCSI extent to associate with the target.",
+		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
 		},
 	},
 }
@@ -91,6 +101,11 @@ func (r *iSCSITargetExtentResource) Schema(_ context.Context, _ resource.SchemaR
 				Required:            true,
 				MarkdownDescription: "ID of the iSCSI extent to associate with the target.",
 				Validators:          []validator.Number{numberIsInteger{}},
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

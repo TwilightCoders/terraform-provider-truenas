@@ -21,10 +21,10 @@ var modelISCSITarget = &model{
 	namespace:    "iscsi.target",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	createMethod: "iscsi.target.create",
 	updateMethod: "iscsi.target.update",
 	getMethod:    "iscsi.target.get_instance",
 	deleteMethod: "iscsi.target.delete",
+	createMethod: "iscsi.target.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -40,7 +40,7 @@ var modelISCSITarget = &model{
 		},
 		{
 			name: "alias", api: "alias", path: "alias",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Optional alias name for the iSCSI target.",
 		},
@@ -70,7 +70,7 @@ var modelISCSITarget = &model{
 					},
 					{
 						name: "initiator", api: "initiator", path: "groups.initiator",
-						kind: kindInt, role: roleOptional,
+						kind: kindInt, role: roleOptionalComputed,
 						nullable: true, readable: true,
 						description: "ID of the authorized initiator group or `null` to allow any initiator.",
 					},
@@ -82,7 +82,7 @@ var modelISCSITarget = &model{
 					},
 					{
 						name: "auth", api: "auth", path: "groups.auth",
-						kind: kindInt, role: roleOptional,
+						kind: kindInt, role: roleOptionalComputed,
 						nullable: true, readable: true,
 						description: "ID of the authentication credential or `null` if no authentication.",
 					},
@@ -103,13 +103,13 @@ var modelISCSITarget = &model{
 		},
 		{
 			name: "iscsi_parameters", api: "iscsi_parameters", path: "iscsi_parameters",
-			kind: kindObject, role: roleOptional,
+			kind: kindObject, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Optional iSCSI-specific parameters for this target.",
 			children: []*node{
 				{
 					name: "queuedcommands", api: "QueuedCommands", path: "iscsi_parameters.QueuedCommands",
-					kind: kindInt, role: roleOptional,
+					kind: kindInt, role: roleOptionalComputed,
 					nullable: true, readable: true, updatable: true,
 					description: "Maximum number of queued commands per iSCSI session.\n\n* `32`: Standard queue depth for most use cases\n* `128`: Higher queue depth for performance-critical applications",
 				},
@@ -120,6 +120,15 @@ var modelISCSITarget = &model{
 			kind: kindInt, role: roleComputed,
 			readable:    true,
 			description: "Relative target ID number assigned by the system.",
+		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
 		},
 	},
 }
@@ -156,7 +165,7 @@ func (r *iSCSITargetResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Validators:          []validator.String{stringvalidator.LengthAtLeast(1), stringvalidator.LengthAtMost(120)},
 			},
 			"alias": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Optional alias name for the iSCSI target.",
 			},
 			"mode": schema.StringAttribute{
@@ -175,7 +184,7 @@ func (r *iSCSITargetResource) Schema(_ context.Context, _ resource.SchemaRequest
 							Validators:          []validator.Number{numberIsInteger{}},
 						},
 						"initiator": schema.NumberAttribute{
-							Optional:            true,
+							Optional: true, Computed: true,
 							MarkdownDescription: "ID of the authorized initiator group or `null` to allow any initiator.",
 							Validators:          []validator.Number{numberIsInteger{}},
 						},
@@ -185,7 +194,7 @@ func (r *iSCSITargetResource) Schema(_ context.Context, _ resource.SchemaRequest
 							Validators:          []validator.String{stringvalidator.OneOf("NONE", "CHAP", "CHAP_MUTUAL")},
 						},
 						"auth": schema.NumberAttribute{
-							Optional:            true,
+							Optional: true, Computed: true,
 							MarkdownDescription: "ID of the authentication credential or `null` if no authentication.",
 							Validators:          []validator.Number{numberIsInteger{}},
 						},
@@ -198,11 +207,11 @@ func (r *iSCSITargetResource) Schema(_ context.Context, _ resource.SchemaRequest
 				ElementType:         types.StringType,
 			},
 			"iscsi_parameters": schema.SingleNestedAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Optional iSCSI-specific parameters for this target.",
 				Attributes: map[string]schema.Attribute{
 					"queuedcommands": schema.NumberAttribute{
-						Optional:            true,
+						Optional: true, Computed: true,
 						MarkdownDescription: "Maximum number of queued commands per iSCSI session.\n\n* `32`: Standard queue depth for most use cases\n* `128`: Higher queue depth for performance-critical applications",
 						Validators:          []validator.Number{numberIsInteger{}},
 					},
@@ -212,6 +221,11 @@ func (r *iSCSITargetResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Computed:            true,
 				MarkdownDescription: "Relative target ID number assigned by the system.",
 				Validators:          []validator.Number{numberIsInteger{}},
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

@@ -53,6 +53,7 @@ Creates a new cloud_sync entry.
 - `schedule` (Attributes) Cron schedule dictating when the task should run. Defaults to `{"dom":"*","dow":"*","hour":"*","minute":"00","month":"*"}`. (see [below for nested schema](#nestedatt--schedule))
 - `snapshot` (Boolean) Whether to create a temporary snapshot of the dataset before every backup. Defaults to `false`.
 - `transfers` (Number) Maximum number of parallel file transfers. `null` for default.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 
 ### Read-Only
 

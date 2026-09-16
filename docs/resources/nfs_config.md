@@ -164,6 +164,7 @@ This resource manages existing settings: creating it applies the configured attr
 - `rpcstatd_port` (Number) Specify the rpc.statd port binding.
 - `servers` (Number) Specify the number of nfsd. Default: Number of nfsd is equal number of CPU.
 - `statd_lockd_log` (Boolean) Enable or disable statd and lockd logging.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 - `userd_manage_gids` (Boolean) Enable to allow server to manage gids.
 - `v4_domain` (String) Specify a DNS domain (NFSv4 only).
 - `v4_krb` (Boolean) Force Kerberos authentication on NFS shares.

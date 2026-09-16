@@ -26,6 +26,7 @@ Create an Associated Target.
 ### Optional
 
 - `lunid` (Number) LUN ID to assign or `null` to auto-assign the next available LUN.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 
 ### Read-Only
 

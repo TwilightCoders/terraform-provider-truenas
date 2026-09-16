@@ -25,6 +25,7 @@ Create a new group.
 - `smb` (Boolean) If set to `True`, the group can be used for SMB share ACL entries. The group is mapped to an NT group account     on the TrueNAS SMB server and has a `sid` value.  Defaults to `true`.
 - `sudo_commands` (List of String) A list of commands that group members may execute with elevated privileges. User is prompted for password     when executing any command from the list.  Defaults to `[]`.
 - `sudo_commands_nopasswd` (List of String) A list of commands that group members may execute with elevated privileges. User is not prompted for password     when executing any command from the list.  Defaults to `[]`.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 - `userns_idmap` (String) Specifies the subgid mapping for this group. If DIRECT then the GID will be     directly mapped to all containers. Alternatively, the target GID may be     explicitly specified. If null, then the GID will not be mapped.
 
 **NOTE: This field will be ignored for groups that have been assigned TrueNAS roles.**

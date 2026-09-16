@@ -60,6 +60,7 @@ This resource manages existing settings: creating it applies the configured attr
 - `shutdown` (String) Shutdown trigger condition: LOWBATT on low battery, BATT when on battery power.
 - `shutdowncmd` (String) Custom command to execute during UPS shutdown sequence. `null` for default.
 - `shutdowntimer` (Number) Seconds to wait after initiating shutdown before forcing power off.
+- `unset` (List of String) Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.
 
 ### Read-Only
 

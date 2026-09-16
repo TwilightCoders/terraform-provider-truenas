@@ -22,10 +22,10 @@ var modelReplication = &model{
 	namespace:    "replication",
 	primaryKey:   "id",
 	idKind:       kindInt,
+	createMethod: "replication.create",
 	updateMethod: "replication.update",
 	getMethod:    "replication.get_instance",
 	deleteMethod: "replication.delete",
-	createMethod: "replication.create",
 	attrs: []*node{
 		{
 			name: "id", api: "id", path: "id",
@@ -53,38 +53,38 @@ var modelReplication = &model{
 		},
 		{
 			name: "ssh_credentials", api: "ssh_credentials", path: "ssh_credentials",
-			kind: kindInt, role: roleOptional,
+			kind: kindInt, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Keychain Credential ID of type `SSH_CREDENTIALS`.",
 			ref:         "id",
 		},
 		{
 			name: "netcat_active_side", api: "netcat_active_side", path: "netcat_active_side",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Which side actively establishes the netcat connection for `SSH+NETCAT` transport.\n\n* `LOCAL`: Local system initiates the connection\n* `REMOTE`: Remote system initiates the connection\n* `null`: Not applicable for other transport types",
 		},
 		{
 			name: "netcat_active_side_listen_address", api: "netcat_active_side_listen_address", path: "netcat_active_side_listen_address",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "IP address for the active side to listen on for `SSH+NETCAT` transport. `null` if not applicable.",
 		},
 		{
 			name: "netcat_active_side_port_min", api: "netcat_active_side_port_min", path: "netcat_active_side_port_min",
-			kind: kindInt, role: roleOptional,
+			kind: kindInt, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Minimum port number in the range for netcat connections. `null` if not applicable.",
 		},
 		{
 			name: "netcat_active_side_port_max", api: "netcat_active_side_port_max", path: "netcat_active_side_port_max",
-			kind: kindInt, role: roleOptional,
+			kind: kindInt, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Maximum port number in the range for netcat connections. `null` if not applicable.",
 		},
 		{
 			name: "netcat_passive_side_connect_address", api: "netcat_passive_side_connect_address", path: "netcat_passive_side_connect_address",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "IP address for the passive side to connect to for `SSH+NETCAT` transport. `null` if not applicable.",
 		},
@@ -177,7 +177,7 @@ var modelReplication = &model{
 		},
 		{
 			name: "encryption_inherit", api: "encryption_inherit", path: "encryption_inherit",
-			kind: kindBool, role: roleOptional,
+			kind: kindBool, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Whether replicated datasets should inherit encryption from parent. `null` if encryption is disabled.",
 		},
@@ -189,13 +189,13 @@ var modelReplication = &model{
 		},
 		{
 			name: "encryption_key_format", api: "encryption_key_format", path: "encryption_key_format",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Format of the encryption key.\n\n* `HEX`: Hexadecimal-encoded key\n* `PASSPHRASE`: Text passphrase\n* `null`: Not applicable when encryption is disabled",
 		},
 		{
 			name: "encryption_key_location", api: "encryption_key_location", path: "encryption_key_location",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Filesystem path where encryption key is stored. `null` if not using key file.",
 		},
@@ -239,7 +239,7 @@ var modelReplication = &model{
 		},
 		{
 			name: "name_regex", api: "name_regex", path: "name_regex",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Replicate all snapshots which names match specified regular expression.",
 		},
@@ -251,7 +251,7 @@ var modelReplication = &model{
 		},
 		{
 			name: "schedule", api: "schedule", path: "schedule",
-			kind: kindObject, role: roleOptional,
+			kind: kindObject, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Schedule to run replication task. Only `auto` replication tasks without bound periodic snapshot tasks can have     a schedule.",
 			children: []*node{
@@ -308,7 +308,7 @@ var modelReplication = &model{
 		},
 		{
 			name: "restrict_schedule", api: "restrict_schedule", path: "restrict_schedule",
-			kind: kindObject, role: roleOptional,
+			kind: kindObject, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Restricts when replication task with bound periodic snapshot tasks runs. For example, you can have periodic     snapshot tasks that run every 15 minutes, but only run replication task every hour.",
 			children: []*node{
@@ -399,13 +399,13 @@ var modelReplication = &model{
 		},
 		{
 			name: "lifetime_value", api: "lifetime_value", path: "lifetime_value",
-			kind: kindInt, role: roleOptional,
+			kind: kindInt, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Number of time units to retain snapshots for custom retention policy. Only applies when `retention_policy` is     CUSTOM.",
 		},
 		{
 			name: "lifetime_unit", api: "lifetime_unit", path: "lifetime_unit",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Time unit for snapshot retention for custom retention policy. Only applies when `retention_policy` is CUSTOM.",
 		},
@@ -475,13 +475,13 @@ var modelReplication = &model{
 		},
 		{
 			name: "compression", api: "compression", path: "compression",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Compresses SSH stream. Available only for SSH transport.",
 		},
 		{
 			name: "speed_limit", api: "speed_limit", path: "speed_limit",
-			kind: kindInt, role: roleOptional,
+			kind: kindInt, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Limits speed of SSH stream. Available only for SSH transport.",
 		},
@@ -515,7 +515,7 @@ var modelReplication = &model{
 		},
 		{
 			name: "logging_level", api: "logging_level", path: "logging_level",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Log level for replication task execution. Controls verbosity of replication logs.",
 		},
@@ -536,6 +536,15 @@ var modelReplication = &model{
 			name: "encryption_key_wo_version", api: "", path: "",
 			kind: kindInt, role: roleOptional,
 			description: "Change this value to send `encryption_key` again. Terraform never stores `encryption_key`.",
+		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
 		},
 	},
 }
@@ -582,31 +591,31 @@ func (r *replicationResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Validators:          []validator.String{stringvalidator.OneOf("SSH", "SSH+NETCAT", "LOCAL")},
 			},
 			"ssh_credentials": schema.NumberAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Keychain Credential ID of type `SSH_CREDENTIALS`.",
 				Validators:          []validator.Number{numberIsInteger{}},
 			},
 			"netcat_active_side": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Which side actively establishes the netcat connection for `SSH+NETCAT` transport.\n\n* `LOCAL`: Local system initiates the connection\n* `REMOTE`: Remote system initiates the connection\n* `null`: Not applicable for other transport types",
 				Validators:          []validator.String{stringvalidator.OneOf("LOCAL", "REMOTE")},
 			},
 			"netcat_active_side_listen_address": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "IP address for the active side to listen on for `SSH+NETCAT` transport. `null` if not applicable.",
 			},
 			"netcat_active_side_port_min": schema.NumberAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Minimum port number in the range for netcat connections. `null` if not applicable.",
 				Validators:          []validator.Number{numberIsInteger{}, numberAtLeast{min: 1}, numberAtMost{max: 65535}},
 			},
 			"netcat_active_side_port_max": schema.NumberAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Maximum port number in the range for netcat connections. `null` if not applicable.",
 				Validators:          []validator.Number{numberIsInteger{}, numberAtLeast{min: 1}, numberAtMost{max: 65535}},
 			},
 			"netcat_passive_side_connect_address": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "IP address for the passive side to connect to for `SSH+NETCAT` transport. `null` if not applicable.",
 			},
 			"sudo": schema.BoolAttribute{
@@ -654,7 +663,7 @@ func (r *replicationResource) Schema(_ context.Context, _ resource.SchemaRequest
 				MarkdownDescription: "Whether to enable encryption for the replicated datasets. Defaults to `false`.",
 			},
 			"encryption_inherit": schema.BoolAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Whether replicated datasets should inherit encryption from parent. `null` if encryption is disabled.",
 			},
 			"encryption_key": schema.StringAttribute{
@@ -662,12 +671,12 @@ func (r *replicationResource) Schema(_ context.Context, _ resource.SchemaRequest
 				MarkdownDescription: "Encryption key for replicated datasets. `null` if not specified.",
 			},
 			"encryption_key_format": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Format of the encryption key.\n\n* `HEX`: Hexadecimal-encoded key\n* `PASSPHRASE`: Text passphrase\n* `null`: Not applicable when encryption is disabled",
 				Validators:          []validator.String{stringvalidator.OneOf("HEX", "PASSPHRASE")},
 			},
 			"encryption_key_location": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Filesystem path where encryption key is stored. `null` if not using key file.",
 			},
 			"periodic_snapshot_tasks": schema.ListAttribute{
@@ -686,7 +695,7 @@ func (r *replicationResource) Schema(_ context.Context, _ resource.SchemaRequest
 				ElementType:         types.StringType,
 			},
 			"name_regex": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Replicate all snapshots which names match specified regular expression.",
 				Validators:          []validator.String{stringvalidator.LengthAtLeast(1)},
 			},
@@ -695,7 +704,7 @@ func (r *replicationResource) Schema(_ context.Context, _ resource.SchemaRequest
 				MarkdownDescription: "Allow replication to run automatically on schedule or after bound periodic snapshot task.",
 			},
 			"schedule": schema.SingleNestedAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Schedule to run replication task. Only `auto` replication tasks without bound periodic snapshot tasks can have     a schedule.",
 				Attributes: map[string]schema.Attribute{
 					"minute": schema.StringAttribute{
@@ -736,7 +745,7 @@ func (r *replicationResource) Schema(_ context.Context, _ resource.SchemaRequest
 				},
 			},
 			"restrict_schedule": schema.SingleNestedAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Restricts when replication task with bound periodic snapshot tasks runs. For example, you can have periodic     snapshot tasks that run every 15 minutes, but only run replication task every hour.",
 				Attributes: map[string]schema.Attribute{
 					"minute": schema.StringAttribute{
@@ -799,12 +808,12 @@ func (r *replicationResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Validators:          []validator.String{stringvalidator.OneOf("SOURCE", "CUSTOM", "NONE")},
 			},
 			"lifetime_value": schema.NumberAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Number of time units to retain snapshots for custom retention policy. Only applies when `retention_policy` is     CUSTOM.",
 				Validators:          []validator.Number{numberIsInteger{}, numberAtLeast{min: 1}},
 			},
 			"lifetime_unit": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Time unit for snapshot retention for custom retention policy. Only applies when `retention_policy` is CUSTOM.",
 				Validators:          []validator.String{stringvalidator.OneOf("HOUR", "DAY", "WEEK", "MONTH", "YEAR")},
 			},
@@ -853,12 +862,12 @@ func (r *replicationResource) Schema(_ context.Context, _ resource.SchemaRequest
 				},
 			},
 			"compression": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Compresses SSH stream. Available only for SSH transport.",
 				Validators:          []validator.String{stringvalidator.OneOf("LZ4", "PIGZ", "PLZIP")},
 			},
 			"speed_limit": schema.NumberAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Limits speed of SSH stream. Available only for SSH transport.",
 				Validators:          []validator.Number{numberIsInteger{}, numberAtLeast{min: 1}},
 			},
@@ -880,7 +889,7 @@ func (r *replicationResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Validators:          []validator.Number{numberIsInteger{}, numberAtLeast{min: 1}},
 			},
 			"logging_level": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Log level for replication task execution. Controls verbosity of replication logs.",
 				Validators:          []validator.String{stringvalidator.OneOf("DEBUG", "INFO", "WARNING", "ERROR")},
 			},
@@ -896,6 +905,11 @@ func (r *replicationResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Optional:            true,
 				MarkdownDescription: "Change this value to send `encryption_key` again. Terraform never stores `encryption_key`.",
 				Validators:          []validator.Number{numberIsInteger{}},
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

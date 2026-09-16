@@ -243,7 +243,7 @@ var modelCloudsyncTask = &model{
 		},
 		{
 			name: "transfers", api: "transfers", path: "transfers",
-			kind: kindInt, role: roleOptional,
+			kind: kindInt, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Maximum number of parallel file transfers. `null` for default.",
 		},
@@ -314,6 +314,15 @@ var modelCloudsyncTask = &model{
 			name: "encryption_salt_wo_version", api: "", path: "",
 			kind: kindInt, role: roleOptional,
 			description: "Change this value to send `encryption_salt` again. Terraform never stores `encryption_salt`.",
+		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
 		},
 	},
 }
@@ -482,7 +491,7 @@ func (r *cloudsyncTaskResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"transfers": schema.NumberAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Maximum number of parallel file transfers. `null` for default.",
 				Validators:          []validator.Number{numberIsInteger{}},
 			},
@@ -533,6 +542,11 @@ func (r *cloudsyncTaskResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional:            true,
 				MarkdownDescription: "Change this value to send `encryption_salt` again. Terraform never stores `encryption_salt`.",
 				Validators:          []validator.Number{numberIsInteger{}},
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

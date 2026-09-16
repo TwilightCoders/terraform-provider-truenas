@@ -22,10 +22,10 @@ var modelUser = &model{
 	namespace:    "user",
 	primaryKey:   "id",
 	idKind:       kindInt,
-	createMethod: "user.create",
-	updateMethod: "user.update",
 	getMethod:    "user.get_instance",
 	deleteMethod: "user.delete",
+	createMethod: "user.create",
+	updateMethod: "user.update",
 	listFilters:  [][]interface{}{[]interface{}{"builtin", "=", false}},
 	listOptions:  map[string]interface{}(nil),
 	attrs: []*node{
@@ -76,7 +76,7 @@ var modelUser = &model{
 		},
 		{
 			name: "userns_idmap", api: "userns_idmap", path: "userns_idmap",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true, inherit: true, intOrString: true,
 			description: "Specifies the subuid mapping for this user. If DIRECT then the UID will be     directly mapped to all containers. Alternatively, the target UID may be     explicitly specified. If `null`, then the UID will not be mapped.\n\nNOTE: This field will be ignored for users that have been assigned TrueNAS roles.",
 			dialect:     apiDialect,
@@ -115,7 +115,7 @@ var modelUser = &model{
 		},
 		{
 			name: "sshpubkey", api: "sshpubkey", path: "sshpubkey",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "SSH public keys corresponding to private keys that authenticate this user to the TrueNAS SSH server. ",
 		},
@@ -150,7 +150,7 @@ var modelUser = &model{
 		},
 		{
 			name: "email", api: "email", path: "email",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Email address of the user. If the user has the `FULL_ADMIN` role, they will receive email alerts and     notifications. ",
 		},
@@ -264,6 +264,15 @@ var modelUser = &model{
 			kind: kindInt, role: roleOptional,
 			description: "Change this value to send `password` again. Terraform never stores `password`.",
 		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
+		},
 	},
 }
 
@@ -323,7 +332,7 @@ func (r *userResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 				MarkdownDescription: "The user account may be used to access SMB shares. If set to `true` then TrueNAS stores an NT hash of the     user account's password for local accounts. This feature is unavailable for local accounts when General Purpose OS     STIG compatibility mode is enabled. If set to `true` the user is automatically added to the `builtin_users`     group. Defaults to `true`.",
 			},
 			"userns_idmap": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Specifies the subuid mapping for this user. If DIRECT then the UID will be     directly mapped to all containers. Alternatively, the target UID may be     explicitly specified. If `null`, then the UID will not be mapped.\n\nNOTE: This field will be ignored for users that have been assigned TrueNAS roles.",
 			},
 			"group": schema.NumberAttribute{
@@ -345,7 +354,7 @@ func (r *userResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 				MarkdownDescription: "Allow the user to authenticate to the TrueNAS SSH server using a password.\n\nWARNING: The established best practice is to use only key-based authentication for SSH servers.  Defaults to `false`.",
 			},
 			"sshpubkey": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "SSH public keys corresponding to private keys that authenticate this user to the TrueNAS SSH server. ",
 			},
 			"locked": schema.BoolAttribute{
@@ -363,7 +372,7 @@ func (r *userResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 				ElementType:         types.StringType,
 			},
 			"email": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Email address of the user. If the user has the `FULL_ADMIN` role, they will receive email alerts and     notifications. ",
 			},
 			"group_create": schema.BoolAttribute{
@@ -435,6 +444,11 @@ func (r *userResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 				Optional:            true,
 				MarkdownDescription: "Change this value to send `password` again. Terraform never stores `password`.",
 				Validators:          []validator.Number{numberIsInteger{}},
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}

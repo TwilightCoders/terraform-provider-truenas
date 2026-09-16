@@ -90,25 +90,25 @@ var modelNFSShare = &model{
 		},
 		{
 			name: "maproot_user", api: "maproot_user", path: "maproot_user",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Map root user client to a specified user. ",
 		},
 		{
 			name: "maproot_group", api: "maproot_group", path: "maproot_group",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Map root group client to a specified group. ",
 		},
 		{
 			name: "mapall_user", api: "mapall_user", path: "mapall_user",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Map all client users to a specified user. ",
 		},
 		{
 			name: "mapall_group", api: "mapall_group", path: "mapall_group",
-			kind: kindString, role: roleOptional,
+			kind: kindString, role: roleOptionalComputed,
 			nullable: true, readable: true, updatable: true,
 			description: "Map all client groups to a specified group. ",
 		},
@@ -148,6 +148,15 @@ Returns:
     - True: The share is in a locked dataset.
     - False: The share is not in a locked dataset.
     - None: Lock status is not available because path locking information was not requested.`,
+		},
+		{
+			name: "unset", api: "", path: "unset",
+			kind: kindList, role: roleOptional,
+			description: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+			elem: &node{
+				name: "unset", api: "", path: "unset",
+				kind: kindString, role: roleRequired,
+			},
 		},
 	},
 }
@@ -207,19 +216,19 @@ func (r *nFSShareResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 				MarkdownDescription: "Export the share as read only.  Defaults to `false`.",
 			},
 			"maproot_user": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Map root user client to a specified user. ",
 			},
 			"maproot_group": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Map root group client to a specified group. ",
 			},
 			"mapall_user": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Map all client users to a specified user. ",
 			},
 			"mapall_group": schema.StringAttribute{
-				Optional:            true,
+				Optional: true, Computed: true,
 				MarkdownDescription: "Map all client groups to a specified group. ",
 			},
 			"security": schema.ListAttribute{
@@ -243,6 +252,11 @@ Returns:
     - True: The share is in a locked dataset.
     - False: The share is not in a locked dataset.
     - None: Lock status is not available because path locking information was not requested.`,
+			},
+			"unset": schema.ListAttribute{
+				Optional:            true,
+				MarkdownDescription: "Attributes to clear, by name. An attribute this configuration does not mention is left as the server has it; naming it here removes the value instead. Only attributes that accept an empty value can be listed.",
+				ElementType:         types.StringType,
 			},
 		},
 	}
