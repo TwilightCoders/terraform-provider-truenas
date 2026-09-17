@@ -41,6 +41,12 @@ archives:
 checksum:
   name_template: "{{ .ProjectName }}_{{ .Version }}_SHA256SUMS"
   algorithm: sha256
+  # The registry checks the manifest against the checksums like any other asset, so it has to be
+  # hashed here as well as published with the release. Attaching it to the release alone fails
+  # ingestion with "missing SHA256 checksum".
+  extra_files:
+    - glob: terraform-registry-manifest.json
+      name_template: "{{ .ProjectName }}_{{ .Version }}_manifest.json"
 
 signs:
   - artifacts: checksum
