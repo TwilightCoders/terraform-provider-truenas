@@ -23,8 +23,16 @@ type Files struct {
 	jobs    map[int]*downloadJob
 	tokens  map[string]bool
 	nextJob int
+	// pending holds uploads accepted but not yet written: like middleware, the fake writes the file
+	// only when the job runs, which here is when core.job_wait asks for it.
+	pending map[int]pendingPut
 	// ExpireDownloads makes every minted download URL report itself as already expired.
 	ExpireDownloads bool
+}
+
+type pendingPut struct {
+	path    string
+	content []byte
 }
 
 type downloadJob struct {
@@ -37,6 +45,7 @@ func newFiles() *Files {
 		content: map[string][]byte{},
 		jobs:    map[int]*downloadJob{},
 		tokens:  map[string]bool{},
+		pending: map[int]pendingPut{},
 		nextJob: 1,
 	}
 }
@@ -182,8 +191,26 @@ func (s *Server) serveUpload(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	s.Files.Put(path, content)
-	w.WriteHeader(http.StatusOK)
+	// Accept now, write later, as middleware does.
+	s.Files.mu.Lock()
+	id := s.Files.nextJob
+	s.Files.nextJob++
+	s.Files.pending[id] = pendingPut{path: path, content: content}
+	s.Files.mu.Unlock()
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(map[string]any{"job_id": id})
+}
+
+// runJob completes a pending upload, reporting whether the id named one.
+func (f *Files) runJob(id int) bool {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	p, ok := f.pending[id]
+	if ok {
+		delete(f.pending, id)
+		f.content[p.path] = p.content
+	}
+	return ok
 }
 
 // handleFileMethod serves the websocket half of file transfer: minting an upload token and
@@ -210,6 +237,15 @@ func (s *Server) handleFileMethod(method string, params []json.RawMessage) (any,
 		}
 		id, href := s.Files.startDownload(args[0])
 		return []any{id, href}, true, nil
+	case "core.job_wait":
+		var id int
+		if len(params) < 1 || json.Unmarshal(params[0], &id) != nil {
+			return nil, true, fmt.Errorf("core.job_wait needs a job id")
+		}
+		if !s.Files.runJob(id) {
+			return nil, true, fmt.Errorf("no job %d", id)
+		}
+		return nil, true, nil
 	}
 	return nil, false, nil
 }

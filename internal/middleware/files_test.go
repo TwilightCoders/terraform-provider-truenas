@@ -3,6 +3,7 @@ package middleware_test
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"strings"
 	"testing"
@@ -108,5 +109,24 @@ func TestFileErrorsNeverLeakTheDownloadToken(t *testing.T) {
 	}
 	if strings.Contains(err.Error(), "auth_token") || strings.Contains(err.Error(), "dl-") {
 		t.Errorf("error leaked the download token: %v", err)
+	}
+}
+
+// TestPutFileReportsFailedJob covers the half of the job that the HTTP status cannot: /_upload
+// accepts the upload before the write runs, so a write that then fails is only visible through
+// the job.
+func TestPutFileReportsFailedJob(t *testing.T) {
+	s := middlewaretest.NewServer(t)
+	s.Handle("core.job_wait", func(context.Context, []json.RawMessage) (any, error) {
+		return nil, &middleware.Error{Errno: 28, Errname: "ENOSPC", Reason: "No space left on device"}
+	})
+	c := dial(t, s)
+
+	err := c.PutFile(context.Background(), "/mnt/pool/f", nil, strings.NewReader("x"))
+	if err == nil || !strings.Contains(err.Error(), "No space left") {
+		t.Fatalf("PutFile = %v, want the job's failure", err)
+	}
+	if _, ok := s.Files.Get("/mnt/pool/f"); ok {
+		t.Error("a failed job left a file behind")
 	}
 }

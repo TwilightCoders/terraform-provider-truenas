@@ -38,7 +38,7 @@ Reading and writing file contents requires an API key with the `FULL_ADMIN` role
 - `content` (default): download the file and hash it. Always correct, and transfers the file on every refresh.
 - `stat`: compare size and modification time, and download only when they move. Cheaper, but it misses an edit that preserves both, such as a restored backup or `cp -p`.
 - `none`: never read the file back. State holds nothing derived from the contents. Use it for secrets, where even a hash confirms a guess.
-- `mode` (String) Permission bits in octal, e.g. `"0644"`. Left to TrueNAS when unset.
+- `mode` (String) Permission bits in octal, e.g. `"0644"`. When unset, TrueNAS creates a new file `0700`, readable by its owner only; set it for any file another service has to read.
 - `on_destroy` (String) What destroying the resource does to the file. TrueNAS has no API to delete one.
 
 - `leave` (default): drop the resource from state and leave the file untouched.

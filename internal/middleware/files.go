@@ -134,9 +134,22 @@ func (c *Client) PutFile(ctx context.Context, path string, mode *int64, content 
 	if err := c.checkHTTPServer(resp); err != nil {
 		return err
 	}
-	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusNoContent {
-		body, _ := io.ReadAll(io.LimitReader(resp.Body, 4096))
+	body, _ := io.ReadAll(io.LimitReader(resp.Body, 4096))
+	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("uploading %s: server returned %s: %s", path, resp.Status, strings.TrimSpace(string(body)))
+	}
+
+	// A 200 means the upload was accepted, not that the file exists: middleware answers with the
+	// id of a filesystem.put job and runs the write in the background. Returning here raced every
+	// read that followed — the first stat of a newly created file found nothing.
+	var accepted struct {
+		JobID *int64 `json:"job_id"`
+	}
+	if err := json.Unmarshal(body, &accepted); err != nil || accepted.JobID == nil {
+		return fmt.Errorf("uploading %s: server did not return a job to wait for: %s", path, strings.TrimSpace(string(body)))
+	}
+	if _, err := c.Call(ctx, "core.job_wait", *accepted.JobID); err != nil {
+		return fmt.Errorf("writing %s: %w", path, err)
 	}
 	return nil
 }

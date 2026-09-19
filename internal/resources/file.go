@@ -104,8 +104,9 @@ func (r *fileResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 					"from the file on the host unless `drift_detection = \"none\"`.",
 			},
 			"mode": schema.StringAttribute{
-				Optional:            true,
-				MarkdownDescription: "Permission bits in octal, e.g. `\"0644\"`. Left to TrueNAS when unset.",
+				Optional: true,
+				MarkdownDescription: "Permission bits in octal, e.g. `\"0644\"`. When unset, TrueNAS creates a new file " +
+					"`0700`, readable by its owner only; set it for any file another service has to read.",
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(octalMode, "must be octal permission bits, e.g. \"0644\""),
 				},
